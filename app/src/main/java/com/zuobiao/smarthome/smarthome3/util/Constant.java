@@ -71,6 +71,8 @@ public class Constant {
     public static final String DOOR_MAGNET = "8005fffe";    //门磁 feff0580
     public static final String CURTAINS = "1105fffe";        //窗帘 feff0511
     public static final String WINDOW = "1205fffe";        //窗 feff0512
+    public static final String TEST = "FFFFFFFF";        //测试
+
 
     //设备名字
     public static final String GATEWAY_STRING = "网关";        //网关
@@ -207,6 +209,9 @@ public class Constant {
         if(WINDOW.equalsIgnoreCase(deviceType)){
             imageId = DRAWABLE_WINDOW;
         }
+        if(TEST.equalsIgnoreCase(deviceType)){
+            imageId = R.drawable.test;
+        }
         return imageId;
 
     }
@@ -253,6 +258,7 @@ public class Constant {
         if(WINDOW.equalsIgnoreCase(deviceType)){
             equipmentTypeName = WINDOW_STRING;
         }
+
         return equipmentTypeName;
     }
 

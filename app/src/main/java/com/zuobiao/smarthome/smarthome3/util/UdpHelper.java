@@ -87,7 +87,13 @@ public class UdpHelper extends UdpMethod {
 //    private ToggleButton tbWindows ;
     private ToggleButton tbCurtains;
 
-
+    private TextView tvTestTemp;
+    private TextView tvTestHumidity;
+    private TextView tvTestPm25;
+    private TextView tvTestFlam;
+    private TextView tvTestLight;
+    private TextView tvTestStatus;
+    private ToggleButton tbTest;
 
     private boolean isSend = true;
 
@@ -418,6 +424,17 @@ public class UdpHelper extends UdpMethod {
                         }, 100);
 
                     }
+
+                    if(tbTest!=null){
+                        setIsSend(false);
+                        tbTest.setChecked(true);
+                        myHandler.postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                setIsSend(true);
+                            }
+                        }, 100);
+                    }
                 }
                 if (data1.equalsIgnoreCase("00")&&mac.equalsIgnoreCase(socketMac)) {
 
@@ -431,6 +448,17 @@ public class UdpHelper extends UdpMethod {
                             }
                         }, 100);
                     }
+                    if(tbTest!=null){
+                        setIsSend(false);
+                        tbTest.setChecked(false);
+                        myHandler.postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                setIsSend(true);
+                            }
+                        }, 100);
+                    }
+
                 }
             }
 
@@ -448,6 +476,18 @@ public class UdpHelper extends UdpMethod {
                             }
                         }, 100);
                     }
+
+                    if (tbTest != null) {
+                        setIsSend(false);
+                        tbTest.setChecked(true);
+                        myHandler.postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                setIsSend(true);
+                            }
+                        }, 100);
+                    }
+
                 }
                 if (handlerMessage.equalsIgnoreCase("00")) {
                     if (toggleButton != null) {
@@ -460,6 +500,18 @@ public class UdpHelper extends UdpMethod {
                             }
                         }, 100);
                     }
+
+                    if (tbTest != null) {
+                        setIsSend(false);
+                        tbTest.setChecked(false);
+                        myHandler.postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                setIsSend(true);
+                            }
+                        }, 100);
+                    }
+
                 }
             }
 
@@ -600,6 +652,12 @@ public class UdpHelper extends UdpMethod {
                 String handlerMessage = (String) msg.obj;
                 int high = Integer.parseInt(handlerMessage.substring(0, 2), 16);
                 int low = Integer.parseInt(handlerMessage.substring(2, 4), 16);
+
+                if(tvTestLight!=null){
+                    int lightSensor = high + low * 256;
+                    tvTestLight.setText(String.valueOf(lightSensor));
+                }
+
                 if (tvLightSensor != null){
                     int lightSensor = high + low * 256;
                     tvLightSensor.setText("光照强度 ：" + lightSensor + "lux");
@@ -640,6 +698,12 @@ public class UdpHelper extends UdpMethod {
                 String handlerMessage = (String) msg.obj;
                 int high = Integer.parseInt(handlerMessage.substring(0, 2), 16);
                 int low = Integer.parseInt(handlerMessage.substring(2, 4), 16);
+
+                if(tvTestFlam !=null){
+                    int inflammableGasSensor = (high + low * 256);
+                    tvTestFlam.setText(String.valueOf(inflammableGasSensor));
+                }
+
                 if (tvInflammableGas != null){
                     int inflammableGasSensor = (high + low * 256);
                     tvInflammableGas.setText("数据 ：" + inflammableGasSensor+" PPM");
@@ -737,6 +801,30 @@ public class UdpHelper extends UdpMethod {
 
                 // TODO: 2016/1/26 data 是为3个16进制的数 第一个是temp，第二个是humi，第三个是pm2.5
                 String data = (String) msg.obj;
+
+                if(tvTestTemp!=null&&tvTestHumidity!=null&&tvTestPm25!=null){
+                    int a = Integer.parseInt(data.substring(0, 2), 16) * 256;
+                    int b = Integer.parseInt(data.substring(2, 4), 16);
+                    int c = Integer.parseInt(data.substring(4, 6), 16) * 256;
+                    int d = Integer.parseInt(data.substring(6, 8), 16);
+                    int e = Integer.parseInt(data.substring(8, 10), 16);
+                    int f = Integer.parseInt(data.substring(10, 12), 16) * 256;
+                    int temp = (c+d) / 10;
+                    int hum = (a+b) / 10;
+                    int pm25 = (e+f) ;
+
+                    tvTestTemp.setText(String.valueOf(temp));
+                    tvTestHumidity.setText(String.valueOf(hum));
+                    tvTestPm25.setText(String.valueOf(pm25));
+                    if(pm25>=0&&pm25<150){
+                        tvTestStatus.setText("优");
+                    }else if(pm25>=150&&pm25<250){
+                        tvTestStatus.setText("良");
+                    }else if(pm25>=250){
+                        tvTestStatus.setText("差");
+                    }
+                }
+
                 if (tvPm25 != null&&tvTemperature !=null && tvHumidity!=null) {
                     int a = Integer.parseInt(data.substring(0, 2), 16) * 256;
                     int b = Integer.parseInt(data.substring(2, 4), 16);
@@ -1636,5 +1724,19 @@ public class UdpHelper extends UdpMethod {
         this.tbCurtains = tbCurtains;
     }
 
+
+
+    public void setTestUI(TextView tvTestTemp,TextView tvTestHumidity,
+                          TextView tvTestPm25,TextView tvTestFlam,
+                          TextView tvTestLight,TextView tvTestStatus,ToggleButton tbTest,String socketMac){
+        this.tvTestTemp = tvTestTemp;
+        this.tvTestHumidity = tvTestHumidity;
+        this.tvTestPm25 = tvTestPm25;
+        this.tvTestFlam = tvTestFlam;
+        this.tvTestLight = tvTestLight;
+        this.tvTestStatus = tvTestStatus;
+        this.tbTest = tbTest;
+        this.socketMac = socketMac;
+    }
 
 }

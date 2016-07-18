@@ -74,6 +74,9 @@ public class ImageListViewAdapter extends BaseAdapter{
             view = convertView;
             viewHolder = (ViewHolder)view.getTag();
         }
+        if(equipmentBean.getDevice_Type().equalsIgnoreCase(Constant.TEST)){
+            viewHolder.tvName.setText("环境检测");
+        }else
         if(!dBcurd.getNickNameByMac(equipmentBean.getMac_ADDR()).equalsIgnoreCase("FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF")){
             String tvNameText = new String(Util.HexString2Bytes(dBcurd.getNickNameByMac(equipmentBean.getMac_ADDR()))).trim();
 

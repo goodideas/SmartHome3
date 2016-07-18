@@ -102,6 +102,7 @@
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden" />
         <activity android:name=".activity.AddRfidCardInfoActivity" />
+        <activity android:name=".activity.TestActivity"></activity>
     </application>
 
 </manifest>

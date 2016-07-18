@@ -1,0 +1,225 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:clipToPadding="true"
+    android:fitsSystemWindows="true"
+    tools:context="com.zuobiao.smarthome.smarthome3.activity.TestActivity">
+
+    <include
+        android:id="@+id/include"
+        layout="@layout/equipment_title_bar"
+        android:layout_width="match_parent"
+        android:layout_height="50dp" />
+    <!--6762A4 1fa459-->
+    <TableLayout
+        android:background="@drawable/test_bg"
+
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="10dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:id="@+id/tlSensors"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/include"
+        android:orientation="vertical"
+        android:stretchColumns="0,1"
+        >
+
+        <TableRow
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:layout_marginBottom="4dp"
+            >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="end"
+                android:textSize="20sp"
+                android:textColor="#FFFFFF"
+                android:text="温度:" />
+
+            <TextView
+                android:id="@+id/tvTestTemp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="20sp"
+                android:textColor="#11ff00"
+                android:text="读取中。。。" />
+
+
+        </TableRow>
+
+        <TableRow    android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:layout_marginBottom="4dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="end"
+                android:textSize="20sp"
+                android:textColor="#FFFFFF"
+                android:text="湿度:" />
+
+            <TextView
+                android:id="@+id/tvTestHumidity"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="20sp"
+                android:textColor="#11ff00"
+                android:text="读取中。。。" />
+
+
+        </TableRow>
+
+        <TableRow    android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:layout_marginBottom="4dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="end"
+                android:textSize="20sp"
+                android:textColor="#FFFFFF"
+                android:text="PM2.5:" />
+
+            <TextView
+                android:id="@+id/tvTestPm25"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="20sp"
+                android:textColor="#11ff00"
+                android:text="读取中。。。" />
+
+
+        </TableRow>
+
+        <TableRow    android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:layout_marginBottom="4dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="end"
+                android:textSize="20sp"
+                android:textColor="#FFFFFF"
+                android:text="烟雾:" />
+
+            <TextView
+                android:id="@+id/tvTestFlam"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="20sp"
+                android:textColor="#11ff00"
+                android:text="读取中。。。" />
+
+
+        </TableRow>
+
+        <TableRow    android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:layout_marginBottom="4dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="end"
+                android:textSize="20sp"
+                android:textColor="#FFFFFF"
+                android:text="光照:" />
+
+            <TextView
+                android:id="@+id/tvTestLight"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="20sp"
+                android:textColor="#11ff00"
+                android:text="读取中。。。" />
+
+
+        </TableRow>
+
+
+    </TableLayout>
+
+
+    <LinearLayout
+        android:id="@+id/llTest"
+        android:layout_below="@id/tlSensors"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:gravity="center"
+        android:background="@drawable/test_bg"
+        >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="end"
+            android:textSize="24sp"
+            android:textColor="#FFFFFF"
+            android:text="当前环境状态:" />
+
+        <TextView
+            android:id="@+id/tvTestStatus"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="24sp"
+            android:textColor="#11ff00"
+            android:text="" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_below="@id/llTest"
+        android:gravity="center"
+        android:id="@+id/llTest2"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:background="@drawable/test_bg"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="24sp"
+            android:text="开关"
+            android:textColor="#FFFFFF"
+            android:layout_marginRight="4dp"
+            android:layout_marginEnd="4dp"
+            />
+
+        <ToggleButton
+            android:id="@+id/tbTest"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:background="@drawable/switchs_bg"
+            android:textOn=""
+            android:textOff=""
+            />
+
+    </LinearLayout>
+
+
+
+</RelativeLayout>

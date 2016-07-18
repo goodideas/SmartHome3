@@ -30,6 +30,7 @@ import com.zuobiao.smarthome.smarthome3.activity.MainActivity;
 import com.zuobiao.smarthome.smarthome3.activity.SocketsActivity;
 import com.zuobiao.smarthome.smarthome3.activity.SwitchsActivity;
 import com.zuobiao.smarthome.smarthome3.activity.TempPm25Activity;
+import com.zuobiao.smarthome.smarthome3.activity.TestActivity;
 import com.zuobiao.smarthome.smarthome3.activity.WindowActivity;
 import com.zuobiao.smarthome.smarthome3.db.DBcurd;
 import com.zuobiao.smarthome.smarthome3.util.Constant;
@@ -304,6 +305,10 @@ public class EquipmentFragment extends BaseFragment {
                 startActivity(intent);
             }
 
+            if (Constant.TEST.equalsIgnoreCase(deviceType)) {
+                startActivity(new Intent(getActivity(),TestActivity.class));
+            }
+
         } else {
             Util.showToast(getActivity(),"网关不在线");
         }
@@ -359,6 +364,9 @@ public class EquipmentFragment extends BaseFragment {
         Log.e(TAG, "spHelper.getSpHasGateWayInfo()=" + spHelper.getSpHasGateWayInfo() + "  spHelper.getSpOnLine()=" + spHelper.getSpOnLine());
         //这种做法不是很好，但能实现功能，暂时这么做。
         list = dBcurd.getAllData();//数据源 不管什么时候，都是从这里读取所有设备
+        EquipmentBean equipmentBeanT = new EquipmentBean();
+        equipmentBeanT.setDevice_Type("FFFFFFFF");
+        list.add(equipmentBeanT);
         adapter = new ImageListViewAdapter(getActivity().getApplicationContext(), list,false);
         gridView.setAdapter(adapter);
         if (spHelper.getSpHasGateWayInfo()) {
