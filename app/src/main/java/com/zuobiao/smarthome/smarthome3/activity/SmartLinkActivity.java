@@ -806,10 +806,11 @@ public class SmartLinkActivity extends StatusActivity {
                         }
                     } catch (IOException e) {
                         e.printStackTrace();
-                    } finally {
-                        Log.e(TAG, "第2次udp接收后的finally，关闭socket222");
-                        secondUdpSocket.close();
                     }
+//                    finally {
+//                        Log.e(TAG, "第2次udp接收后的finally，关闭socket222");
+//                        secondUdpSocket.close();
+//                    }
                 }
 
             }
