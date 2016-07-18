@@ -1,0 +1,584 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:clipToPadding="true"
+    android:fitsSystemWindows="true">
+
+    <include
+        android:id="@+id/include6"
+        layout="@layout/title_layout"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/title_height" />
+
+    <Button
+        android:id="@+id/btnAddSceneBack"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/include6"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:background="#00000000"
+        android:text="返回"
+        android:textColor="#FFFFFF" />
+
+
+    <Button
+        android:id="@+id/btnAddSceneSure"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/include6"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:background="#00000000"
+        android:text="确定"
+        android:textColor="#FFFFFF" />
+
+    <TextView
+        android:id="@+id/tvSettingEquipmentName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/include6"
+        android:layout_marginBottom="16dp"
+        android:layout_marginLeft="32dp"
+        android:layout_marginTop="16dp"
+        android:text="asasas" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/tvSettingEquipmentName"
+        android:paddingBottom="16dp"
+        >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+
+        android:orientation="vertical">
+
+        <!--第1个-->
+        <!--当设备只有一种开关时，显示第一个开关-->
+        <LinearLayout
+            android:id="@+id/llSwitchOne"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:background="@drawable/current_scene_bg"
+            android:layout_marginTop="16dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:visibility="visible">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                >
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginStart="16dp"
+                    android:text="开关一" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    >
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="16dp"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    android:text="触发方式" />
+
+
+                <Spinner
+                    android:id="@+id/spinnerSwitchOne"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+
+                    />
+                </LinearLayout>
+            </LinearLayout>
+
+            <!--时间触发开始-->
+            <LinearLayout
+                android:id="@+id/llTimeSwitchOne"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:visibility="gone"
+                >
+                <Button
+                    android:id="@+id/btnTimePickerOpenOne"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="16dp"
+                    android:text="选择时间" />
+
+                <TextView
+                    android:id="@+id/tvTimePickerOpenOne"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="16dp"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:hint="点击左边按钮选择时间" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginRight="16dp"
+                    android:text="开"
+                    android:textSize="24sp" />
+
+
+            </LinearLayout>
+            <!--时间触发结束-->
+
+            <!--立即触发开始-->
+            <LinearLayout
+                android:id="@+id/llImmediatelySwitchOne"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                >
+                <ToggleButton
+                    android:id="@+id/tbOne"
+                    android:layout_width="80dp"
+                    android:layout_height="80dp"
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginStart="16dp"
+                    android:background="@drawable/switchs_bg"
+                    android:gravity="center"
+                    android:textOff=""
+                    android:textOn=""
+                     />
+
+            </LinearLayout>
+            <!--立即触发结束-->
+
+            <!--条件触发开始-->
+            <LinearLayout
+                android:id="@+id/llConditionSwitchOne"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:visibility="visible"
+                >
+                <Spinner
+                    android:id="@+id/spinnerConditionEquipmentOne"
+                    android:layout_width="80dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_weight="1"/>
+
+                <Spinner
+                    android:id="@+id/spinnerTemp25One"
+                    android:layout_width="80dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:visibility="gone"
+                    />
+
+                <Spinner
+                    android:id="@+id/spinnerSymbolOne"
+                    android:layout_width="80dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_weight="1"
+                    android:gravity="center"/>
+
+
+
+                <EditText
+                    android:id="@+id/etConditionValueOne"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_weight="1"
+                    android:inputType="number"
+                    android:gravity="center"
+                    android:maxLength="5"
+                    android:maxLines="1"
+                    android:hint="条件值" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:text="开" />
+
+            </LinearLayout>
+            <!--条件触发结束-->
+
+
+        </LinearLayout>
+        <!--第1个结束-->
+
+        <!--第2个-->
+        <LinearLayout
+            android:id="@+id/llSwitchTwo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:background="@drawable/current_scene_bg"
+            android:layout_marginTop="16dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:visibility="visible">
+            <!--===========================-->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                >
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginStart="16dp"
+                    android:text="开关二" />
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    >
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                   android:layout_gravity="center"
+                    android:layout_marginLeft="16dp"
+                   android:gravity="center"
+                    android:text="触发方式" />
+
+
+                <Spinner
+                    android:id="@+id/spinnerSwitchTwo"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    />
+</LinearLayout>
+
+            </LinearLayout>
+
+            <!--时间触发开始-->
+            <LinearLayout
+                android:id="@+id/llTimeSwitchTwo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:visibility="gone"
+                >
+                <Button
+                    android:id="@+id/btnTimePickerOpenTwo"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="16dp"
+                    android:text="选择时间" />
+
+                <TextView
+                    android:id="@+id/tvTimePickerOpenTwo"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="16dp"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:hint="点击左边按钮选择时间" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginRight="16dp"
+                    android:text="开"
+                    android:textSize="24sp" />
+
+
+            </LinearLayout>
+            <!--时间触发结束-->
+
+            <!--立即触发开始-->
+            <LinearLayout
+                android:id="@+id/llImmediatelySwitchTwo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                >
+                <ToggleButton
+                    android:id="@+id/tbTwo"
+                    android:layout_width="80dp"
+                    android:layout_height="80dp"
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginStart="16dp"
+                    android:gravity="center"
+                    android:background="@drawable/switchs_bg"
+                    android:textOff=""
+                    android:textOn=""
+                    />
+
+            </LinearLayout>
+            <!--立即触发结束-->
+
+            <!--条件触发开始-->
+            <LinearLayout
+                android:id="@+id/llConditionSwitchTwo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:visibility="visible"
+                >
+                <Spinner
+                    android:id="@+id/spinnerConditionEquipmentTwo"
+                    android:layout_width="80dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_weight="1"/>
+                <Spinner
+                    android:id="@+id/spinnerTemp25Two"
+                    android:layout_width="80dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:visibility="gone"
+                    />
+
+                <Spinner
+                    android:id="@+id/spinnerSymbolTwo"
+                    android:layout_width="80dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_weight="1"
+                    android:gravity="center"/>
+
+                <EditText
+                    android:id="@+id/etConditionValueTwo"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:inputType="number"
+                    android:maxLength="5"
+                    android:maxLines="1"
+                    android:hint="条件值" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:text="开" />
+
+            </LinearLayout>
+            <!--条件触发结束-->
+            <!--===========================-->
+
+
+        </LinearLayout>
+        <!--第2个结束-->
+
+        <!--第3个-->
+        <LinearLayout
+            android:id="@+id/llSwitchThree"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:background="@drawable/current_scene_bg"
+            android:layout_marginTop="16dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:visibility="visible">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                >
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginStart="16dp"
+                    android:text="开关三" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    >
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                  android:layout_gravity="center"
+                    android:gravity="center"
+                    android:layout_marginLeft="16dp"
+                    android:text="触发方式" />
+
+
+                <Spinner
+                    android:id="@+id/spinnerSwitchThree"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    />
+                </LinearLayout>
+            </LinearLayout>
+
+            <!--时间触发开始-->
+            <LinearLayout
+                android:id="@+id/llTimeSwitchThree"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:visibility="gone"
+                >
+                <Button
+                    android:id="@+id/btnTimePickerOpenThree"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="16dp"
+                    android:text="选择时间" />
+
+                <TextView
+                    android:id="@+id/tvTimePickerOpenThree"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="16dp"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:hint="点击左边按钮选择时间" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginRight="16dp"
+                    android:text="开"
+                    android:textSize="24sp" />
+
+
+            </LinearLayout>
+            <!--时间触发结束-->
+
+            <!--立即触发开始-->
+            <LinearLayout
+                android:id="@+id/llImmediatelySwitchThree"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                >
+                <ToggleButton
+                    android:id="@+id/tbThree"
+                    android:layout_width="80dp"
+                    android:layout_height="80dp"
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginStart="16dp"
+                    android:gravity="center"
+                    android:background="@drawable/switchs_bg"
+                    android:textOff=""
+                    android:textOn=""
+                    />
+
+            </LinearLayout>
+            <!--立即触发结束-->
+
+            <!--条件触发开始-->
+            <LinearLayout
+                android:id="@+id/llConditionSwitchThree"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:visibility="visible"
+                >
+                <Spinner
+                    android:id="@+id/spinnerConditionEquipmentThree"
+                    android:layout_width="80dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_weight="1"/>
+
+                <Spinner
+                    android:id="@+id/spinnerTemp25Three"
+                    android:layout_width="80dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:visibility="gone"
+                    />
+
+                <Spinner
+                    android:id="@+id/spinnerSymbolThree"
+                    android:layout_width="80dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_weight="1"
+                    android:gravity="center"/>
+
+                <EditText
+                    android:id="@+id/etConditionValueThree"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:inputType="number"
+                    android:maxLength="5"
+                    android:maxLines="1"
+                    android:hint="条件值" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:text="开" />
+
+            </LinearLayout>
+            <!--条件触发结束-->
+
+
+        </LinearLayout>
+        <!--第3个结束-->
+
+
+    </LinearLayout>
+    </ScrollView>
+
+
+</RelativeLayout>

@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#20121212"
+    >
+
+    <include android:layout_width="match_parent"
+        android:layout_height="@dimen/title_height"
+        layout="@layout/title_layout"
+        android:id="@+id/include3" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:textColor="#FFFFFF"
+        android:textSize="@dimen/title_textsize"
+        android:layout_marginTop="@dimen/textview_marginTop"
+        android:text="设置"
+        />
+
+
+    <RelativeLayout
+
+        android:layout_marginTop="16dp"
+        android:id="@+id/smartLinkRelativeLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/include3"
+        android:layout_centerHorizontal="true"
+        android:background="@drawable/smartlink_bg"
+        android:clickable="true"
+        >
+
+        <ImageView
+            android:contentDescription="smartlink"
+            android:layout_width="30dip"
+            android:layout_height="30dip"
+            android:id="@+id/ivSmartLink"
+            android:layout_marginStart="16dp"
+            android:layout_marginLeft="16dp"
+            android:layout_centerVertical="true"
+            android:src="@drawable/smartlink"
+            />
+
+    <TextView
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="16dp"
+        android:paddingLeft="16dp"
+        android:layout_toRightOf="@id/ivSmartLink"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="SmartLink"
+        android:id="@+id/textView8" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text=">"
+            android:layout_marginRight="16dp"
+            android:layout_centerVertical="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true" />
+
+
+    </RelativeLayout>
+
+
+
+
+
+    <RelativeLayout
+
+        android:layout_marginTop="16dp"
+        android:id="@+id/aboutRelativeLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/smartLinkRelativeLayout"
+        android:layout_centerHorizontal="true"
+        android:background="@drawable/smartlink_bg"
+        android:clickable="true"
+        >
+
+        <ImageView
+            android:contentDescription="about"
+            android:layout_width="30dip"
+            android:layout_height="30dip"
+            android:id="@+id/ivAbout"
+            android:layout_marginStart="16dp"
+            android:layout_marginLeft="16dp"
+            android:layout_centerVertical="true"
+            android:src="@drawable/about"
+            />
+
+        <TextView
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="16dp"
+            android:paddingLeft="16dp"
+            android:layout_toRightOf="@id/ivAbout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="关于"
+            android:id="@+id/textView9" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text=">"
+            android:layout_marginRight="16dp"
+            android:layout_centerVertical="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true" />
+
+
+    </RelativeLayout>
+
+
+</RelativeLayout>

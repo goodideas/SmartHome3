@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+
+    <include android:layout_width="match_parent"
+        android:layout_height="@dimen/title_height"
+        layout="@layout/title_layout"
+        android:id="@+id/include4" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:textColor="#FFFFFF"
+        android:textSize="@dimen/title_textsize"
+        android:layout_marginTop="@dimen/textview_marginTop"
+        android:text="场景"
+        android:id="@+id/textView7" />
+
+    <LinearLayout
+        android:id="@+id/llSelected"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/include4"
+        android:orientation="horizontal"
+        >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="#0f62d7"
+            android:text="当前应用场景 "
+            android:paddingLeft="2dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="16dp"
+            android:textSize="24sp"
+            />
+
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="#de0fb8"
+            android:text=""
+            android:id="@+id/tvShowInUseScene"
+            android:layout_marginLeft="16dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="16dp"
+            android:layout_marginRight="16dp"
+            android:textSize="24sp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:background="@drawable/current_scene_bg"
+            />
+
+
+
+
+    </LinearLayout>
+
+    <ListView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/scene_listview"
+        android:layout_below="@id/llSelected"
+        android:divider="#00000000"
+        android:scrollbars="none"
+        android:listSelector="@android:color/transparent"
+        android:layout_centerHorizontal="true" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="添加场景"
+        android:textColor="#FFFFFF"
+        android:id="@+id/btnAddScene"
+        android:background="#00000000"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="刷新"
+        android:background="#00000000"
+        android:textColor="#FFFFFF"
+        android:id="@+id/btnRefreshSceneSetting"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
+
+</RelativeLayout>

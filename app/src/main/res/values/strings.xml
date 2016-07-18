@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">智能家居系统</string>
+    <string name="scan_text">将二维码放入框内, 即可自动扫描</string>
+    <string name="btnSettingString">SmartLink</string>
+    <string name="tvShowCurrentWifiHint">wifi</string>
+    <string name="etSSIDPWHint">请输入wifi密码</string>
+    <string name="cbShowPwText">显示密码</string>
+    <string name="btnStartText">START</string>
+    <string name="open">open</string>
+    <string name="close">close</string>
+</resources><!--E6B58BE8AF95350000000000000000000000000000000000 0100 98FFE908004B120000 0001 0000000000000000000000000000000000-->
