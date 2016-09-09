@@ -5,7 +5,8 @@ import android.content.Context;
 import android.content.SharedPreferences;
 
 /**
- * Created by zhuangbinbin on 2016/1/5.
+ * Created by zhuangbinbin
+ * on 2016/1/5.
  */
 public class SpConfig {
     private Context context;

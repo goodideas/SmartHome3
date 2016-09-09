@@ -36,6 +36,7 @@ public class SpHelper {
     private final String spPm25 = "pm25";
     private final String spLightSensor = "lightSensor";
     private final String spInflammableGasSensor = "inflammableGasSensor";
+    private final String spNoiseSensor = "noiseSensor";
 
 
     private SharedPreferences gateWayInfoShared;
@@ -86,6 +87,16 @@ public class SpHelper {
         gateWayInfoEditor.putString(spLightSensor, lightSensor);
         gateWayInfoEditor.commit();
     }
+    //噪音
+    public String getSpNoiseSensor() {
+        return gateWayInfoShared.getString(spNoiseSensor, null);
+    }
+
+    public void saveSpNoiseSensor(String noiseSensor) {
+        gateWayInfoEditor.putString(spNoiseSensor, noiseSensor);
+        gateWayInfoEditor.commit();
+    }
+
 
     //烟雾
     public String getSpInflammableGasSensor() {

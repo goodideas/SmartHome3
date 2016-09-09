@@ -50,6 +50,9 @@ public class Constant {
     public static final int  HANDLER_WINDOW_HAS_ANSWER = 0x226;
     public static final int  HANDLER_CURTAINS_NO_ANSWER = 0x227;
 
+    public static final int  HANDLER_NOISE_SERSON_HAS_ANSWER = 0x228;
+    public static final int  HANDLER_NOISE_SERSON_HAS_ANSWER2 = 0x229;
+
     public static final int BEFOREINTO_SWITCH_MAX_TIME = 1;
     public static final int BEFOREINTO_WINDOW_MAX_TIME = 1;
     public static final int BEFOREINTO_CURTAINS_MAX_TIME = 1;
@@ -71,7 +74,8 @@ public class Constant {
     public static final String DOOR_MAGNET = "8005fffe";    //门磁 feff0580
     public static final String CURTAINS = "1105fffe";        //窗帘 feff0511
     public static final String WINDOW = "1205fffe";        //窗 feff0512
-    public static final String TEST = "FFFFFFFF";        //测试
+    public static final String NOISE_SENSOR = "9005fffe";//噪音传感器
+//    public static final String TEST = "FFFFFFFF";        //测试
 
 
     //设备名字
@@ -86,6 +90,7 @@ public class Constant {
     public static final String DOOR_MAGNET_STRING = "门磁";            //门磁
     public static final String CURTAINS_STRING = "智能窗帘";        //窗帘
     public static final String WINDOW_STRING = "智能门/窗";        //窗
+    public static final String NOISE_STRING = "噪音传感器";        //噪音
 
     //图片id
     public static final int DRAWABLE_CONTROL_MODULE = R.drawable.magnet;
@@ -99,6 +104,7 @@ public class Constant {
     public static final int DRAWABLE_WINDOW = R.drawable.window;
     public static final int DRAWABLE_TEMP_PM25 = R.drawable.temp_pm25;
     public static final int DRAWABLE_SWITCHES = R.drawable.switches;
+    public static final int DRAWABLE_NOISE = R.drawable.noise;
 
 
 //    命令类型
@@ -124,6 +130,7 @@ public class Constant {
     public static final String INFLAMMABLE_GAS_RECV2_COMMAND = "6150";
     public static final String LIGHT_SENSOR_RECV2_COMMAND = "7150";
     public static final String DOOR_MAGNET_RECV_COMMAND = "8150";
+    public static final String NOISE_SENSOR_RECV2_COMMAND = "9150";
     public static final String SWITCH_RECV3_COMMAND = "2010";
     public static final String SOCKETS_RECV3_COMMAND = "3010";
     public static final String TEMP_PM25_RECV3_COMMAND = "4010";
@@ -131,6 +138,7 @@ public class Constant {
     public static final String INFLAMMABLE_GAS_RECV3_COMMAND = "6010";
     public static final String LIGHT_SONSER_RECV2_COMMAND = "7010";
     public static final String DOOR_MAGNET_RECV2_COMMAND = "8010";
+    public static final String NOISE_SONSER_RECV2_COMMAND = "9010";
     public static final String CURTAINS_RECV_COMMAND = "1210";
     public static final String SCENE_SETTING_RECV_COMMAND = "F110";
     public static final String SCENE_SETTING_RECV2_COMMAND = "F210";
@@ -158,6 +166,8 @@ public class Constant {
     public static final byte[] INFLAMMABLE_GAS_SEND_COMMAND = {(byte)0x60,(byte)0x00};
     public static final byte[] LIGHT_SENSOR_SEND2_COMMAND = {(byte)0x70,(byte)0x00};
     public static final byte[] DOOR_MAGNET_SEND_COMMAND = {(byte)0x80,(byte)0x00};
+    public static final byte[] NOISE_SENSOR_SEND2_COMMAND = {(byte)0x90,(byte)0x00};
+
     public static final byte[] WINDOW_SEND_COMMAND = {(byte)0x10,(byte)0x00};
 
 
@@ -209,9 +219,13 @@ public class Constant {
         if(WINDOW.equalsIgnoreCase(deviceType)){
             imageId = DRAWABLE_WINDOW;
         }
-        if(TEST.equalsIgnoreCase(deviceType)){
-            imageId = R.drawable.test;
+        if(NOISE_SENSOR.equalsIgnoreCase(deviceType)){
+            imageId = DRAWABLE_NOISE;
         }
+
+//        if(TEST.equalsIgnoreCase(deviceType)){
+//            imageId = R.drawable.test;
+//        }
         return imageId;
 
     }
@@ -257,6 +271,9 @@ public class Constant {
         }
         if(WINDOW.equalsIgnoreCase(deviceType)){
             equipmentTypeName = WINDOW_STRING;
+        }
+        if(NOISE_SENSOR.equalsIgnoreCase(deviceType)){
+            equipmentTypeName = NOISE_STRING;
         }
 
         return equipmentTypeName;

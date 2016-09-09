@@ -20,8 +20,6 @@ public class DBconstant {
     public static final String EQUIPMENT_REMARK = "remark";
 
     public static final String CREATEE_QUIPMENT_DB_SQL = "create table "+TABLENAME+"("
-//            +ID+" integer primary key autoincrement,"
-//            +EQUIPMENT_MAC_ADDR+" varchar(20),"
             +EQUIPMENT_MAC_ADDR+" varchar(20) primary key,"
             +EQUIPMENT_SHORT_ADDR+" varchar(20),"
             +EQUIPMENT_COORD_SHORT_ADDR+" varchar(20),"

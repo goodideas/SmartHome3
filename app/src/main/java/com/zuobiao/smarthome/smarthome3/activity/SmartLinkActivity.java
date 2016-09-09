@@ -133,8 +133,10 @@ public class SmartLinkActivity extends StatusActivity {
     // 广播的数据
     private byte[] seek = {(byte) 0xff, (byte) 0xaa, (byte) 0x00, (byte) 0x00,
             (byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0x00,
-            (byte) 0x00, (byte) 0x01, (byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0xff,
+            (byte) 0x00, (byte) 0x01, (byte) 0x00, (byte) 0x07, (byte) 0x00,
+            (byte)0x00,(byte)0x00,(byte)0x00,(byte)0x00,(byte)0x00,(byte)0x00,(byte)0x00, (byte) 0x00, (byte) 0xff,
             (byte) 0x55};
+
 
     private String mac = "";
     private MyHandler myHandler;
@@ -783,7 +785,7 @@ public class SmartLinkActivity extends StatusActivity {
                             Log.e("Main", "getSocketAddress2222=" + secondUdpDataPacket.getSocketAddress() + " getAddress2222=" + secondUdpDataPacket.getAddress());
 
                             String receiveStr = bytes2HexString(secondUdpReceiveByte, len);
-
+                            Log.e(TAG,"广播后回复数据="+receiveStr);
 
                             if (doWithSecondUdpRvData(receiveStr)) {
                                 // TODO: 2016/1/19 确定是网关接收包了，保存

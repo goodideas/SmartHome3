@@ -78,7 +78,7 @@ public class UdpHelper extends UdpMethod {
     private ToggleButton toggleButton;
     private String socketMac;
     private String switchMac;
-
+    private String inflammableGasMac;
 
 
 
@@ -95,12 +95,14 @@ public class UdpHelper extends UdpMethod {
     private TextView tvTestStatus;
     private ToggleButton tbTest;
 
+    private TextView tvNoiseSensor;
+
     private boolean isSend = true;
 
 
     private static UdpHelper UdpInstance = new UdpHelper();
 
-    public static synchronized UdpHelper getInstance() {
+    public static UdpHelper getInstance() {
         if (UdpInstance == null) {
             UdpInstance = new UdpHelper();
             Log.e(TAG, "getInstance");
@@ -649,6 +651,7 @@ public class UdpHelper extends UdpMethod {
 
             //光照
             if (msg.what == Constant.HANDLER_LIGHT_SERSON_HAS_ANSWER) {
+                //                FFAA8553037FCF5C0000715010000C5EEA08004B1200EE317005FFFE 04D5 23FF55
                 String handlerMessage = (String) msg.obj;
                 int high = Integer.parseInt(handlerMessage.substring(0, 2), 16);
                 int low = Integer.parseInt(handlerMessage.substring(2, 4), 16);
@@ -691,6 +694,49 @@ public class UdpHelper extends UdpMethod {
                     }
                 }
             }
+
+
+            //噪音
+            if (msg.what == Constant.HANDLER_NOISE_SERSON_HAS_ANSWER) {
+
+                String handlerMessage = (String) msg.obj;
+                int high = Integer.parseInt(handlerMessage.substring(0, 2), 16);
+                int low = Integer.parseInt(handlerMessage.substring(2, 4), 16);
+//                FFAA4393027FCF5C00009150100058FDE908004B120076339005FFFE   43 0A  2BFF55
+                if (tvNoiseSensor != null){
+                    int noiseSensor = high + low * 256;
+                    tvNoiseSensor.setText("音量 ：" + noiseSensor + "db");
+                    if(spHelper!=null){
+                        spHelper.saveSpNoiseSensor(String.valueOf(noiseSensor));
+                    }
+
+
+                }
+
+            }
+
+            //噪音2
+            if (msg.what == Constant.HANDLER_NOISE_SERSON_HAS_ANSWER2) {
+                String handlerMessage = (String) msg.obj;
+                int high = Integer.parseInt(handlerMessage.substring(0, 2), 16);
+                int low = Integer.parseInt(handlerMessage.substring(2, 4), 16);
+                if (tvNoiseSensor != null){
+                    int noiseSensor = high + low * 256;
+                    if(noiseSensor == 0){
+                        if(!TextUtils.isEmpty(spHelper.getSpNoiseSensor())){
+                            if(Integer.parseInt(spHelper.getSpNoiseSensor())==0){
+                                tvNoiseSensor.setText("正在读取数据。。。");
+                            }else{
+                                tvNoiseSensor.setText("音量 ：" + spHelper.getSpNoiseSensor() + "db");
+                            }
+                        }
+                    }else{
+                        //读到的数据不是为0
+                        tvNoiseSensor.setText("音量 ：" + noiseSensor + "db");
+                    }
+                }
+            }
+
 
 
             //烟雾
@@ -1337,20 +1383,6 @@ public class UdpHelper extends UdpMethod {
         //n个设备包 03 10
         if (commd.equalsIgnoreCase(Constant.REFRESH_EQUIPMENT_RECV2_COMMAND)) {
             //解析数据
-// FF AA
-// B7 59 0B 7F CF 5C 00 00
-// 03 10
-// 32 00
-// 4B FF C3 07 00 4B 12 00
-// E8 81
-// A9 C9
-// 12 05 FF FE
-// 00 00 00 00
-// 00 00 00 00
-// 00 00
-// FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF
-// 48
-// FF 55
             //设备表
             EquipmentBean equipmentBean = new EquipmentBean();
             //设备的mac地址，不是网关的mac地址
@@ -1396,7 +1428,6 @@ public class UdpHelper extends UdpMethod {
             String he = data.substring(68, 76);
             String pd = data.substring(76, 80);
             String remark = data.substring(80, 128);
-//            String remark = data.substring(84, 128);
             equipmentBean.setMac_ADDR(mac);
             equipmentBean.setShort_ADDR(shortAddr);
             equipmentBean.setCoord_Short_ADDR(CoordShortAddr);
@@ -1422,22 +1453,37 @@ public class UdpHelper extends UdpMethod {
         if (commd.equalsIgnoreCase(Constant.SWITCH_RECV2_COMMAND)) {
             String handlerMessage = data.substring(56, 58);
             String mac  = data.substring(28,44);
-//            FFAA A366017FCF5C0000 2150 1000 051AEA08004B12003C902005FFFE060062FF55
             Message msg = new Message();
             msg.obj = handlerMessage+mac;
             msg.what = Constant.HANDLER_SWITCHS_HAS_ANSWER2;
             myHandler.sendMessage(msg);
         }
 
+        //光照
         if (commd.equalsIgnoreCase(Constant.LIGHT_SENSOR_RECV2_COMMAND)) {
-//            FFAA B7590B7FCF5C0000 7150 1000 E95AEA08004B1200 F23A 7005FFFE 6300 93 FF55
 
 
             if (Constant.LIGHT_SENSOR.equalsIgnoreCase(data.substring(48, 56))) {
+
                 String handlerMessage = data.substring(56, 60);
                 Message msg = new Message();
                 msg.obj = handlerMessage;
                 msg.what = Constant.HANDLER_LIGHT_SERSON_HAS_ANSWER;
+                myHandler.sendMessage(msg);
+            }
+
+
+        }
+        //噪音
+        if (commd.equalsIgnoreCase(Constant.NOISE_SENSOR_RECV2_COMMAND)) {
+
+
+            if (Constant.NOISE_SENSOR.equalsIgnoreCase(data.substring(48, 56))) {
+
+                String handlerMessage = data.substring(56, 60);
+                Message msg = new Message();
+                msg.obj = handlerMessage;
+                msg.what = Constant.HANDLER_NOISE_SERSON_HAS_ANSWER;
                 myHandler.sendMessage(msg);
             }
 
@@ -1465,9 +1511,6 @@ public class UdpHelper extends UdpMethod {
 
 
         if (commd.equalsIgnoreCase(Constant.INFRARED_RECV_COMMAND)) {
-//FF AA B7 59 0B 7F CF 5C 00 00  51 50  10 00     7C B3 E9 08 00 4B 12 00   8B 39   50 05 FF FE 01 00 94 FF 55
-
-//FF AA B7 59 0B 7F CF 5C 00 00  51 50  10 00     7C B3 E9 08 00 4B 12 00   8B 39   50 05 FF FE 00 00 93 FF 55
 
             String handlerMessage = data.substring(56, 58);
             Message msg = new Message();
@@ -1476,7 +1519,6 @@ public class UdpHelper extends UdpMethod {
             myHandler.sendMessage(msg);
 
         }
-//        FFAAA366017FCF5C000041501400CA6FEA08004B1200DE1D4005FFFE02EF00E8950033FF55
         if (commd.equalsIgnoreCase(Constant.INFRARED_RECV3_COMMAND)) {
             String handlerMessage = data.substring(56, 58);
             Message msg = new Message();
@@ -1524,7 +1566,6 @@ public class UdpHelper extends UdpMethod {
         if (commd.equalsIgnoreCase(Constant.SOCKETS_RECV2_COMMAND)) {
             String handlerMessage = data.substring(56, 58);
             String mac = data.substring(28, 44);
-//FFAA A366017FCF5C0000 3150 1000 7D07EA08004B1200 9949 3005FFFE 0100 E8 FF55
           Log.e(TAG,"rev mac = "+mac);
             Message msg = new Message();
             msg.obj = handlerMessage+mac;
@@ -1533,10 +1574,8 @@ public class UdpHelper extends UdpMethod {
         }
 
         if (commd.equalsIgnoreCase(Constant.TEMP_PM25_RECV2_COMMAND)) {
-//            FFAA 0C24D034FE180000 4150 1400375EEA08004B120024F4 4005FFFE   00F6  00D0 9B01     A0 FF55
-//            FFAA 0C24D034FE180000 4150 1400375EEA08004B120024F4 4005FFFE   00DD  00F8 4401     58 FF55
-//                                                                           56 57 58 59 60   61 62 63 64  65 66 67 68
-            // TODO: 2016/1/26 56,58 temp  58,60 humi  60,62 pm25
+
+            // 56,58 temp  58,60 humi  60,62 pm25
             String handlerMessage = data.substring(56, 68);
             Message msg = new Message();
             msg.obj = handlerMessage;
@@ -1560,11 +1599,21 @@ public class UdpHelper extends UdpMethod {
             myHandler.sendMessage(msg);
         }
 
+        //光照
         if (commd.equalsIgnoreCase(Constant.LIGHT_SONSER_RECV2_COMMAND)) {
             String handlerMessage = data.substring(56, 60);
             Message msg = new Message();
             msg.obj = handlerMessage;
             msg.what = Constant.HANDLER_LIGHT_SERSON_HAS_ANSWER2;
+            myHandler.sendMessage(msg);
+        }
+
+        //噪音
+        if (commd.equalsIgnoreCase(Constant.NOISE_SONSER_RECV2_COMMAND)) {
+            String handlerMessage = data.substring(56, 60);
+            Message msg = new Message();
+            msg.obj = handlerMessage;
+            msg.what = Constant.HANDLER_NOISE_SERSON_HAS_ANSWER2;
             myHandler.sendMessage(msg);
         }
 
@@ -1577,8 +1626,7 @@ public class UdpHelper extends UdpMethod {
         }
 
         if (commd.equalsIgnoreCase(Constant.DOOR_MAGNET_RECV_COMMAND)) {
-//            FFAA0C24D034FE180000 8150 100001991B07004B1200CA958005FFFE  0100   FB   FF55
-//            FFAA0C24D034FE180000 8150 100001991B07004B1200CA958005FFFE  0000   FA   FF55
+
             String handlerMessage = data.substring(56, 58);
             Message msg = new Message();
             msg.obj = handlerMessage;
@@ -1631,13 +1679,7 @@ public class UdpHelper extends UdpMethod {
             msg.what = Constant.HANDLER_DEL_RFID_INFO_HAS_ANSWER;
             myHandler.sendMessage(msg);
         }
-//FFAA 7412007FCF5C0000
-// 1010 1300
-// 28FFC307004B1200
-// 9E36
-// 1205FFFE
-// 0000000000
-// 36FF55
+
         if(commd.equalsIgnoreCase(Constant.WINDOW_RECV_COMMAND)){
 
             String handlerMessage = data.substring(60, 64);
@@ -1648,22 +1690,7 @@ public class UdpHelper extends UdpMethod {
         }
 
 
-//        if(commd.equalsIgnoreCase(Constant.WINDOW_RECV_COMMAND)){
-//
-//            String handlerMessage = data.substring(60, 64);
-//            Message msg = new Message();
-//            msg.obj = handlerMessage;
-//            msg.what = Constant.HANDLER_WINDOW_HAS_ANSWER;
-//            myHandler.sendMessage(msg);
-//        }
-//        FFAA 7412007FCF5C0000 1010 1300
-// 28FFC307004B12009E361205FFFE0000000000000000000000000000000000000000000000000000000000E59B9EE5AEB6E6A8A1E5BC8F00000036FF55
 
-//        FFAA7412007FCF5C000010101300
-// 28FFC307004B12009E361205FFFE
-// 0000
-// 0100
-// 00000000000000000000000000000000000000000000000000E59B9EE5AEB6E6A8A1E5BC8F00000037FF55
     }
 
     /**
@@ -1686,8 +1713,9 @@ public class UdpHelper extends UdpMethod {
         this.socketMac = socketMac;
     }
 
-    public void setInflammableGasUI(TextView tvInflammableGas) {
+    public void setInflammableGasUI(TextView tvInflammableGas,String inflammableGasMac) {
         this.tvInflammableGas = tvInflammableGas;
+        this.inflammableGasMac = inflammableGasMac;
     }
 
     public void setInfraredTv(TextView tvInfrared) {
@@ -1724,19 +1752,21 @@ public class UdpHelper extends UdpMethod {
         this.tbCurtains = tbCurtains;
     }
 
-
-
-    public void setTestUI(TextView tvTestTemp,TextView tvTestHumidity,
-                          TextView tvTestPm25,TextView tvTestFlam,
-                          TextView tvTestLight,TextView tvTestStatus,ToggleButton tbTest,String socketMac){
-        this.tvTestTemp = tvTestTemp;
-        this.tvTestHumidity = tvTestHumidity;
-        this.tvTestPm25 = tvTestPm25;
-        this.tvTestFlam = tvTestFlam;
-        this.tvTestLight = tvTestLight;
-        this.tvTestStatus = tvTestStatus;
-        this.tbTest = tbTest;
-        this.socketMac = socketMac;
+    public void setNoiseSensorTv(TextView tvNoiseSensor){
+        this.tvNoiseSensor = tvNoiseSensor;
     }
+
+//    public void setTestUI(TextView tvTestTemp,TextView tvTestHumidity,
+//                          TextView tvTestPm25,TextView tvTestFlam,
+//                          TextView tvTestLight,TextView tvTestStatus,ToggleButton tbTest,String socketMac){
+//        this.tvTestTemp = tvTestTemp;
+//        this.tvTestHumidity = tvTestHumidity;
+//        this.tvTestPm25 = tvTestPm25;
+//        this.tvTestFlam = tvTestFlam;
+//        this.tvTestLight = tvTestLight;
+//        this.tvTestStatus = tvTestStatus;
+//        this.tbTest = tbTest;
+//        this.socketMac = socketMac;
+//    }
 
 }

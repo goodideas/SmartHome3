@@ -3,6 +3,7 @@ package com.zuobiao.smarthome.smarthome3.activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -16,15 +17,12 @@ import com.zuobiao.smarthome.smarthome3.util.SpHelper;
 import com.zuobiao.smarthome.smarthome3.util.UdpHelper;
 import com.zuobiao.smarthome.smarthome3.util.Util;
 
-/**
- * 烟雾传感器
- */
-public class InflammableGasActivity extends StatusActivity {
-
-    private TextView tvInflammableGas;
+public class NoiseActivity extends StatusActivity {
+    private static final String TAG = "NoiseActivity";
+    private TextView tvNoiseSensor;
     private UdpHelper udpHelper;
     private SpHelper spHelper;
-    private Button btnInflammableGasRefreSh;
+    private Button btnNoiseSensorRefreSh;
     private EquipmentBean equipmentBean;
     private Util util;
 
@@ -32,15 +30,15 @@ public class InflammableGasActivity extends StatusActivity {
     private EditText etEquipmentName;
     private boolean isModify = false;
     private DBcurd dBcurd;
+
     private Button btnEquipmentTitleBarBack;
     private TextView tvEquipmentShow;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_inflammable_gas);
-        tvInflammableGas = (TextView)findViewById(R.id.tvInflammableGas);
-        btnInflammableGasRefreSh = (Button)findViewById(R.id.btnInflammableGasRefreSh);
+        setContentView(R.layout.activity_noise);
+        tvNoiseSensor = (TextView)findViewById(R.id.tvNoiseSensor);
+        btnNoiseSensorRefreSh = (Button)findViewById(R.id.btnNoiseSensorRefreSh);
         tvEquipmentShow = (TextView)findViewById(R.id.tvEquipmentShow);
         btnEquipmentTitleBarBack = (Button)findViewById(R.id.btnEquipmentTitleBarBack);
         btnEquipmentTitleBarBack.setOnClickListener(new View.OnClickListener() {
@@ -53,43 +51,41 @@ public class InflammableGasActivity extends StatusActivity {
         Intent intent = this.getIntent();
         equipmentBean=(EquipmentBean)intent.getSerializableExtra("equipmentBean");
         util = new Util();
-        btnModifyName = (Button)findViewById(R.id.btnModifyNameInflammableGas);
-        etEquipmentName = (EditText)findViewById(R.id.etEquipmentNameInflammableGas);
 
-        dBcurd = new DBcurd(InflammableGasActivity.this);
+        btnModifyName = (Button)findViewById(R.id.btnModifyNameNoiseSensor);
+        etEquipmentName = (EditText)findViewById(R.id.etEquipmentNameNoiseSensor);
 
-        spHelper = new SpHelper(InflammableGasActivity.this);
+        dBcurd = new DBcurd(NoiseActivity.this);
+        spHelper = new SpHelper(NoiseActivity.this);
         udpHelper = UdpHelper.getInstance();
-
-        if(!TextUtils.isEmpty(spHelper.getSpInflammableGasSensor())){
-            tvInflammableGas.setText("数据 ：" + spHelper.getSpInflammableGasSensor() + " PPM");
+        if(!TextUtils.isEmpty(spHelper.getSpNoiseSensor())){
+            tvNoiseSensor.setText("音量 ：" + spHelper.getSpNoiseSensor() + "db");
         }
 
-        udpHelper.setInflammableGasUI(tvInflammableGas,equipmentBean.getMac_ADDR());
-        udpHelper.startUdpWithIp(spHelper.getSpGateWayIp(), InflammableGasActivity.this);
+        udpHelper.setNoiseSensorTv(tvNoiseSensor);
+        udpHelper.startUdpWithIp(spHelper.getSpGateWayIp(), NoiseActivity.this);
         udpHelper.setIsSend(true);
         udpHelper.send(getDataOfBeforeDo());
-        btnInflammableGasRefreSh.setOnClickListener(new View.OnClickListener() {
+        btnNoiseSensorRefreSh.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (udpHelper != null) {
                     udpHelper.setIsSend(true);
                     udpHelper.send(getDataOfBeforeDo());
+                } else {
+                    Log.e(TAG, "==null");
                 }
             }
         });
-
         tvEquipmentShow.setText(Constant.getTypeName(equipmentBean.getDevice_Type()));
         if(!dBcurd.getNickNameByMac(equipmentBean.getMac_ADDR()).equalsIgnoreCase("FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF")) {
-
-//            etEquipmentName.setText(new String(util.HexString2Bytes(dBcurd.getNickNameByMac(equipmentBean.getMac_ADDR()))).trim());
-            String equipmentName = new String(util.HexString2Bytes(dBcurd.getNickNameByMac(equipmentBean.getMac_ADDR()))).trim();
-//            etEquipmentName.setText(new String(util.HexString2Bytes(dBcurd.getNickNameByMac(equipmentBean.getMac_ADDR()))).trim());
+            String equipmentName = new String(Util.HexString2Bytes(dBcurd.getNickNameByMac(equipmentBean.getMac_ADDR()))).trim();
             if(TextUtils.isEmpty(equipmentName)){
                 etEquipmentName.setText(Constant.getTypeName(equipmentBean.getDevice_Type()));
             }else{
                 etEquipmentName.setText(equipmentName);
             }
+
         }else{
             etEquipmentName.setText(Constant.getTypeName(equipmentBean.getDevice_Type()));
         }
@@ -122,6 +118,7 @@ public class InflammableGasActivity extends StatusActivity {
 
     }
 
+
     private byte[] getDataOfBeforeDo(){
         byte[] data = new byte[25];
 
@@ -130,9 +127,9 @@ public class InflammableGasActivity extends StatusActivity {
         byte[] macByte = util.HexString2Bytes(spHelper.getSpGateWayMac());
         int macByteLength = macByte.length;
         System.arraycopy(macByte, 0, data, 2, macByteLength);
-        data[10] = Constant.INFLAMMABLE_GAS_SEND_COMMAND[0];
-        data[11] = Constant.INFLAMMABLE_GAS_SEND_COMMAND[1];
-        //数据内容长度
+        data[10] = Constant.NOISE_SENSOR_SEND2_COMMAND[0];
+        data[11] = Constant.NOISE_SENSOR_SEND2_COMMAND[1];
+//数据内容长度
         data[12] = (byte) 0x08;
         data[13] = (byte) 0x00;
         byte[] euipmentMacByte = util.HexString2Bytes(equipmentBean.getMac_ADDR());
@@ -145,8 +142,6 @@ public class InflammableGasActivity extends StatusActivity {
         data[24] = Constant.DATA_TAIL[1];
         return data;
     }
-
-
     private byte[] getModifyData(String equipmentName){
         byte[] data = new byte[51];
 

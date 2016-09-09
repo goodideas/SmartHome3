@@ -23,7 +23,7 @@ import com.zuobiao.smarthome.smarthome3.util.Util;
 import java.lang.reflect.Field;
 import java.util.List;
 
-public class AddRfidCardInfoActivity extends AppCompatActivity {
+public class AddRfidCardInfoActivity extends StatusActivity {
 
 
     private Button btnBack;

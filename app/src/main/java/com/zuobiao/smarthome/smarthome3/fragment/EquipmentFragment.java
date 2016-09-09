@@ -27,6 +27,7 @@ import com.zuobiao.smarthome.smarthome3.activity.InflammableGasActivity;
 import com.zuobiao.smarthome.smarthome3.activity.InfraredActivity;
 import com.zuobiao.smarthome.smarthome3.activity.LightSensorActivity;
 import com.zuobiao.smarthome.smarthome3.activity.MainActivity;
+import com.zuobiao.smarthome.smarthome3.activity.NoiseActivity;
 import com.zuobiao.smarthome.smarthome3.activity.SocketsActivity;
 import com.zuobiao.smarthome.smarthome3.activity.SwitchsActivity;
 import com.zuobiao.smarthome.smarthome3.activity.TempPm25Activity;
@@ -49,8 +50,7 @@ public class EquipmentFragment extends BaseFragment {
 
 
     private static final String TAG = "EquipmentFragment";
-//    private Button btnMenu;
-//    private CustomPopWindow titlePopup;
+
     private Button btnCamera;
     private byte[] searchGateWay = new byte[17+7];
     private GridView gridView;
@@ -64,8 +64,6 @@ public class EquipmentFragment extends BaseFragment {
     private static final int REFRESH_DATA = 0x123;
     private UdpHelper udpHelper;
     private static final String broadcastIP = "255.255.255.255";
-    private byte[] bddata = {(byte)0xff,(byte)0xaa,(byte)0x00,(byte)0x00,(byte)0x00,(byte)0x00,(byte)0x00,(byte)0x00,(byte)0x00,(byte)0x00
-            ,(byte)0x01,(byte)0x00,(byte)0x00,(byte)0x00,(byte)0x00,(byte)0xff,(byte)0x55};
 
     private Util util = new Util();
 
@@ -96,9 +94,7 @@ public class EquipmentFragment extends BaseFragment {
                 udpHelper = UdpHelper.getInstance();
                 spHelper = new SpHelper(getActivity());
                 udpHelper.startUdpWithIp(broadcastIP, getActivity());
-//                udpHelper.send(broadcastData());
                 udpHelper.setIsSend(true);
-//                udpHelper.send(bddata);
                 udpHelper.send(broadcastData());
                 udpHelper.doSearchGateWay();
                 myHandler.sendEmptyMessageDelayed(REFRESH_DATA, 2000);
@@ -119,39 +115,6 @@ public class EquipmentFragment extends BaseFragment {
         //第3种 网关不在线 手机没存 onLine = false，hasGateWayInfo = false
 
         //第4种 网关不在线 手机存了 onLine = false，hasGateWayInfo = true
-
-        //测试
-//        EquipmentBean equipmentBean = new EquipmentBean();
-//        equipmentBean.setMac_ADDR("B7590B7FCF5C0000");
-//        equipmentBean.setShort_ADDR("C4EE");
-//        equipmentBean.setCoord_Short_ADDR("EF5E");
-//        equipmentBean.setSoftware_Edition("00000000");
-//        equipmentBean.setHardware_Edition("00000000");
-//        equipmentBean.setDevice_Type("2005FFFE");
-//        equipmentBean.setPoint_Data("0000");
-//        equipmentBean.setRemark("FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF");
-//        dBcurd.addData(equipmentBean);
-//
-//        list = dBcurd.getAllData();//数据源 不管什么时候，都是从这里读取所有设备
-//        if (list.size() == 0) {
-//            Log.e(TAG, "list ==null");
-//            //可以做一些文字或者图片来显示，告知用户
-//        }
-//
-//        if (!spHelper.getSpHasGateWayInfo()) {
-//            //没有网关的信息，显示空白或者只显示网关
-//            if (list.size() != 0) {
-//                EquipmentBean equipmentBeans = list.get(0);
-//                equipmentBeans.setOnLine(spHelper.getSpOnLine());
-//            }
-//
-//        } else {
-//            //有网关信息，显示设备，在线显示在线，不在线显示不在线
-//            for (int i = 0; i < list.size(); i++) {
-//                EquipmentBean equipmentBeans = list.get(i);
-//                equipmentBeans.setOnLine(spHelper.getSpOnLine());
-//            }
-//        }
 
         adapter = new ImageListViewAdapter(getActivity().getApplicationContext(), list,false);
         gridView.setAdapter(adapter);
@@ -180,23 +143,6 @@ public class EquipmentFragment extends BaseFragment {
             }
         });
 
-//        btnMenu = (Button)messageLayout.findViewById(R.id.btnMenu);
-//        btnMenu.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                titlePopup.show(v);
-//                Log.e(TAG,"anniu");
-//            }
-//        });
-//        titlePopup = new CustomPopWindow(getActivity(), LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
-//        //给标题栏弹窗添加子类
-//        titlePopup.addAction(new ActionItem(getActivity(), "删除", R.drawable.delete));
-//        titlePopup.setItemOnClickListener(new CustomPopWindow.OnItemOnClickListener() {
-//            @Override
-//            public void onItemClick(ActionItem item, int position) {
-//                Toast.makeText(getActivity(), "position=" + position, Toast.LENGTH_SHORT).show();
-//            }
-//        });
 
         return messageLayout;
     }
@@ -305,8 +251,14 @@ public class EquipmentFragment extends BaseFragment {
                 startActivity(intent);
             }
 
-            if (Constant.TEST.equalsIgnoreCase(deviceType)) {
-                startActivity(new Intent(getActivity(),TestActivity.class));
+            if (Constant.NOISE_SENSOR.equalsIgnoreCase(deviceType)) {
+                //噪音
+                Intent intent = new Intent();
+                intent.setClass(getActivity(), NoiseActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("equipmentBean", equipmentBean);
+                intent.putExtras(bundle);
+                startActivity(intent);
             }
 
         } else {
@@ -341,32 +293,13 @@ public class EquipmentFragment extends BaseFragment {
 
 
     @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
-        Log.e(TAG, "onAttach-----");
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        Log.e(TAG, "onCreate------");
-
-    }
-
-    @Override
-    public void onActivityCreated(Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-        Log.e(TAG, "onActivityCreated-------");
-    }
-
-    @Override
     public void onStart() {
         Log.e(TAG, "spHelper.getSpHasGateWayInfo()=" + spHelper.getSpHasGateWayInfo() + "  spHelper.getSpOnLine()=" + spHelper.getSpOnLine());
         //这种做法不是很好，但能实现功能，暂时这么做。
         list = dBcurd.getAllData();//数据源 不管什么时候，都是从这里读取所有设备
-        EquipmentBean equipmentBeanT = new EquipmentBean();
-        equipmentBeanT.setDevice_Type("FFFFFFFF");
-        list.add(equipmentBeanT);
+//        EquipmentBean equipmentBeanT = new EquipmentBean();
+//        equipmentBeanT.setDevice_Type("FFFFFFFF");
+//        list.add(equipmentBeanT);
         adapter = new ImageListViewAdapter(getActivity().getApplicationContext(), list,false);
         gridView.setAdapter(adapter);
         if (spHelper.getSpHasGateWayInfo()) {
@@ -384,109 +317,15 @@ public class EquipmentFragment extends BaseFragment {
         Log.e(TAG, "onStart----->");
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        Log.e(TAG, "onresume---->");
-        MainActivity.currFragTag = Constant.FRAGMENT_FLAG_EQUIPMENT;
-    }
 
-    @Override
-    public void onPause() {
-        super.onPause();
-        Log.e(TAG, "onpause");
-    }
 
-    @Override
-    public void onStop() {
-        super.onStop();
-        Log.e(TAG, "onStop");
-    }
 
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        Log.e(TAG, "ondestoryView");
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        Log.e(TAG, "ondestory");
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        Log.d(TAG, "onDetach------");
-
-    }
-
-//    private byte[] broadcastData(){
-//        //数据头
-//        searchGateWay[0] = Constant.DATA_HEAD[0];
-//        searchGateWay[1] = Constant.DATA_HEAD[1];
-//
-//        searchGateWay[2] = (byte)0x00;
-//        searchGateWay[3] = (byte)0x00;
-//        searchGateWay[4] = (byte)0x00;
-//        searchGateWay[5] = (byte)0x00;
-//        searchGateWay[6] = (byte)0x00;
-//        searchGateWay[7] = (byte)0x00;
-//        searchGateWay[8] = (byte)0x00;
-//        searchGateWay[9] = (byte)0x00;
-//
-//        //命令类型
-//        searchGateWay[10] = Constant.GATEWAY_SEND_COMMAND[0];
-//        searchGateWay[11] = Constant.GATEWAY_SEND_COMMAND[1];
-//
-//        //数据内容长度
-//        searchGateWay[12] = (byte)0x06;
-//
-//        //数据内容
-//        searchGateWay[13] = (byte)0x00;
-//
-//        byte[] timeByte = getLocalTime();
-//
-//        searchGateWay[14] = timeByte[0];//年
-//        searchGateWay[15] = timeByte[1];//月
-//        searchGateWay[16] = timeByte[2];//日
-//        searchGateWay[17] = timeByte[3];//时
-//        searchGateWay[18] = timeByte[4];//分
-//        searchGateWay[19] = timeByte[5];//秒
-//        //数据校验
-//
-//        searchGateWay[20] = util.checkData(util.bytes2HexString(timeByte,timeByte.length));
-//
-//        //数据尾
-//        searchGateWay[21] = Constant.DATA_TAIL[0];
-//        searchGateWay[22] = Constant.DATA_TAIL[1];
-//        return searchGateWay;
-//    }
-//
-//    private byte[] getLocalTime(){
-//        byte[] time = new byte[6];
-//        SimpleDateFormat formatter = new SimpleDateFormat ("yy:MM:dd:HH:mm:ss");
-//        Date curDate = new Date(System.currentTimeMillis());//获取当前时间
-//        String timeForm = formatter.format(curDate);
-//        String times[] = timeForm.split(":");
-//        for(int i =0;i< 6;i++){
-//            time[i] = Byte.parseByte(times[i]);
-//        }
-//
-//        return time;
-//    }
 
     private byte[] broadcastData(){
         //数据头
         searchGateWay[0] = Constant.DATA_HEAD[0];
         searchGateWay[1] = Constant.DATA_HEAD[1];
-//        ff aa 00 00 00 00 00 00 00 00 01 00 00 00 00 ff 55
 
-        //mac地址
-//        byte[] macByte = util.HexString2Bytes(getMacAddress());
-//        int macByteLength = macByte.length;
-//        System.arraycopy(macByte,0,searchGateWay,2,macByteLength);
         searchGateWay[2] = (byte)0x00;
         searchGateWay[3] = (byte)0x00;
         searchGateWay[4] = (byte)0x00;
@@ -524,8 +363,6 @@ public class EquipmentFragment extends BaseFragment {
         return searchGateWay;
     }
 
-    //    FFAA 0000000000000000 0100 0800  07 E0 03 14 0B 0E 0C 23 FF55
-//    FFAA 0000000000000000 0100 0800  07 E0 03 14 0B 0E 36 4D FF55
     private byte[] getLocalTime(){
         byte[] time = new byte[7];
         SimpleDateFormat formatter = new SimpleDateFormat ("yyyy:MM:dd:HH:mm:ss");
@@ -557,9 +394,7 @@ public class EquipmentFragment extends BaseFragment {
         @Override
         public void handleMessage(Message msg) {
             if(msg.what == REFRESH_DATA){
-//                Toast t = Toast.makeText(getActivity(),"刷新",Toast.LENGTH_SHORT);
-//                t.setGravity(Gravity.CENTER, 0, 0);
-//                t.show();
+
                 mSwipeLayout.setRefreshing(false);
 
 //                list = dBcurd.getAllData();//数据源 不管什么时候，都是从这里读取所有设备
