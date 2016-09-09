@@ -74,6 +74,8 @@ public class Constant {
     public static final String DOOR_MAGNET = "8005fffe";    //门磁 feff0580
     public static final String CURTAINS = "1105fffe";        //窗帘 feff0511
     public static final String WINDOW = "1205fffe";        //窗 feff0512
+    public static final String SINGLE_CURTAINS = "1305fffe";        //单个窗 feff0513
+
     public static final String NOISE_SENSOR = "9005fffe";//噪音传感器
 //    public static final String TEST = "FFFFFFFF";        //测试
 
@@ -222,6 +224,9 @@ public class Constant {
         if(NOISE_SENSOR.equalsIgnoreCase(deviceType)){
             imageId = DRAWABLE_NOISE;
         }
+        if(SINGLE_CURTAINS.equalsIgnoreCase(deviceType)){
+            imageId = DRAWABLE_CURTAINS;
+        }
 
 //        if(TEST.equalsIgnoreCase(deviceType)){
 //            imageId = R.drawable.test;
@@ -274,6 +279,9 @@ public class Constant {
         }
         if(NOISE_SENSOR.equalsIgnoreCase(deviceType)){
             equipmentTypeName = NOISE_STRING;
+        }
+        if(SINGLE_CURTAINS.equalsIgnoreCase(deviceType)){
+            equipmentTypeName = CURTAINS_STRING;
         }
 
         return equipmentTypeName;

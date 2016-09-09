@@ -28,6 +28,7 @@ import com.zuobiao.smarthome.smarthome3.activity.InfraredActivity;
 import com.zuobiao.smarthome.smarthome3.activity.LightSensorActivity;
 import com.zuobiao.smarthome.smarthome3.activity.MainActivity;
 import com.zuobiao.smarthome.smarthome3.activity.NoiseActivity;
+import com.zuobiao.smarthome.smarthome3.activity.SingleCurtainsActivity;
 import com.zuobiao.smarthome.smarthome3.activity.SocketsActivity;
 import com.zuobiao.smarthome.smarthome3.activity.SwitchsActivity;
 import com.zuobiao.smarthome.smarthome3.activity.TempPm25Activity;
@@ -235,6 +236,16 @@ public class EquipmentFragment extends BaseFragment {
                 //窗帘
                 Intent intent = new Intent();
                 intent.setClass(getActivity(), CurtainsActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("equipmentBean", equipmentBean);
+                intent.putExtras(bundle);
+                startActivity(intent);
+            }
+
+            if (Constant.SINGLE_CURTAINS.equalsIgnoreCase(deviceType)) {
+                //单个窗帘
+                Intent intent = new Intent();
+                intent.setClass(getActivity(), SingleCurtainsActivity.class);
                 Bundle bundle = new Bundle();
                 bundle.putSerializable("equipmentBean", equipmentBean);
                 intent.putExtras(bundle);

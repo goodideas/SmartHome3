@@ -84,8 +84,8 @@ public class UdpHelper extends UdpMethod {
 
     private ToggleButton tbDoor;
     private ToggleButton tbWindow;
-//    private ToggleButton tbWindows ;
     private ToggleButton tbCurtains;
+    private ToggleButton tbSingleCurtains ;
 
     private TextView tvTestTemp;
     private TextView tvTestHumidity;
@@ -593,10 +593,34 @@ public class UdpHelper extends UdpMethod {
                         }, 100);
 
                     }
+                    if (tbSingleCurtains!=null) {
+                        setIsSend(false);
+                        tbSingleCurtains.setChecked(false);
+                        myHandler.postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                setIsSend(true);
+                            }
+                        }, 100);
+
+                    }
+
                 }else if(doors.equalsIgnoreCase("01")){
                     if (tbCurtains != null) {
                         setIsSend(false);
                         tbCurtains.setChecked(true);
+                        myHandler.postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                setIsSend(true);
+                            }
+                        }, 100);
+
+                    }
+
+                    if (tbSingleCurtains!=null) {
+                        setIsSend(false);
+                        tbSingleCurtains.setChecked(true);
                         myHandler.postDelayed(new Runnable() {
                             @Override
                             public void run() {
@@ -1751,6 +1775,10 @@ public class UdpHelper extends UdpMethod {
     public void setCurtainsUI(ToggleButton tbCurtains){
         this.tbCurtains = tbCurtains;
     }
+    public void setSingleCurtainsUI(ToggleButton tbSingleCurtains){
+        this.tbSingleCurtains = tbSingleCurtains;
+    }
+
 
     public void setNoiseSensorTv(TextView tvNoiseSensor){
         this.tvNoiseSensor = tvNoiseSensor;
