@@ -27,7 +27,7 @@ public class LightSensorActivity extends StatusActivity {
     private SpHelper spHelper;
     private Button btnLightSensorRefreSh;
     private EquipmentBean equipmentBean;
-    private Util util;
+//    private Util util;
 
     private Button btnModifyName;
     private EditText etEquipmentName;
@@ -54,7 +54,7 @@ public class LightSensorActivity extends StatusActivity {
 
         Intent intent = this.getIntent();
         equipmentBean=(EquipmentBean)intent.getSerializableExtra("equipmentBean");
-        util = new Util();
+//        util = new Util();
 
         btnModifyName = (Button)findViewById(R.id.btnModifyNameLightSensor);
         etEquipmentName = (EditText)findViewById(R.id.etEquipmentNameLightSensor);
@@ -66,7 +66,7 @@ public class LightSensorActivity extends StatusActivity {
             tvLightSensor.setText("光照强度 ：" + spHelper.getSpLightSensor() + "lux");
         }
 
-        udpHelper.setLightSensorTv(tvLightSensor);
+        udpHelper.setLightSensorTv(tvLightSensor,equipmentBean.getMac_ADDR());
         udpHelper.startUdpWithIp(spHelper.getSpGateWayIp(), LightSensorActivity.this);
         udpHelper.setIsSend(true);
         udpHelper.send(getDataOfBeforeDo());
@@ -83,7 +83,7 @@ public class LightSensorActivity extends StatusActivity {
         });
         tvEquipmentShow.setText(Constant.getTypeName(equipmentBean.getDevice_Type()));
         if(!dBcurd.getNickNameByMac(equipmentBean.getMac_ADDR()).equalsIgnoreCase("FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF")) {
-            String equipmentName = new String(util.HexString2Bytes(dBcurd.getNickNameByMac(equipmentBean.getMac_ADDR()))).trim();
+            String equipmentName = new String(Util.HexString2Bytes(dBcurd.getNickNameByMac(equipmentBean.getMac_ADDR()))).trim();
 //            etEquipmentName.setText(new String(util.HexString2Bytes(dBcurd.getNickNameByMac(equipmentBean.getMac_ADDR()))).trim());
             if(TextUtils.isEmpty(equipmentName)){
                 etEquipmentName.setText(Constant.getTypeName(equipmentBean.getDevice_Type()));
@@ -132,7 +132,7 @@ public class LightSensorActivity extends StatusActivity {
 
         data[0] = Constant.DATA_HEAD[0];
         data[1] = Constant.DATA_HEAD[1];
-        byte[] macByte = util.HexString2Bytes(spHelper.getSpGateWayMac());
+        byte[] macByte = Util.HexString2Bytes(spHelper.getSpGateWayMac());
         int macByteLength = macByte.length;
         System.arraycopy(macByte, 0, data, 2, macByteLength);
         data[10] = Constant.LIGHT_SENSOR_SEND2_COMMAND[0];
@@ -140,12 +140,12 @@ public class LightSensorActivity extends StatusActivity {
 //数据内容长度
         data[12] = (byte) 0x08;
         data[13] = (byte) 0x00;
-        byte[] euipmentMacByte = util.HexString2Bytes(equipmentBean.getMac_ADDR());
+        byte[] euipmentMacByte = Util.HexString2Bytes(equipmentBean.getMac_ADDR());
         int euipmentMacByteLength = macByte.length;
         System.arraycopy(euipmentMacByte, 0, data, 14, euipmentMacByteLength);
-        String checkData = util.bytes2HexString(data, data.length);
+        String checkData = Util.bytes2HexString(data, data.length);
 
-        data[22] = util.checkData(checkData.substring(28, 44));//校验位
+        data[22] = Util.checkData(checkData.substring(28, 44));//校验位
         data[23] = Constant.DATA_TAIL[0];
         data[24] = Constant.DATA_TAIL[1];
         return data;
@@ -155,7 +155,7 @@ public class LightSensorActivity extends StatusActivity {
 
         data[0] = Constant.DATA_HEAD[0];
         data[1] = Constant.DATA_HEAD[1];
-        byte[] macByte = util.HexString2Bytes(spHelper.getSpGateWayMac());
+        byte[] macByte = Util.HexString2Bytes(spHelper.getSpGateWayMac());
         int macByteLength = macByte.length;
         System.arraycopy(macByte, 0, data, 2, macByteLength);
         data[10] = Constant.MODEFY_EQUIPMENT_NAME_SEND_COMMAND[0];
@@ -164,11 +164,11 @@ public class LightSensorActivity extends StatusActivity {
         data[12] = (byte) 0x22;
         data[13] = (byte) 0x00;
 
-        byte[] euipmentMacByte = util.HexString2Bytes(equipmentBean.getMac_ADDR());
+        byte[] euipmentMacByte = Util.HexString2Bytes(equipmentBean.getMac_ADDR());
         int euipmentMacByteLength = euipmentMacByte.length;
         System.arraycopy(euipmentMacByte, 0, data, 14, euipmentMacByteLength);
 
-        byte[] equipmentShorMacByte = util.HexString2Bytes(equipmentBean.getShort_ADDR());
+        byte[] equipmentShorMacByte = Util.HexString2Bytes(equipmentBean.getShort_ADDR());
         int equipmentShorMacByteLength = equipmentShorMacByte.length;
         System.arraycopy(equipmentShorMacByte, 0, data, 22, equipmentShorMacByteLength);
 
@@ -176,8 +176,8 @@ public class LightSensorActivity extends StatusActivity {
         int etNameByteLength = etNameByte.length;
         System.arraycopy(etNameByte, 0, data, 24, etNameByteLength);
 
-        String checkData = util.bytes2HexString(data, data.length);
-        data[48] = util.checkData(checkData.substring(28, 96));//校验位
+        String checkData = Util.bytes2HexString(data, data.length);
+        data[48] = Util.checkData(checkData.substring(28, 96));//校验位
         data[49] = Constant.DATA_TAIL[0];
         data[50] = Constant.DATA_TAIL[1];
 //        发送的修改的数据 FFAA B7590B7FCF5C0000 0500 2200 2E73EA08004B1200 C4EE 6162636465666768696A6B6C6D6E00000000000000000000 4B FF55

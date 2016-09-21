@@ -62,7 +62,7 @@ public class NoiseActivity extends StatusActivity {
             tvNoiseSensor.setText("音量 ：" + spHelper.getSpNoiseSensor() + "db");
         }
 
-        udpHelper.setNoiseSensorTv(tvNoiseSensor);
+        udpHelper.setNoiseSensorTv(tvNoiseSensor,equipmentBean.getMac_ADDR());
         udpHelper.startUdpWithIp(spHelper.getSpGateWayIp(), NoiseActivity.this);
         udpHelper.setIsSend(true);
         udpHelper.send(getDataOfBeforeDo());

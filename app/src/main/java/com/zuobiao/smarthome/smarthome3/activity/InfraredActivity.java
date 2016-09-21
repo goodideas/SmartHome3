@@ -61,7 +61,7 @@ public class InfraredActivity extends StatusActivity {
         dBcurd = new DBcurd(InfraredActivity.this);
         spHelper = new SpHelper(InfraredActivity.this);
         udpHelper = UdpHelper.getInstance();
-        udpHelper.setInfraredTv(tvInfrared);
+        udpHelper.setInfraredTv(tvInfrared,equipmentBean.getMac_ADDR());
         udpHelper.startUdpWithIp(spHelper.getSpGateWayIp(), InfraredActivity.this);
         udpHelper.setIsSend(true);
         udpHelper.send(getDataOfBeforeDo());

@@ -47,12 +47,11 @@ public class UdpHelper extends UdpMethod {
     private MyHandler myHandler;
     private SpHelper spHelper;
     private DBcurd dBcurd;
-    private Util util;
 
     private ProgressDialog searchDialog;
 
     private Runnable runnable;
-    private Runnable WelcomRunnable;
+    private Runnable WelcomeRunnable;
     private Runnable refreshRunnable;
     private Runnable addRunnable;
     private Runnable switchsRunnable;
@@ -79,21 +78,16 @@ public class UdpHelper extends UdpMethod {
     private String socketMac;
     private String switchMac;
     private String inflammableGasMac;
-
-
+    private String doorMagnetMac;
+    private String infraredMac;
+    private String lightSensorMac;
+    private String noiseSensorMac;
+    private String tempPm25Mac;
 
     private ToggleButton tbDoor;
     private ToggleButton tbWindow;
     private ToggleButton tbCurtains;
     private ToggleButton tbSingleCurtains ;
-
-    private TextView tvTestTemp;
-    private TextView tvTestHumidity;
-    private TextView tvTestPm25;
-    private TextView tvTestFlam;
-    private TextView tvTestLight;
-    private TextView tvTestStatus;
-    private ToggleButton tbTest;
 
     private TextView tvNoiseSensor;
 
@@ -123,11 +117,10 @@ public class UdpHelper extends UdpMethod {
         dBcurd = new DBcurd(context);
         startUdp();
         mContext = context;
-        util = new Util();
         getDataFlag = false;
     }
 
-    //测试消息
+    //消息
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
     private void notifys() {
         NotificationManager nm = (NotificationManager) mContext.getSystemService(mContext.NOTIFICATION_SERVICE);
@@ -165,7 +158,7 @@ public class UdpHelper extends UdpMethod {
                         udpSocket.receive(udpPacket);
                         int len = udpPacket.getLength();
                         if (len > 0) {
-                            String receiveStr = util.bytes2HexString(udpReceiveByte, len);
+                            String receiveStr = Util.bytes2HexString(udpReceiveByte, len);
                             Log.e("UdpHelper", "receiveStr=" + receiveStr + " ip=" + udpPacket.getAddress().toString());
                             //说明有接收到设备的数据
                             doWithRevData(receiveStr, udpPacket.getAddress().toString().substring(1));
@@ -173,19 +166,15 @@ public class UdpHelper extends UdpMethod {
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
-//                    finally {
-//                        if(udpSocket!=null){
-//                            udpSocket.close();
-//                        }
-//                    }
                 }
 
             }
         }.start();
     }
 
-    public void setLightSensorTv(TextView tvLightSensor) {
+    public void setLightSensorTv(TextView tvLightSensor,String lightSensorMac) {
         this.tvLightSensor = tvLightSensor;
+        this.lightSensorMac = lightSensorMac;
     }
 
 
@@ -207,9 +196,8 @@ public class UdpHelper extends UdpMethod {
                 sendUdpPacket.setLength(data.length);
             }
 
-            Log.e(TAG, "=============发送的数据=" + util.bytes2HexString(data,data.length));
+            Log.e(TAG, "=============发送的数据=" + Util.bytes2HexString(data,data.length));
         }
-
         new Thread() {
             @Override
             public void run() {
@@ -257,7 +245,6 @@ public class UdpHelper extends UdpMethod {
                 }
 
             }
-
 
             if (msg.what == Constant.HANDLER_ADD_EQUIPMENT_ADD_DATA) {
                 spHelper.SaveSpOnLine(true);
@@ -309,17 +296,12 @@ public class UdpHelper extends UdpMethod {
 
             //面板开关
             if (msg.what == Constant.HANDLER_SWITCHS_HAS_ANSWER) {
-                //    FF AA     B7 59 0B 7F CF 5C 00 00     21 10 09 00     2E 73 EA 08 00 4B 12 00 01 F1 FF 55
-                //主要提取数据内容
-                //数据内容： 0x01 成功
-                //          0x00 失败
+
                 String handlerMessage = (String) msg.obj;
                 if (handlerMessage.equalsIgnoreCase("01")) {
-//                    Toast.makeText(mContext, "成功", Toast.LENGTH_SHORT).show();
                     Util.showToast(mContext, "成功");
                 }
                 if (handlerMessage.equalsIgnoreCase("00")||handlerMessage.equalsIgnoreCase("FF")) {
-//                    Toast.makeText(mContext, "失败", Toast.LENGTH_SHORT).show();
                     Util.showToast(mContext, "失败");
                 }
 
@@ -329,18 +311,13 @@ public class UdpHelper extends UdpMethod {
             if (msg.what == Constant.HANDLER_SOCKETS_HAS_ANSWER) {
                 String handlerMessage = (String) msg.obj;
                 if (handlerMessage.equalsIgnoreCase("01")) {
-//                    Toast.makeText(mContext, "成功", Toast.LENGTH_SHORT).show();
                     Util.showToast(mContext, "成功");
                 }
-//                FFAA B7590B7FCF5C0000 3110 0900 2C5EEA08004B1200 FF D8 FF55
-//                FFAA B7590B7FCF5C0000 31100 900 2C5EEA08004B1200 FF D8 FF55
                 if (handlerMessage.equalsIgnoreCase("00")) {
-//                    Toast.makeText(mContext, "失败", Toast.LENGTH_SHORT).show();
                     Util.showToast(mContext, "失败");
                 }
 
                 if (handlerMessage.equalsIgnoreCase("FF")) {
-//                    Toast.makeText(mContext, "失败", Toast.LENGTH_SHORT).show();
                     Util.showToast(mContext, "失败");
                 }
             }
@@ -350,10 +327,8 @@ public class UdpHelper extends UdpMethod {
                 String handlerMessage = (String) msg.obj;
                 String status = handlerMessage.substring(28,30);
                 if (status.equalsIgnoreCase("01")) {
-//                    Toast.makeText(mContext, "成功", Toast.LENGTH_SHORT).show();
                     Util.showToast(mContext, "成功");
                 }else if (status.equalsIgnoreCase("00")) {
-//                    Toast.makeText(mContext, "失败", Toast.LENGTH_SHORT).show();
                     Util.showToast(mContext, "失败");
                 }
             }
@@ -363,18 +338,13 @@ public class UdpHelper extends UdpMethod {
             if (msg.what == Constant.HANDLER_CURTAINS_HAS_ANSWER) {
                 String handlerMessage = (String) msg.obj;
                 if (handlerMessage.equalsIgnoreCase("01")) {
-//                    Toast.makeText(mContext, "成功", Toast.LENGTH_SHORT).show();
                     Util.showToast(mContext, "成功！");
                 }
-//                FFAA B7590B7FCF5C0000 3110 0900 2C5EEA08004B1200 FF D8 FF55
-//                FFAA B7590B7FCF5C0000 31100 900 2C5EEA08004B1200 FF D8 FF55
                 if (handlerMessage.equalsIgnoreCase("00")) {
-//                    Toast.makeText(mContext, "失败", Toast.LENGTH_SHORT).show();
                     Util.showToast(mContext, "失败！");
                 }
 
                 if (handlerMessage.equalsIgnoreCase("FF")) {
-//                    Toast.makeText(mContext, "失败", Toast.LENGTH_SHORT).show();
                     Util.showToast(mContext, "失败！");
                 }
             }
@@ -402,13 +372,8 @@ public class UdpHelper extends UdpMethod {
                     dowithTbState(state);
             }
 
-//            FFAA A366017FCF5C0000 3110 0900 7D07EA08004B1200 01 D4 FF55
-//            FFAA A366017FCF5C0000 3150 1000 7D07EA08004B1200 99493005FFFE0100E8FF55
             //人为按下插座时返回的数据
             if (msg.what == Constant.HANDLER_SOCKETS_HAS_ANSWER2) {
-//FFAA B7590B7FCF5C0000 3150 1000 2C5EEA08004B1200 BC1E 3005FFFE 0100 E6 FF55   kai
-//FFAA B7590B7FCF5C0000 3150 1000 2C5EEA08004B1200 BC1E 3005FFFE 0000 E5 FF55   guan
-//FFAA A366017FCF5C0000 3150 1000 7D07EA08004B1200 9949 3005FFFE 0100 E8 FF55
                 String handlerMessage = (String) msg.obj;
                 String data1 = handlerMessage.substring(0,2);
                 String mac = handlerMessage.substring(2);
@@ -427,16 +392,6 @@ public class UdpHelper extends UdpMethod {
 
                     }
 
-                    if(tbTest!=null){
-                        setIsSend(false);
-                        tbTest.setChecked(true);
-                        myHandler.postDelayed(new Runnable() {
-                            @Override
-                            public void run() {
-                                setIsSend(true);
-                            }
-                        }, 100);
-                    }
                 }
                 if (data1.equalsIgnoreCase("00")&&mac.equalsIgnoreCase(socketMac)) {
 
@@ -450,16 +405,7 @@ public class UdpHelper extends UdpMethod {
                             }
                         }, 100);
                     }
-                    if(tbTest!=null){
-                        setIsSend(false);
-                        tbTest.setChecked(false);
-                        myHandler.postDelayed(new Runnable() {
-                            @Override
-                            public void run() {
-                                setIsSend(true);
-                            }
-                        }, 100);
-                    }
+
 
                 }
             }
@@ -479,16 +425,6 @@ public class UdpHelper extends UdpMethod {
                         }, 100);
                     }
 
-                    if (tbTest != null) {
-                        setIsSend(false);
-                        tbTest.setChecked(true);
-                        myHandler.postDelayed(new Runnable() {
-                            @Override
-                            public void run() {
-                                setIsSend(true);
-                            }
-                        }, 100);
-                    }
 
                 }
                 if (handlerMessage.equalsIgnoreCase("00")) {
@@ -503,16 +439,7 @@ public class UdpHelper extends UdpMethod {
                         }, 100);
                     }
 
-                    if (tbTest != null) {
-                        setIsSend(false);
-                        tbTest.setChecked(false);
-                        myHandler.postDelayed(new Runnable() {
-                            @Override
-                            public void run() {
-                                setIsSend(true);
-                            }
-                        }, 100);
-                    }
+
 
                 }
             }
@@ -656,12 +583,12 @@ public class UdpHelper extends UdpMethod {
 //
 //                    }
 //                }
-
-
+//
+//
 //                if (handlerMessage.equalsIgnoreCase("01")) {
 //
 //                }
-
+//
 //                if (handlerMessage.equalsIgnoreCase("01")) {
 //                    if (toggleButton != null)
 //                        toggleButton.setChecked(true);
@@ -675,17 +602,14 @@ public class UdpHelper extends UdpMethod {
 
             //光照
             if (msg.what == Constant.HANDLER_LIGHT_SERSON_HAS_ANSWER) {
-                //                FFAA8553037FCF5C0000715010000C5EEA08004B1200EE317005FFFE 04D5 23FF55
                 String handlerMessage = (String) msg.obj;
-                int high = Integer.parseInt(handlerMessage.substring(0, 2), 16);
-                int low = Integer.parseInt(handlerMessage.substring(2, 4), 16);
+                String stat = handlerMessage.substring(0,4);
+                String mac = handlerMessage.substring(4);
+                int high = Integer.parseInt(stat.substring(0, 2), 16);
+                int low = Integer.parseInt(stat.substring(2, 4), 16);
 
-                if(tvTestLight!=null){
-                    int lightSensor = high + low * 256;
-                    tvTestLight.setText(String.valueOf(lightSensor));
-                }
 
-                if (tvLightSensor != null){
+                if (tvLightSensor != null&&mac.equals(lightSensorMac)){
                     int lightSensor = high + low * 256;
                     tvLightSensor.setText("光照强度 ：" + lightSensor + "lux");
                     if(spHelper!=null){
@@ -700,9 +624,11 @@ public class UdpHelper extends UdpMethod {
             //光照2
             if (msg.what == Constant.HANDLER_LIGHT_SERSON_HAS_ANSWER2) {
                 String handlerMessage = (String) msg.obj;
-                int high = Integer.parseInt(handlerMessage.substring(0, 2), 16);
-                int low = Integer.parseInt(handlerMessage.substring(2, 4), 16);
-                if (tvLightSensor != null){
+                String stat = handlerMessage.substring(0,4);
+                String mac = handlerMessage.substring(4);
+                int high = Integer.parseInt(stat.substring(0, 2), 16);
+                int low = Integer.parseInt(stat.substring(2, 4), 16);
+                if (tvLightSensor != null&&mac.equals(lightSensorMac)){
                     int lightSensor = high + low * 256;
                     if(lightSensor == 0){
                         if(!TextUtils.isEmpty(spHelper.getSpLightSensor())){
@@ -724,10 +650,11 @@ public class UdpHelper extends UdpMethod {
             if (msg.what == Constant.HANDLER_NOISE_SERSON_HAS_ANSWER) {
 
                 String handlerMessage = (String) msg.obj;
-                int high = Integer.parseInt(handlerMessage.substring(0, 2), 16);
-                int low = Integer.parseInt(handlerMessage.substring(2, 4), 16);
-//                FFAA4393027FCF5C00009150100058FDE908004B120076339005FFFE   43 0A  2BFF55
-                if (tvNoiseSensor != null){
+                String stat = handlerMessage.substring(0,4);
+                String mac = handlerMessage.substring(4);
+                int high = Integer.parseInt(stat.substring(0, 2), 16);
+                int low = Integer.parseInt(stat.substring(2, 4), 16);
+                if (tvNoiseSensor != null&&mac.equals(noiseSensorMac)){
                     int noiseSensor = high + low * 256;
                     tvNoiseSensor.setText("音量 ：" + noiseSensor + "db");
                     if(spHelper!=null){
@@ -742,9 +669,11 @@ public class UdpHelper extends UdpMethod {
             //噪音2
             if (msg.what == Constant.HANDLER_NOISE_SERSON_HAS_ANSWER2) {
                 String handlerMessage = (String) msg.obj;
-                int high = Integer.parseInt(handlerMessage.substring(0, 2), 16);
-                int low = Integer.parseInt(handlerMessage.substring(2, 4), 16);
-                if (tvNoiseSensor != null){
+                String stat = handlerMessage.substring(0,4);
+                String mac = handlerMessage.substring(4);
+                int high = Integer.parseInt(stat.substring(0, 2), 16);
+                int low = Integer.parseInt(stat.substring(2, 4), 16);
+                if (tvNoiseSensor != null&&mac.equals(noiseSensorMac)){
                     int noiseSensor = high + low * 256;
                     if(noiseSensor == 0){
                         if(!TextUtils.isEmpty(spHelper.getSpNoiseSensor())){
@@ -766,15 +695,13 @@ public class UdpHelper extends UdpMethod {
             //烟雾
             if (msg.what == Constant.HANDLER_INFLAMMABLE_GAS_HAS_ANSWER) {
                 String handlerMessage = (String) msg.obj;
-                int high = Integer.parseInt(handlerMessage.substring(0, 2), 16);
-                int low = Integer.parseInt(handlerMessage.substring(2, 4), 16);
+                String stat = handlerMessage.substring(0,4);
+                String mac = handlerMessage.substring(4);
 
-                if(tvTestFlam !=null){
-                    int inflammableGasSensor = (high + low * 256);
-                    tvTestFlam.setText(String.valueOf(inflammableGasSensor));
-                }
+                int high = Integer.parseInt(stat.substring(0, 2), 16);
+                int low = Integer.parseInt(stat.substring(2, 4), 16);
 
-                if (tvInflammableGas != null){
+                if (tvInflammableGas != null&&mac.equals(inflammableGasMac)){
                     int inflammableGasSensor = (high + low * 256);
                     tvInflammableGas.setText("数据 ：" + inflammableGasSensor+" PPM");
                     if(spHelper!=null){
@@ -786,9 +713,11 @@ public class UdpHelper extends UdpMethod {
             //烟雾2
             if (msg.what == Constant.HANDLER_INFLAMMABLE_GAS_HAS_ANSWER3) {
                 String handlerMessage = (String) msg.obj;
-                int high = Integer.parseInt(handlerMessage.substring(0, 2), 16);
-                int low = Integer.parseInt(handlerMessage.substring(2, 4), 16);
-                if (tvInflammableGas != null) {
+                String stat = handlerMessage.substring(0,4);
+                String mac = handlerMessage.substring(4);
+                int high = Integer.parseInt(stat.substring(0, 2), 16);
+                int low = Integer.parseInt(stat.substring(2, 4), 16);
+                if (tvInflammableGas != null&&mac.equals(inflammableGasMac)) {
                     int inflammableGasSensor = high + low * 256;
                     if(inflammableGasSensor == 0){
                         if(!TextUtils.isEmpty(spHelper.getSpInflammableGasSensor())){
@@ -810,13 +739,11 @@ public class UdpHelper extends UdpMethod {
             //人体红外
             if (msg.what == Constant.HANDLER_INFRARED_HAS_ANSWER) {
                 String handlerMessage = (String) msg.obj;
-//                int state = Integer.parseInt(handlerMessage, 16);
-
-                if (tvInfrared != null) {
-//                    if (state == 1) {
-                    if (handlerMessage.equalsIgnoreCase("01")) {
+                String stat = handlerMessage.substring(0,2);
+                String mac = handlerMessage.substring(2);
+                if (tvInfrared != null&&mac.equals(infraredMac)) {
+                    if (stat.equalsIgnoreCase("01")) {
                         tvInfrared.setText("有人");
-                        //测试
                         new Thread() {
                             @Override
                             public void run() {
@@ -824,7 +751,7 @@ public class UdpHelper extends UdpMethod {
                             }
                         }.start();
                     }
-                    if (handlerMessage.equalsIgnoreCase("00")) {
+                    if (stat.equalsIgnoreCase("00")) {
                         tvInfrared.setText("没人");
                     }
 
@@ -834,12 +761,11 @@ public class UdpHelper extends UdpMethod {
             //人体红外2
             if (msg.what == Constant.HANDLER_INFRARED_HAS_ANSWER3) {
                 String handlerMessage = (String) msg.obj;
-//                int state = Integer.parseInt(handlerMessage, 16);
-
-                if (tvInfrared != null) {
-                    if (handlerMessage.equalsIgnoreCase("01")) {
+                String stat = handlerMessage.substring(0,2);
+                String mac = handlerMessage.substring(2);
+                if (tvInfrared != null&&mac.equals(infraredMac)) {
+                    if (stat.equalsIgnoreCase("01")) {
                         tvInfrared.setText("有人");
-                        //测试
                         new Thread() {
                             @Override
                             public void run() {
@@ -847,7 +773,7 @@ public class UdpHelper extends UdpMethod {
                             }
                         }.start();
                     }
-                    if (handlerMessage.equalsIgnoreCase("00")) {
+                    if (stat.equalsIgnoreCase("00")) {
                         tvInfrared.setText("没人");
                     }
 
@@ -858,50 +784,17 @@ public class UdpHelper extends UdpMethod {
 
             //温湿度pm2传过啦的数据
             if (msg.what == Constant.HANDLER_TEMP_PM25_HAS_ANSWER) {
-//            FFAA 0C24D034FE180000 4150 1400375EEA08004B120024F4 4005FFFE   00F6  00D0 9B01     A0 FF55
-//            FFAA 0C24D034FE180000 4150 1400375EEA08004B120024F4 4005FFFE   00DD             00F8            4401          58 FF55
-//                                                                           56 57 58 59    60 61 62 63     64 65 66 67
-//                                                                            0  1  2  3     4  5  6  7      8  9 10 11
-
-//            FFAA 0C24D034FE180000 4150 1400375EEA08004B120024F  44005FFFE  00C8  0103  6901  74 FF55
-
-
-//                FFAA0C24D034FE18000041501400375EEA08004B120024F44005FFFE    00C6   0106  4601  52 FF55
-
-
-                // TODO: 2016/1/26 data 是为3个16进制的数 第一个是temp，第二个是humi，第三个是pm2.5
+                // 是为3个16进制的数 第一个是temp，第二个是humi，第三个是pm2.5
                 String data = (String) msg.obj;
-
-                if(tvTestTemp!=null&&tvTestHumidity!=null&&tvTestPm25!=null){
-                    int a = Integer.parseInt(data.substring(0, 2), 16) * 256;
-                    int b = Integer.parseInt(data.substring(2, 4), 16);
-                    int c = Integer.parseInt(data.substring(4, 6), 16) * 256;
-                    int d = Integer.parseInt(data.substring(6, 8), 16);
-                    int e = Integer.parseInt(data.substring(8, 10), 16);
-                    int f = Integer.parseInt(data.substring(10, 12), 16) * 256;
-                    int temp = (c+d) / 10;
-                    int hum = (a+b) / 10;
-                    int pm25 = (e+f) ;
-
-                    tvTestTemp.setText(String.valueOf(temp));
-                    tvTestHumidity.setText(String.valueOf(hum));
-                    tvTestPm25.setText(String.valueOf(pm25));
-                    if(pm25>=0&&pm25<150){
-                        tvTestStatus.setText("优");
-                    }else if(pm25>=150&&pm25<250){
-                        tvTestStatus.setText("良");
-                    }else if(pm25>=250){
-                        tvTestStatus.setText("差");
-                    }
-                }
-
-                if (tvPm25 != null&&tvTemperature !=null && tvHumidity!=null) {
-                    int a = Integer.parseInt(data.substring(0, 2), 16) * 256;
-                    int b = Integer.parseInt(data.substring(2, 4), 16);
-                    int c = Integer.parseInt(data.substring(4, 6), 16) * 256;
-                    int d = Integer.parseInt(data.substring(6, 8), 16);
-                    int e = Integer.parseInt(data.substring(8, 10), 16);
-                    int f = Integer.parseInt(data.substring(10, 12), 16) * 256;
+                String stat = data.substring(0,12);
+                String mac = data.substring(12);
+                if (tvPm25 != null&&tvTemperature !=null && tvHumidity!=null&&mac.equals(tempPm25Mac)) {
+                    int a = Integer.parseInt(stat.substring(0, 2), 16) * 256;
+                    int b = Integer.parseInt(stat.substring(2, 4), 16);
+                    int c = Integer.parseInt(stat.substring(4, 6), 16) * 256;
+                    int d = Integer.parseInt(stat.substring(6, 8), 16);
+                    int e = Integer.parseInt(stat.substring(8, 10), 16);
+                    int f = Integer.parseInt(stat.substring(10, 12), 16) * 256;
                     int temp = (c+d) / 10;
                     int hum = (a+b) / 10;
                     int pm25 = (e+f) ;
@@ -921,13 +814,15 @@ public class UdpHelper extends UdpMethod {
             if (msg.what == Constant.HANDLER_TEMP_PM25_HAS_ANSWER3) {
                 // TODO: 2016/1/26 data 是为3个16进制的数 第一个是temp，第二个是humi，第三个是pm2.5
                 String data = (String) msg.obj;
-                if (tvPm25 != null&&tvTemperature !=null && tvHumidity!=null) {
-                    int a = Integer.parseInt(data.substring(0, 2), 16) * 256;
-                    int b = Integer.parseInt(data.substring(2, 4), 16);
-                    int c = Integer.parseInt(data.substring(4, 6), 16) * 256;
-                    int d = Integer.parseInt(data.substring(6, 8), 16);
-                    int e = Integer.parseInt(data.substring(8, 10), 16);
-                    int f = Integer.parseInt(data.substring(10, 12), 16) * 256;
+                String stat = data.substring(0,12);
+                String mac = data.substring(12);
+                if (tvPm25 != null&&tvTemperature !=null && tvHumidity!=null&&mac.equals(tempPm25Mac)) {
+                    int a = Integer.parseInt(stat.substring(0, 2), 16) * 256;
+                    int b = Integer.parseInt(stat.substring(2, 4), 16);
+                    int c = Integer.parseInt(stat.substring(4, 6), 16) * 256;
+                    int d = Integer.parseInt(stat.substring(6, 8), 16);
+                    int e = Integer.parseInt(stat.substring(8, 10), 16);
+                    int f = Integer.parseInt(stat.substring(10, 12), 16) * 256;
 
                     int temp = (c+d) / 10;
                     int hum = (a+b) / 10;
@@ -955,11 +850,14 @@ public class UdpHelper extends UdpMethod {
 
             if (msg.what == Constant.HANDLER_DOOR_MAGNET_HAS_ANSWER) {
                 String handlerMessage = (String) msg.obj;
-                if (tvDoorMagnet != null) {
-                    if (handlerMessage.equalsIgnoreCase("01")) {
+                String stat = handlerMessage.substring(0,2);
+                String mac = handlerMessage.substring(2);
+
+                if (tvDoorMagnet != null&&mac.equalsIgnoreCase(doorMagnetMac)) {
+                    if (stat.equalsIgnoreCase("01")) {
                         tvDoorMagnet.setText("开");
                     }
-                    if (handlerMessage.equalsIgnoreCase("00")) {
+                    if (stat.equalsIgnoreCase("00")) {
                         tvDoorMagnet.setText("关");
                     }
                 }
@@ -968,14 +866,18 @@ public class UdpHelper extends UdpMethod {
 
             if (msg.what == Constant.HANDLER_DOOR_MAGNET_HAS_ANSWER2) {
                 String handlerMessage = (String) msg.obj;
-                if (tvDoorMagnet != null) {
-                    if (handlerMessage.equalsIgnoreCase("01")) {
+                String stat = handlerMessage.substring(0,2);
+                String mac = handlerMessage.substring(2);
+
+                if (tvDoorMagnet != null&&mac.equalsIgnoreCase(doorMagnetMac)) {
+                    if (stat.equalsIgnoreCase("01")) {
                         tvDoorMagnet.setText("开");
                     }
-                    if (handlerMessage.equalsIgnoreCase("00")) {
+                    if (stat.equalsIgnoreCase("00")) {
                         tvDoorMagnet.setText("关");
                     }
                 }
+
             }
 
             //修改设备名称
@@ -983,11 +885,9 @@ public class UdpHelper extends UdpMethod {
                 String handlerMessage = (String) msg.obj;
 
                 if (handlerMessage.equalsIgnoreCase("01")) {
-//                    Toast.makeText(mContext, "成功", Toast.LENGTH_SHORT).show();
                     Util.showToast(mContext, "成功！");
                 }
                 if (handlerMessage.equalsIgnoreCase("00")) {
-//                    Toast.makeText(mContext, "失败", Toast.LENGTH_SHORT).show();
                     Util.showToast(mContext, "失败！");
                 }
 
@@ -1224,23 +1124,20 @@ public class UdpHelper extends UdpMethod {
     }
 
 
-
-
     /**
      * 欢迎界面的查找网关
      *
      * @param maxTime 等待的最大时间 单位毫秒
      */
     public void doSearchGateWayOnWelcom(int maxTime) {
-        //TODO 可能要判断是不是我们的网关
-        WelcomRunnable = new Runnable() {
+        WelcomeRunnable = new Runnable() {
             @Override
             public void run() {
                 spHelper.SaveSpOnLine(getDataFlag);
                 closeUdp();
             }
         };
-        myHandler.postDelayed(WelcomRunnable, maxTime);
+        myHandler.postDelayed(WelcomeRunnable, maxTime);
 
     }
 
@@ -1251,7 +1148,6 @@ public class UdpHelper extends UdpMethod {
             @Override
             public void run() {
                 searchDialog.dismiss();
-//                spHelper.SaveSpOnLine(false);
                 myHandler.sendEmptyMessage(Constant.HANDLER_ADD_EQUIPMENT_NO_ANSWER);
             }
         };
@@ -1372,7 +1268,6 @@ public class UdpHelper extends UdpMethod {
      * @param ip
      */
     private void doWithDataByCommd(String commd, String data, String ip) {
-//       FF AA B7 59 0B 7F CF 5C 00 00 01 10 2A 00 2E 16 90 1F 00 05 FF FE 01 00 00 00 01 00 00 00 00 00 48 6F 6D 69 64 65 61 D6 C7 C4 DC CD F8 B9 D8 00 00 00 00 00 00 00 00 00 41 FF 55
         //网关
 
         if (commd.equalsIgnoreCase(Constant.GATEWAY_RECV_COMMAND)) {
@@ -1396,8 +1291,6 @@ public class UdpHelper extends UdpMethod {
         //刷新时网关发送过来的告知有几个包 02 10
         if (commd.equalsIgnoreCase(Constant.REFRESH_EQUIPMENT_RECV_COMMAND)) {
             //解析数据
-//            FF AA B7 59 0B 7F CF 5C 00 00 02 10 02 00 07 00 07 FF 55
-            //TODO 最好对比下mac对不对 B7 59 0B 7F CF 5C 00 00
             addEquipmentNumber = Integer.parseInt(data.substring(28, 30), 16);
             Log.e("udpHelper", "将要来的number=" + addEquipmentNumber);
             myHandler.sendEmptyMessage(Constant.HANDLER_REFRESH_EQUIPMENT_GATE_DATA);
@@ -1418,14 +1311,6 @@ public class UdpHelper extends UdpMethod {
             String he = data.substring(68, 76);
             String pd = data.substring(76, 80);
             String remark = data.substring(80, 128);
-//            String remark = data.substring(84, 128);
-            // TODO: 2016/4/14 网关信息有误，remark的信息错误
-            // FFAA B848E434FE180000 0310 3200 2C5EEA08004B1200
-            // 8E65 0000 3005FFFE
-            // 00000000 00000000
-            // 0000
-            // 8E65E68F92E5BAA731000000000000000000000000000000 错误 前面2个字节不能加上短地址
-            // 6F FF55
 
             equipmentBean.setMac_ADDR(mac);
             equipmentBean.setShort_ADDR(shortAddr);
@@ -1488,10 +1373,10 @@ public class UdpHelper extends UdpMethod {
 
 
             if (Constant.LIGHT_SENSOR.equalsIgnoreCase(data.substring(48, 56))) {
-
+                String mac = data.substring(28, 44);
                 String handlerMessage = data.substring(56, 60);
                 Message msg = new Message();
-                msg.obj = handlerMessage;
+                msg.obj = handlerMessage+mac;
                 msg.what = Constant.HANDLER_LIGHT_SERSON_HAS_ANSWER;
                 myHandler.sendMessage(msg);
             }
@@ -1503,10 +1388,10 @@ public class UdpHelper extends UdpMethod {
 
 
             if (Constant.NOISE_SENSOR.equalsIgnoreCase(data.substring(48, 56))) {
-
+                String mac = data.substring(28, 44);
                 String handlerMessage = data.substring(56, 60);
                 Message msg = new Message();
-                msg.obj = handlerMessage;
+                msg.obj = handlerMessage+mac;
                 msg.what = Constant.HANDLER_NOISE_SERSON_HAS_ANSWER;
                 myHandler.sendMessage(msg);
             }
@@ -1518,8 +1403,9 @@ public class UdpHelper extends UdpMethod {
             //如果是烟雾的
             if (Constant.INFLAMMABLE_GAS.equalsIgnoreCase(data.substring(48, 56))) {
                 String handlerMessage = data.substring(56, 60);
+                String mac = data.substring(28, 44);
                 Message msg = new Message();
-                msg.obj = handlerMessage;
+                msg.obj = handlerMessage+mac;
                 msg.what = Constant.HANDLER_INFLAMMABLE_GAS_HAS_ANSWER;
                 myHandler.sendMessage(msg);
             }
@@ -1527,8 +1413,9 @@ public class UdpHelper extends UdpMethod {
 
         if (commd.equalsIgnoreCase(Constant.INFLAMMABLE_GAS_RECV3_COMMAND)) {
             String handlerMessage = data.substring(56, 60);
+            String mac = data.substring(28, 44);
             Message msg = new Message();
-            msg.obj = handlerMessage;
+            msg.obj = handlerMessage+mac;
             msg.what = Constant.HANDLER_INFLAMMABLE_GAS_HAS_ANSWER3;
             myHandler.sendMessage(msg);
         }
@@ -1537,16 +1424,18 @@ public class UdpHelper extends UdpMethod {
         if (commd.equalsIgnoreCase(Constant.INFRARED_RECV_COMMAND)) {
 
             String handlerMessage = data.substring(56, 58);
+            String mac = data.substring(28, 44);
             Message msg = new Message();
-            msg.obj = handlerMessage;
+            msg.obj = handlerMessage+mac;
             msg.what = Constant.HANDLER_INFRARED_HAS_ANSWER;
             myHandler.sendMessage(msg);
 
         }
         if (commd.equalsIgnoreCase(Constant.INFRARED_RECV3_COMMAND)) {
             String handlerMessage = data.substring(56, 58);
+            String mac = data.substring(28, 44);
             Message msg = new Message();
-            msg.obj = handlerMessage;
+            msg.obj = handlerMessage+mac;
             msg.what = Constant.HANDLER_INFRARED_HAS_ANSWER3;
             myHandler.sendMessage(msg);
         }
@@ -1563,12 +1452,6 @@ public class UdpHelper extends UdpMethod {
         }
 
         if(commd.equalsIgnoreCase(Constant.SCENE_SETTING_RECV2_COMMAND)){
-// FFAA 7412007FCF5C0000 F100 6E00 E59CBA310000000000000000000000000000000000000000 0300
-// 2E73EA08004B1200  00      00       00        00 00 00 00  00       0000000000000000 00     0000   00
-// 2E73EA08004B1200  01      01       00        00 00 0B 0C  00       0000000000000000 00     0000   00
-// 2E73EA08004B1200  02      02       00        00 00 00 00  00       A55CEA08004B1200 00     0063   01     10 FF55  00
-// 场景设备mac        设备号  触发方式   立即开关   时间         时间开关    条件设备mac     传感号  条件值  符号
-
             Message msg = new Message();
             msg.obj = data;
             msg.what = Constant.HANDLER_SCENE_SETTING_HAS_ANSWER2;
@@ -1590,7 +1473,7 @@ public class UdpHelper extends UdpMethod {
         if (commd.equalsIgnoreCase(Constant.SOCKETS_RECV2_COMMAND)) {
             String handlerMessage = data.substring(56, 58);
             String mac = data.substring(28, 44);
-          Log.e(TAG,"rev mac = "+mac);
+            Log.e(TAG,"rev mac = "+mac);
             Message msg = new Message();
             msg.obj = handlerMessage+mac;
             msg.what = Constant.HANDLER_SOCKETS_HAS_ANSWER2;
@@ -1599,14 +1482,13 @@ public class UdpHelper extends UdpMethod {
 
         if (commd.equalsIgnoreCase(Constant.TEMP_PM25_RECV2_COMMAND)) {
 
-            // 56,58 temp  58,60 humi  60,62 pm25
             String handlerMessage = data.substring(56, 68);
+            String mac = data.substring(28,44);
             Message msg = new Message();
-            msg.obj = handlerMessage;
+            msg.obj = handlerMessage+mac;
             msg.what = Constant.HANDLER_TEMP_PM25_HAS_ANSWER;
             myHandler.sendMessage(msg);
         }
-//        FF AA B7 59 0B 7F CF 5C 00 00 20 10 10 00 2E 73 EA 08 00 4B 12 00 C4 EE 20 05 FF FE 04 00 C8 FF 55
         if (commd.equalsIgnoreCase(Constant.SWITCH_RECV3_COMMAND)) {
             String handlerMessage = data.substring(56, 58);
             Message msg = new Message();
@@ -1626,8 +1508,9 @@ public class UdpHelper extends UdpMethod {
         //光照
         if (commd.equalsIgnoreCase(Constant.LIGHT_SONSER_RECV2_COMMAND)) {
             String handlerMessage = data.substring(56, 60);
+            String mac = data.substring(28,44);
             Message msg = new Message();
-            msg.obj = handlerMessage;
+            msg.obj = handlerMessage+mac;
             msg.what = Constant.HANDLER_LIGHT_SERSON_HAS_ANSWER2;
             myHandler.sendMessage(msg);
         }
@@ -1635,16 +1518,18 @@ public class UdpHelper extends UdpMethod {
         //噪音
         if (commd.equalsIgnoreCase(Constant.NOISE_SONSER_RECV2_COMMAND)) {
             String handlerMessage = data.substring(56, 60);
+            String mac = data.substring(28, 44);
             Message msg = new Message();
-            msg.obj = handlerMessage;
+            msg.obj = handlerMessage+mac;
             msg.what = Constant.HANDLER_NOISE_SERSON_HAS_ANSWER2;
             myHandler.sendMessage(msg);
         }
 
         if (commd.equalsIgnoreCase(Constant.TEMP_PM25_RECV3_COMMAND)) {
             String handlerMessage = data.substring(56, 68);
+            String mac = data.substring(28, 44);
             Message msg = new Message();
-            msg.obj = handlerMessage;
+            msg.obj = handlerMessage+mac;
             msg.what = Constant.HANDLER_TEMP_PM25_HAS_ANSWER3;
             myHandler.sendMessage(msg);
         }
@@ -1652,23 +1537,24 @@ public class UdpHelper extends UdpMethod {
         if (commd.equalsIgnoreCase(Constant.DOOR_MAGNET_RECV_COMMAND)) {
 
             String handlerMessage = data.substring(56, 58);
+            String mac = data.substring(28, 44);
             Message msg = new Message();
-            msg.obj = handlerMessage;
+            msg.obj = handlerMessage+mac;
             msg.what = Constant.HANDLER_DOOR_MAGNET_HAS_ANSWER;
             myHandler.sendMessage(msg);
         }
 
         if (commd.equalsIgnoreCase(Constant.DOOR_MAGNET_RECV2_COMMAND)) {
-            String handlerMessage = data.substring(56, 60);
+            String handlerMessage = data.substring(56, 58);
+            String mac = data.substring(28, 44);
             Message msg = new Message();
-            msg.obj = handlerMessage;
+            msg.obj = handlerMessage+mac;
             msg.what = Constant.HANDLER_DOOR_MAGNET_HAS_ANSWER2;
             myHandler.sendMessage(msg);
         }
 
         if (commd.equalsIgnoreCase(Constant.MODIFY_EQUIPMENT_NAME_RECV_COMMAND)) {
             String handlerMessage = data.substring(44, 46);
-//            String handlerMessage2 = data.substring(28, 44);
             Message msg = new Message();
             msg.obj = handlerMessage;
             msg.what = Constant.HANDLER_MODIFY_EQUIPMENT_NAME_HAS_ANSWER;
@@ -1707,6 +1593,7 @@ public class UdpHelper extends UdpMethod {
         if(commd.equalsIgnoreCase(Constant.WINDOW_RECV_COMMAND)){
 
             String handlerMessage = data.substring(60, 64);
+
             Message msg = new Message();
             msg.obj = handlerMessage;
             msg.what = Constant.HANDLER_WINDOW_HAS_ANSWER;
@@ -1742,21 +1629,23 @@ public class UdpHelper extends UdpMethod {
         this.inflammableGasMac = inflammableGasMac;
     }
 
-    public void setInfraredTv(TextView tvInfrared) {
+    public void setInfraredTv(TextView tvInfrared,String infraredMac) {
         this.tvInfrared = tvInfrared;
+        this.infraredMac = infraredMac;
     }
 
 
-    public void setTempPm25Tv(TextView tvTemperature,TextView tvHumidity,TextView tvPm25) {
+    public void setTempPm25Tv(TextView tvTemperature,TextView tvHumidity,TextView tvPm25,String tempPm25Mac) {
         this.tvTemperature = tvTemperature;
         this.tvHumidity= tvHumidity;
         this.tvPm25 = tvPm25;
-
+        this.tempPm25Mac = tempPm25Mac;
 
     }
 
-    public void setDoorMagnetUI(TextView tvDoorMagnet) {
+    public void setDoorMagnetUI(TextView tvDoorMagnet,String doorMagnetMac) {
         this.tvDoorMagnet = tvDoorMagnet;
+        this.doorMagnetMac = doorMagnetMac;
     }
 
     public void setWindowUI(ToggleButton tbDoor,ToggleButton tbWindow){
@@ -1780,21 +1669,9 @@ public class UdpHelper extends UdpMethod {
     }
 
 
-    public void setNoiseSensorTv(TextView tvNoiseSensor){
+    public void setNoiseSensorTv(TextView tvNoiseSensor,String noiseSensorMac){
         this.tvNoiseSensor = tvNoiseSensor;
+        this.noiseSensorMac = noiseSensorMac;
     }
-
-//    public void setTestUI(TextView tvTestTemp,TextView tvTestHumidity,
-//                          TextView tvTestPm25,TextView tvTestFlam,
-//                          TextView tvTestLight,TextView tvTestStatus,ToggleButton tbTest,String socketMac){
-//        this.tvTestTemp = tvTestTemp;
-//        this.tvTestHumidity = tvTestHumidity;
-//        this.tvTestPm25 = tvTestPm25;
-//        this.tvTestFlam = tvTestFlam;
-//        this.tvTestLight = tvTestLight;
-//        this.tvTestStatus = tvTestStatus;
-//        this.tbTest = tbTest;
-//        this.socketMac = socketMac;
-//    }
 
 }

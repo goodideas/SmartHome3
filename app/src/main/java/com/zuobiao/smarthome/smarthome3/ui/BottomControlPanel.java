@@ -18,7 +18,7 @@ public class BottomControlPanel extends LinearLayout implements View.OnClickList
 	private ImageText mMsgBtn = null;
 	private ImageText mContactsBtn = null;
 	private ImageText mSettingBtn = null;
-	private int DEFALUT_BACKGROUND_COLOR = Color.rgb(243, 243, 243); //Color.rgb(192, 192, 192)
+	private int DEFAULT_BACKGROUND_COLOR = Color.rgb(243, 243, 243); //Color.rgb(192, 192, 192)
 	private BottomPanelCallback mBottomCallback = null;
 	private List<ImageText> viewList = new ArrayList<ImageText>();
 
@@ -34,7 +34,7 @@ public class BottomControlPanel extends LinearLayout implements View.OnClickList
 		mMsgBtn = (ImageText)findViewById(R.id.btn_message);
 		mContactsBtn = (ImageText)findViewById(R.id.btn_contacts);
 		mSettingBtn = (ImageText)findViewById(R.id.btn_setting);
-		setBackgroundColor(DEFALUT_BACKGROUND_COLOR);
+		setBackgroundColor(DEFAULT_BACKGROUND_COLOR);
 		setOrientation(LinearLayout.HORIZONTAL);
 		viewList.add(mMsgBtn);
 		viewList.add(mContactsBtn);

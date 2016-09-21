@@ -98,11 +98,6 @@ public class Util {
 
 
     public static void showToast(Context context,String info){
-//        if(toast!=null){
-//            toast.cancel();
-//        }
-//        toast = Toast.makeText(context.getApplicationContext(), info, Toast.LENGTH_SHORT);
-//        toast.show();
         if(toast!=null){
             toast.setText(info);
         }else{
@@ -112,11 +107,7 @@ public class Util {
     }
 
     public static void showToast(Context context,String info,int gravity,int xOffset,int yOffset){
-//        if(toast!=null){
-//            toast.cancel();
-//        }
-//        toast = Toast.makeText(context.getApplicationContext(), info, Toast.LENGTH_SHORT);
-//        toast.show();
+
         if(toast!=null){
             toast.setText(info);
 

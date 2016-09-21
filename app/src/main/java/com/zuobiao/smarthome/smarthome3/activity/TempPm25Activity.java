@@ -72,7 +72,7 @@ public class TempPm25Activity extends StatusActivity {
             }
         });
 
-        udpHelper.setTempPm25Tv(tvTemperature, tvHumidity, tvPm25);
+        udpHelper.setTempPm25Tv(tvTemperature, tvHumidity, tvPm25,equipmentBean.getMac_ADDR());
         udpHelper.startUdpWithIp(spHelper.getSpGateWayIp(), TempPm25Activity.this);
         udpHelper.setIsSend(true);
         udpHelper.send(getDataOfBeforeDo());
