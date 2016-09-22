@@ -2,6 +2,7 @@ package com.zuobiao.smarthome.smarthome3.fragment;
 
 
 import android.app.AlertDialog;
+import android.app.Fragment;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -31,7 +32,7 @@ import com.zuobiao.smarthome.smarthome3.util.Util;
 
 import java.util.List;
 
-public class SceneFragment extends BaseFragment {
+public class SceneFragment extends Fragment {
 
     private static final String TAG = "SceneFragment";
     private UdpHelper udpHelper;
@@ -311,7 +312,6 @@ public class SceneFragment extends BaseFragment {
     @Override
 	public void onResume() {
 		super.onResume();
-		MainActivity.currFragTag = Constant.FRAGMENT_FLAG_SCENE;
 	}
 
     private byte[] doWithSendDataToGateWay(List<SceneEquipmentBean> allList) {

@@ -4,6 +4,8 @@ import android.content.Context;
 import android.widget.Toast;
 
 import java.io.UnsupportedEncodingException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 /**
  * Created by Administrator
@@ -93,6 +95,29 @@ public class Util {
         return tvNameText;
     }
 
+
+    public static byte[] getLocalTime() {
+        byte[] time = new byte[7];
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy:MM:dd:HH:mm:ss");
+        Date curDate = new Date(System.currentTimeMillis());//获取当前时间
+        String timeForm = formatter.format(curDate);
+        String times[] = timeForm.split(":");
+
+        String year = Integer.toHexString(Integer.parseInt(times[0]));
+        if (year.length() != 4) {
+            year = "0" + year;
+        }
+        //year == 07e0
+        byte[] yearByte = Util.HexString2Bytes(year);
+
+        time[0] = yearByte[1];
+        time[1] = yearByte[0];
+
+        for (int i = 1; i < 6; i++) {
+            time[i + 1] = Byte.parseByte(times[i]);
+        }
+        return time;
+    }
 
 
 

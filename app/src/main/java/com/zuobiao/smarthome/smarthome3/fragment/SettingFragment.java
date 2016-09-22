@@ -1,6 +1,7 @@
 package com.zuobiao.smarthome.smarthome3.fragment;
 
 
+import android.app.Fragment;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -16,7 +17,7 @@ import com.zuobiao.smarthome.smarthome3.activity.SmartLinkActivity;
 import com.zuobiao.smarthome.smarthome3.util.Constant;
 import com.zuobiao.smarthome.smarthome3.util.Util;
 
-public class SettingFragment extends BaseFragment {
+public class SettingFragment extends Fragment {
     private static final String TAG = "SettingFragment";
     private RelativeLayout rlSmartLink;
     private RelativeLayout aboutRelativeLayout;
@@ -50,7 +51,7 @@ public class SettingFragment extends BaseFragment {
     @Override
     public void onResume() {
         super.onResume();
-        MainActivity.currFragTag = Constant.FRAGMENT_FLAG_SETTING;
+
     }
 
     @Override

@@ -86,17 +86,17 @@ public class BaseFragment extends Fragment {
 		super.onDestroy();
 	}
 	
-	public static BaseFragment newInstance(Context context,String tag){
-		BaseFragment baseFragment =  null;
-		if(TextUtils.equals(tag, Constant.FRAGMENT_FLAG_SCENE)){
-			baseFragment = new SceneFragment();
-		}else if(TextUtils.equals(tag, Constant.FRAGMENT_FLAG_EQUIPMENT)){
-			baseFragment = new EquipmentFragment();
-		}else if(TextUtils.equals(tag, Constant.FRAGMENT_FLAG_SETTING)){
-			baseFragment = new SettingFragment();
-		}
-		return baseFragment;
-		
-	}
+//	public static BaseFragment newInstance(Context context,String tag){
+//		BaseFragment baseFragment =  null;
+//		if(TextUtils.equals(tag, Constant.FRAGMENT_FLAG_SCENE)){
+//			baseFragment = new SceneFragment();
+//		}else if(TextUtils.equals(tag, Constant.FRAGMENT_FLAG_EQUIPMENT)){
+//			baseFragment = new EquipmentFragment();
+//		}else if(TextUtils.equals(tag, Constant.FRAGMENT_FLAG_SETTING)){
+//			baseFragment = new SettingFragment();
+//		}
+//		return baseFragment;
+//
+//	}
 
 }

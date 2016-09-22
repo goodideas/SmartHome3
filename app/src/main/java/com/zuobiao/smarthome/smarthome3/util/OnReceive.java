@@ -5,5 +5,5 @@ package com.zuobiao.smarthome.smarthome3.util;
  * on 2016/9/21.
  */
 public interface OnReceive {
-    void receive(byte[] data);
+    void receive(String data,String ip);
 }

@@ -18,6 +18,7 @@ import com.zuobiao.smarthome.smarthome3.R;
 import com.zuobiao.smarthome.smarthome3.db.DBcurd;
 import com.zuobiao.smarthome.smarthome3.util.Constant;
 import com.zuobiao.smarthome.smarthome3.util.ImageListViewAdapter;
+import com.zuobiao.smarthome.smarthome3.util.OnReceive;
 import com.zuobiao.smarthome.smarthome3.util.SpHelper;
 import com.zuobiao.smarthome.smarthome3.util.UdpHelper;
 import com.zuobiao.smarthome.smarthome3.util.Util;
@@ -41,11 +42,7 @@ public class AddEquipmentActivity extends StatusActivity {
     private DrawerLayout mDrawerLayout;
     private ActionBarDrawerToggle mDrawerToggle;
     private Button btnBack;
-//    private GridView AddEquipmentGridView;
-//    private List<EquipmentBean> list;
     private DBcurd dBcurd;
-//    private ImageListViewAdapter adapter;
-
     private final static int SCANNIN_GREQUEST_CODE = 1;
 
     private UdpHelper udpHelper;
@@ -70,11 +67,7 @@ public class AddEquipmentActivity extends StatusActivity {
         btnSendDelRfidCard = (Button) findViewById(R.id.btnSendDelRfidCard);
         btnAddRfidCardInfo = (Button) findViewById(R.id.btnAddRfidCardInfo);
 
-//        AddEquipmentGridView = (GridView) findViewById(R.id.AddEquipmentGridView);
         dBcurd = new DBcurd(AddEquipmentActivity.this);
-//        list = dBcurd.getAllData();
-//        adapter = new ImageListViewAdapter(AddEquipmentActivity.this, list, true);
-//        AddEquipmentGridView.setAdapter(adapter);
         lvEquipments = (ListView) findViewById(R.id.lvEquipments);
 
         util = new Util();
@@ -114,7 +107,6 @@ public class AddEquipmentActivity extends StatusActivity {
 
     @Override
     public void onBackPressed() {
-//        super.onBackPressed();
         if (mDrawerLayout.isDrawerOpen(GravityCompat.START)) {
             mDrawerLayout.closeDrawer(GravityCompat.START);
         } else {
@@ -154,7 +146,6 @@ public class AddEquipmentActivity extends StatusActivity {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         Util.showToast(getApplicationContext(), rfids[dialogAddWhich]);
-                        ////
                         spHelper = new SpHelper(AddEquipmentActivity.this);
                         String ip = spHelper.getSpGateWayIp();
                         if (ip != null) {
@@ -165,11 +156,11 @@ public class AddEquipmentActivity extends StatusActivity {
                             udpHelper.startUdpWithIp(ip, AddEquipmentActivity.this);
                             udpHelper.setIsSend(true);
                             udpHelper.send(getSendRfidByte(rfids[dialogAddWhich], Constant.RFID_INFO_SEND_ADD));
+
                         } else {
                             Util.showToast(getApplicationContext(), "没有网关信息!");
 
                         }
-                        ///
 
                     }
                 });
@@ -247,6 +238,12 @@ public class AddEquipmentActivity extends StatusActivity {
                 udpHelper.startUdpWithIp(broadcastIP, AddEquipmentActivity.this);
                 udpHelper.setIsSend(true);
                 udpHelper.send(broadcastData());
+                udpHelper.setOnReceive(new OnReceive() {
+                    @Override
+                    public void receive(String data, String ip) {
+                        Log.e("接收接口", "receive() data=" + data);
+                    }
+                });
                 udpHelper.doSearchGateWay();
             }
         });
@@ -266,8 +263,6 @@ public class AddEquipmentActivity extends StatusActivity {
                     udpHelper.setIsSend(true);
                     udpHelper.send(getRefreshSendData());
                     udpHelper.doRefreshEquipment(Constant.REFRESH_EQUIPMENT_WAIT_MAX_TIME * 1000);
-//                    udpHelper.setListViewData(AddEquipmentGridView);
-
 
                 } else {
                     Util.showToast(getApplicationContext(), "没有网关信息!");
@@ -329,7 +324,6 @@ public class AddEquipmentActivity extends StatusActivity {
 
     //添加设备
     private byte[] getAddSendData() {
-//        ff aa B7 59 0B 7F CF 5C 00 00 04 00 00 00 00 ff 55
         byte[] refreshSendData = new byte[17];
         refreshSendData[0] = Constant.DATA_HEAD[0];
         refreshSendData[1] = Constant.DATA_HEAD[1];
@@ -355,28 +349,11 @@ public class AddEquipmentActivity extends StatusActivity {
 
 
     @Override
-    protected void onResume() {
-        super.onResume();
-    }
-
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-    }
-
-
-    @Override
     protected void onStop() {
         if (udpHelper != null) {
             udpHelper.closeUdp();
         }
         super.onStop();
-    }
-
-    @Override
-    protected void onRestart() {
-        super.onRestart();
     }
 
 
@@ -402,7 +379,7 @@ public class AddEquipmentActivity extends StatusActivity {
         searchGateWay[12] = (byte) 0x07;
         searchGateWay[13] = (byte) 0x00;
         //数据内容
-        byte[] timeByte = getLocalTime();
+        byte[] timeByte = Util.getLocalTime();
         searchGateWay[14] = timeByte[0];//年
         searchGateWay[15] = timeByte[1];//年
         searchGateWay[16] = timeByte[2];//月
@@ -412,7 +389,7 @@ public class AddEquipmentActivity extends StatusActivity {
         searchGateWay[20] = timeByte[6];//秒
         //数据校验
 
-        searchGateWay[21] = util.checkData(Util.bytes2HexString(timeByte, timeByte.length));
+        searchGateWay[21] = Util.checkData(Util.bytes2HexString(timeByte, timeByte.length));
 
         //数据尾
         searchGateWay[22] = Constant.DATA_TAIL[0];
@@ -421,28 +398,7 @@ public class AddEquipmentActivity extends StatusActivity {
     }
 
 
-    private byte[] getLocalTime() {
-        byte[] time = new byte[7];
-        SimpleDateFormat formatter = new SimpleDateFormat("yyyy:MM:dd:HH:mm:ss");
-        Date curDate = new Date(System.currentTimeMillis());//获取当前时间
-        String timeForm = formatter.format(curDate);
-        String times[] = timeForm.split(":");
 
-        String year = Integer.toHexString(Integer.parseInt(times[0]));
-        if (year.length() != 4) {
-            year = "0" + year;
-        }
-        //year == 07e0
-        byte[] yearByte = Util.HexString2Bytes(year);
-
-        time[0] = yearByte[1];
-        time[1] = yearByte[0];
-
-        for (int i = 1; i < 6; i++) {
-            time[i + 1] = Byte.parseByte(times[i]);
-        }
-        return time;
-    }
 
 
     private byte[] getSendRfidByte(String rfidInfo, byte[] sendCommand) {

@@ -47,6 +47,7 @@ public class UdpHelper extends UdpMethod {
     private MyHandler myHandler;
     private SpHelper spHelper;
     private DBcurd dBcurd;
+    private OnReceive onReceive;
 
     private ProgressDialog searchDialog;
 
@@ -92,6 +93,7 @@ public class UdpHelper extends UdpMethod {
     private TextView tvNoiseSensor;
 
     private boolean isSend = true;
+    private Context mContext;
 
 
     private static UdpHelper UdpInstance = new UdpHelper();
@@ -107,7 +109,7 @@ public class UdpHelper extends UdpMethod {
     private UdpHelper() {
     }
 
-    Context mContext;
+
 
     public void startUdpWithIp(String ip, Context context) {
         Log.e(TAG, "startUdpWithIp ip=" + ip);
@@ -1269,7 +1271,9 @@ public class UdpHelper extends UdpMethod {
      */
     private void doWithDataByCommd(String commd, String data, String ip) {
         //网关
-
+        if(onReceive!=null){
+            onReceive.receive(data,ip);
+        }
         if (commd.equalsIgnoreCase(Constant.GATEWAY_RECV_COMMAND)) {
             if(Constant.GATEWAY.equalsIgnoreCase(data.substring(36, 44))) {
                 String gateWayMac = data.substring(4, 20);
@@ -1603,6 +1607,11 @@ public class UdpHelper extends UdpMethod {
 
 
     }
+
+    public void setOnReceive(OnReceive receive){
+        this.onReceive = receive;
+    }
+
 
     /**
      * ui处理

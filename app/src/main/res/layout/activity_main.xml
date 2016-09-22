@@ -6,15 +6,29 @@
     android:clipToPadding="true"
     android:fitsSystemWindows="true"
     tools:context=".activity.MainActivity">
+    <!--<include-->
+        <!--android:id="@+id/bottom_layout"-->
+        <!--layout="@layout/bottom_panel_layout" />-->
+    <!--<FrameLayout-->
+        <!--android:id="@+id/fragment_content"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="match_parent"-->
+
+        <!--android:layout_above="@id/bottom_layout" >-->
+    <!--</FrameLayout>-->
+
     <include
-        android:id="@+id/bottom_layout"
-        layout="@layout/bottom_panel_layout" />
+        android:id="@+id/includeBtn"
+        layout="@layout/btn_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        />
     <FrameLayout
-        android:id="@+id/fragment_content"
+        android:id="@+id/fragmentContent"
+        android:layout_above="@id/includeBtn"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-
-        android:layout_above="@id/bottom_layout" >
-    </FrameLayout>
+        />
 
 </RelativeLayout>

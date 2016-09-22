@@ -1,142 +1,146 @@
 package com.zuobiao.smarthome.smarthome3.activity;
 
-import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.text.TextUtils;
-import android.util.Log;
+
 import android.view.KeyEvent;
+import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.zuobiao.smarthome.smarthome3.R;
-import com.zuobiao.smarthome.smarthome3.fragment.BaseFragment;
-import com.zuobiao.smarthome.smarthome3.ui.BottomControlPanel;
-import com.zuobiao.smarthome.smarthome3.util.Constant;
+import com.zuobiao.smarthome.smarthome3.fragment.EquipmentFragment;
+import com.zuobiao.smarthome.smarthome3.fragment.SceneFragment;
+import com.zuobiao.smarthome.smarthome3.fragment.SettingFragment;
 
-public class MainActivity extends StatusActivity implements BottomControlPanel.BottomPanelCallback {
-    BottomControlPanel bottomPanel = null;
-    private FragmentManager fragmentManager = null;
-    private FragmentTransaction fragmentTransaction = null;
-    public static String currFragTag = "";
+public class MainActivity extends StatusActivity implements View.OnClickListener{
+
+    private TextView tvEquipmentFragment;
+    private TextView tvSceneFragment;
+    private TextView tvSettingFragment;
+
+    private Drawable equipment,equipmentPress;
+    private Drawable scene,scenePress;
+    private Drawable setting,settingPress;
+    private static final int TEXT_COLOR_PRESS = 0xFF4B87D6;
+    private static final int TEXT_COLOR = 0xFFA1A1A1;
+
+    private FragmentManager fragmentManager;
+    private FragmentTransaction fragmentTransaction;
+
+    private EquipmentFragment equipmentFragment;
+    private SceneFragment sceneFragment;
+    private SettingFragment settingFragment;
+
     private long exitTime = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        initDrawable();
+        initFindView();
+        initListen();
+        setDefault();
+
+    }
+
+    private void initDrawable() {
+        equipmentPress= getResources().getDrawable(R.drawable.equipment_press);
+        scenePress= getResources().getDrawable(R.drawable.scene_press);
+        settingPress= getResources().getDrawable(R.drawable.setting_press);
+
+        equipment= getResources().getDrawable(R.drawable.equipment_unpress);
+        scene= getResources().getDrawable(R.drawable.scene_unpress);
+        setting= getResources().getDrawable(R.drawable.setting_unpress);
 
 
-        initUI();
+        equipmentPress.setBounds(0, 0, equipmentPress.getMinimumWidth()*2/3, equipmentPress.getMinimumHeight()*2/3);
+        scenePress.setBounds(0, 0, scenePress.getMinimumWidth()*2/3, scenePress.getMinimumHeight()*2/3);
+        settingPress.setBounds(0, 0, settingPress.getMinimumWidth()*2/3, settingPress.getMinimumHeight()*2/3);
+
+        equipment.setBounds(0, 0, equipment.getMinimumWidth()*2/3, equipment.getMinimumHeight()*2/3);
+        scene.setBounds(0, 0, scene.getMinimumWidth()*2/3, scene.getMinimumHeight()*2/3);
+        setting.setBounds(0, 0, setting.getMinimumWidth()*2/3, setting.getMinimumHeight()*2/3);
+    }
+
+
+    private void initFindView() {
+        tvEquipmentFragment = (TextView)findViewById(R.id.tvEquipmentFragment);
+        tvSceneFragment = (TextView)findViewById(R.id.tvSceneFragment);
+        tvSettingFragment = (TextView)findViewById(R.id.tvSettingFragment);
+    }
+
+    private void initListen() {
+        tvEquipmentFragment.setOnClickListener(this);
+        tvSceneFragment.setOnClickListener(this);
+        tvSettingFragment.setOnClickListener(this);
+    }
+
+    private void setDefault() {
+        tvSetColor(tvEquipmentFragment, tvSceneFragment, tvSettingFragment);
+        tvSetCompoundDrawables(tvEquipmentFragment, equipmentPress, tvSceneFragment, scene, tvSettingFragment, setting);
+        equipmentFragment = new EquipmentFragment();
         fragmentManager = getFragmentManager();
-        setDefaultFirstFragment(Constant.FRAGMENT_FLAG_EQUIPMENT);
-    }
-
-
-
-    private void initUI(){
-        bottomPanel = (BottomControlPanel)findViewById(R.id.bottom_layout);
-        if(bottomPanel != null){
-            bottomPanel.initBottomPanel();
-            bottomPanel.setBottomCallback(this);
-        }
-    }
-
-    @Override
-    public void onBottomPanelClick(int itemId) {
-        String tag = "";
-        if((itemId & Constant.BTN_FLAG_EQUIPMENT) != 0){
-            tag = Constant.FRAGMENT_FLAG_EQUIPMENT;
-        }else if((itemId & Constant.BTN_FLAG_SCENE) != 0){
-            tag = Constant.FRAGMENT_FLAG_SCENE;
-        }else if((itemId & Constant.BTN_FLAG_SETTING) != 0){
-            tag = Constant.FRAGMENT_FLAG_SETTING;
-        }
-        setTabSelection(tag); //切换Fragment
-    }
-
-    private  void switchFragment(String tag){
-        if(TextUtils.equals(tag, currFragTag)){
-            return;
-        }
-        //把上一个fragment detach掉
-        if(currFragTag != null && !currFragTag.equals("")){
-            detachFragment(getFragment(currFragTag));
-        }
-        attachFragment(R.id.fragment_content, getFragment(tag), tag);
-        commitTransactions(tag);
-    }
-    private Fragment getFragment(String tag){
-
-        Fragment f = fragmentManager.findFragmentByTag(tag);
-
-        if(f == null){
-//            Toast.makeText(getApplicationContext(), "fragment = null tag = " + tag, Toast.LENGTH_SHORT).show();
-            f = BaseFragment.newInstance(getApplicationContext(), tag);
-        }
-        return f;
-
-    }
-
-    private void commitTransactions(String tag){
-        if (fragmentTransaction != null && !fragmentTransaction.isEmpty()) {
-            fragmentTransaction.commit();
-            currFragTag = tag;
-            fragmentTransaction = null;
-        }
-    }
-
-    private FragmentTransaction ensureTransaction( ){
-        if(fragmentTransaction == null){
-            fragmentTransaction = fragmentManager.beginTransaction();
-            fragmentTransaction
-                    .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
-
-        }
-        return fragmentTransaction;
-
-    }
-
-    private void attachFragment(int layout, Fragment f, String tag){
-        if(f != null){
-            if(f.isDetached()){
-                ensureTransaction();
-                fragmentTransaction.attach(f);
-
-            }else if(!f.isAdded()){
-                ensureTransaction();
-                fragmentTransaction.add(layout, f, tag);
-            }
-        }
-    }
-    private void detachFragment(Fragment f){
-
-        if(f != null && !f.isDetached()){
-            ensureTransaction();
-            fragmentTransaction.detach(f);
-        }
-    }
-
-
-    public  void setTabSelection(String tag) {
-        // 开启一个Fragment事务
         fragmentTransaction = fragmentManager.beginTransaction();
-        switchFragment(tag);
+        fragmentTransaction.replace(R.id.fragmentContent, equipmentFragment);
+        fragmentTransaction.commit();
+    }
+
+    private void tvSetColor(TextView tvPress, TextView tvNormal1, TextView tvNormal2) {
+        tvPress.setTextColor(TEXT_COLOR_PRESS);
+        tvNormal1.setTextColor(TEXT_COLOR);
+        tvNormal2.setTextColor(TEXT_COLOR);
 
     }
 
+    private void tvSetCompoundDrawables(TextView tv1, Drawable press, TextView tv2, Drawable unpress2, TextView tv3, Drawable unpress3) {
+        tv1.setCompoundDrawables(null, press, null, null);
+        tv2.setCompoundDrawables(null, unpress2, null, null);
+        tv3.setCompoundDrawables(null, unpress3, null, null);
+    }
 
     @Override
     protected void onStop() {
         super.onStop();
-        currFragTag = "";
     }
 
-    private void setDefaultFirstFragment(String tag){
-        Log.i("yan", "setDefaultFirstFragment enter... currFragTag = " + currFragTag);
-        setTabSelection(tag);
-        bottomPanel.defaultBtnChecked();
-        Log.i("yan", "setDefaultFirstFragment exit...");
+
+    @Override
+    public void onClick(View v) {
+        fragmentManager = getFragmentManager();
+        fragmentTransaction = fragmentManager.beginTransaction();
+
+        switch (v.getId()){
+            case R.id.tvEquipmentFragment:
+                tvSetColor(tvEquipmentFragment, tvSceneFragment, tvSettingFragment);
+                tvSetCompoundDrawables(tvEquipmentFragment, equipmentPress, tvSceneFragment, scene, tvSettingFragment, setting);
+                if(equipmentFragment==null){
+                    equipmentFragment = new EquipmentFragment();
+                }
+                fragmentTransaction.replace(R.id.fragmentContent,equipmentFragment);
+
+                break;
+            case R.id.tvSceneFragment:
+                tvSetColor(tvSceneFragment, tvEquipmentFragment, tvSettingFragment);
+                tvSetCompoundDrawables(tvEquipmentFragment, equipment, tvSceneFragment, scenePress, tvSettingFragment, setting);
+                if(sceneFragment==null){
+                    sceneFragment = new SceneFragment();
+                }
+                fragmentTransaction.replace(R.id.fragmentContent, sceneFragment);
+                break;
+            case R.id.tvSettingFragment:
+                tvSetColor(tvSettingFragment, tvEquipmentFragment, tvSceneFragment);
+                tvSetCompoundDrawables(tvEquipmentFragment, equipment, tvSceneFragment, scene, tvSettingFragment, settingPress);
+                if(settingFragment==null){
+                    settingFragment = new SettingFragment();
+                }
+                fragmentTransaction.replace(R.id.fragmentContent,settingFragment);
+                break;
+        }
+        fragmentTransaction.commit();
     }
 
 
@@ -159,4 +163,6 @@ public class MainActivity extends StatusActivity implements BottomControlPanel.B
         }
         return super.onKeyDown(keyCode, event);
     }
+
+
 }

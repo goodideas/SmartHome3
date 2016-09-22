@@ -3,6 +3,7 @@ package com.zuobiao.smarthome.smarthome3.fragment;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.Fragment;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -47,7 +48,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class EquipmentFragment extends BaseFragment {
+public class EquipmentFragment extends Fragment {
 
 
     private static final String TAG = "EquipmentFragment";
