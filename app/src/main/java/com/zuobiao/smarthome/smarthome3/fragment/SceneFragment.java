@@ -274,9 +274,6 @@ public class SceneFragment extends BaseFragment {
 		return contactsLayout;
 	}
 
- // FFAA 66C5CF34FE1800 00F1 0036 E6B58BE8AF953530 3100 0000000000000000000000000000000198FFE908004B1200010000000000000100000000000000000000000000D0FF55
-
-//  FFAA 66C5CF34FE1800 00F1 001A E6B58BE8AF953530 3100 0000000000000000000000000000000000FF55
     private byte[] getCloseSceneData(List<SceneEquipmentBean> allList){
         byte[] data = new byte[43];
 
@@ -311,10 +308,6 @@ public class SceneFragment extends BaseFragment {
         return data;
     }
 
-//    FFAA 66C5CF34FE180000 F110 0100 01 01 FF55
-    //FFAA 66C5CF34FE180000 F100 3600 E6B58BE8AF95353033000000000000000000000000000000 0001 98FFE908004B1200 0200 000000000001000000000000000000000000D3FF5500
-
-//    FFAA 66C5CF34FE180000 F110 0100 01 01 FF55
     @Override
 	public void onResume() {
 		super.onResume();
@@ -481,14 +474,6 @@ public class SceneFragment extends BaseFragment {
 
     }
 
-    //                             E6B58BE8AF95353031000000000000000000000000000000000198FFE908004B12000100000000000001000000000000000000000000
-    //FFAA66C5CF34FE180000F1003600 E6B58BE8AF95353031000000000000000000000000000000000198FFE908004B12000100000000000001000000000000000000000000 00D0FF55
-
-//    E6B58BE8AF95353031000000000000000000000000000000000198FFE908004B12000100000000000001000000000000000000000000
-
-//    FFAA 66C5CF34FE180000 F100 3600 E6B58BE8AF95353033000000000000000000000000000000 0001 98FFE908004B1200 01 00 00   00 00 00 00 01 0000000000000000 00  00 00 00 00D2FF55
-//    FFAA 66C5CF34FE180000 F100 3600 E6B58BE8AF95353031000000000000000000000000000000 0001 98FFE908004B1200 01 00 00   00 00 00 00 01 0000000000000000 00  00 00 00 00D0FF55
-
     /**
      *
      * @param doWithSendDataToGateWay 数据的内容
@@ -532,9 +517,6 @@ public class SceneFragment extends BaseFragment {
         return sendData;
     }
 
-//    FFAA 7412007FCF5C0000 F20001000101FF55
-
-    ////
     private byte[] refreshSceneSetting(){
 
         byte[] data = new byte[18];
@@ -597,6 +579,34 @@ public class SceneFragment extends BaseFragment {
 
     }
 
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        Log.i(TAG, "onActivityCreated...");
+        super.onActivityCreated(savedInstanceState);
+    }
 
+    @Override
+    public void onPause() {
+        Log.i(TAG, "onPause...");
+        super.onPause();
+    }
+
+    @Override
+    public void onStop() {
+        Log.i(TAG, "onStop...");
+        super.onStop();
+    }
+
+    @Override
+    public void onDestroyView() {
+        Log.i(TAG, "onDestroyView...");
+        super.onDestroyView();
+    }
+
+    @Override
+    public void onDestroy() {
+        Log.i(TAG, "onDestroy...");
+        super.onDestroy();
+    }
 
 }

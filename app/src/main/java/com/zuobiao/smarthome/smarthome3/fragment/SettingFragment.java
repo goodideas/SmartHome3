@@ -3,6 +3,7 @@ package com.zuobiao.smarthome.smarthome3.fragment;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,7 +17,7 @@ import com.zuobiao.smarthome.smarthome3.util.Constant;
 import com.zuobiao.smarthome.smarthome3.util.Util;
 
 public class SettingFragment extends BaseFragment {
-
+    private static final String TAG = "SettingFragment";
     private RelativeLayout rlSmartLink;
     private RelativeLayout aboutRelativeLayout;
 
@@ -37,9 +38,6 @@ public class SettingFragment extends BaseFragment {
         aboutRelativeLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                Toast t = Toast.makeText(getActivity(),"南翔智地创客学院智能家居系统",Toast.LENGTH_SHORT);
-//                t.setGravity(Gravity.CENTER, 0, 0);
-//                t.show();
                 Util.showToast(getActivity(),R.string.app_name, Gravity.CENTER, 0, 0);
             }
         });
@@ -49,12 +47,46 @@ public class SettingFragment extends BaseFragment {
         return settingLayout;
     }
 
-
     @Override
     public void onResume() {
         super.onResume();
         MainActivity.currFragTag = Constant.FRAGMENT_FLAG_SETTING;
     }
 
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        Log.i(TAG, "onActivityCreated...");
+        super.onActivityCreated(savedInstanceState);
+    }
 
+    @Override
+    public void onStart() {
+        Log.i(TAG, "onStart...");
+        super.onStart();
+    }
+
+
+    @Override
+    public void onPause() {
+        Log.i(TAG, "onPause...");
+        super.onPause();
+    }
+
+    @Override
+    public void onStop() {
+        Log.i(TAG, "onStop...");
+        super.onStop();
+    }
+
+    @Override
+    public void onDestroyView() {
+        Log.i(TAG, "onDestroyView...");
+        super.onDestroyView();
+    }
+
+    @Override
+    public void onDestroy() {
+        Log.i(TAG, "onDestroy...");
+        super.onDestroy();
+    }
 }

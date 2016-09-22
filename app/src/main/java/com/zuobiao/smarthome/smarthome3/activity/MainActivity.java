@@ -121,31 +121,6 @@ public class MainActivity extends StatusActivity implements BottomControlPanel.B
     public  void setTabSelection(String tag) {
         // 开启一个Fragment事务
         fragmentTransaction = fragmentManager.beginTransaction();
-/*		 if(TextUtils.equals(tag, Constant.FRAGMENT_FLAG_EQUIPMENT)){
-		   if (messageFragment == null) {
-				messageFragment = new EquipmentFragment();
-			}
-
-		}else if(TextUtils.equals(tag, Constant.FRAGMENT_FLAG_SCENE)){
-			if (contactsFragment == null) {
-				contactsFragment = new SceneFragment();
-			}
-
-		}else if(TextUtils.equals(tag, Constant.FRAGMENT_FLAG_NEWS)){
-			if (newsFragment == null) {
-
-			}
-
-		}else if(TextUtils.equals(tag,Constant.FRAGMENT_FLAG_SETTING)){
-			if (settingFragment == null) {
-				settingFragment = new SettingFragment();
-			}
-		}else if(TextUtils.equals(tag, Constant.FRAGMENT_FLAG_SIMPLE)){
-			if (simpleFragment == null) {
-				simpleFragment = new SimpleFragment();
-			}
-
-		}*/
         switchFragment(tag);
 
     }

@@ -302,15 +302,12 @@ public class EquipmentFragment extends BaseFragment {
         builder.show();
     }
 
-
     @Override
     public void onStart() {
+        Log.e(TAG,"onStart");
         Log.e(TAG, "spHelper.getSpHasGateWayInfo()=" + spHelper.getSpHasGateWayInfo() + "  spHelper.getSpOnLine()=" + spHelper.getSpOnLine());
         //这种做法不是很好，但能实现功能，暂时这么做。
         list = dBcurd.getAllData();//数据源 不管什么时候，都是从这里读取所有设备
-//        EquipmentBean equipmentBeanT = new EquipmentBean();
-//        equipmentBeanT.setDevice_Type("FFFFFFFF");
-//        list.add(equipmentBeanT);
         adapter = new ImageListViewAdapter(getActivity().getApplicationContext(), list,false);
         gridView.setAdapter(adapter);
         if (spHelper.getSpHasGateWayInfo()) {
@@ -327,10 +324,6 @@ public class EquipmentFragment extends BaseFragment {
 
         Log.e(TAG, "onStart----->");
     }
-
-
-
-
 
     private byte[] broadcastData(){
         //数据头
@@ -387,9 +380,6 @@ public class EquipmentFragment extends BaseFragment {
         }
         //year == 07e0
         byte[] yearByte = util.HexString2Bytes(year);
-//        int yearByteLength = yearByte.length;
-//        System.arraycopy(yearByte,0,time,0,yearByteLength);
-
         time[0] = yearByte[1];
         time[1] = yearByte[0];
 
@@ -407,9 +397,6 @@ public class EquipmentFragment extends BaseFragment {
             if(msg.what == REFRESH_DATA){
 
                 mSwipeLayout.setRefreshing(false);
-
-//                list = dBcurd.getAllData();//数据源 不管什么时候，都是从这里读取所有设备
-//                adapter = new ImageListViewAdapter(getActivity().getApplicationContext(), list);
                 gridView.setAdapter(adapter);
                 if (spHelper.getSpHasGateWayInfo()) {
                     Log.e(TAG, "hasGateWayInfo=" + spHelper.getSpHasGateWayInfo());
@@ -423,6 +410,43 @@ public class EquipmentFragment extends BaseFragment {
 
             }
         }
+    }
+
+
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        Log.i(TAG, "onActivityCreated...");
+        super.onActivityCreated(savedInstanceState);
+    }
+
+    @Override
+    public void onResume() {
+        Log.i(TAG, "onResume...");
+        super.onResume();
+    }
+
+    @Override
+    public void onPause() {
+        Log.i(TAG, "onPause...");
+        super.onPause();
+    }
+
+    @Override
+    public void onStop() {
+        Log.i(TAG, "onStop...");
+        super.onStop();
+    }
+
+    @Override
+    public void onDestroyView() {
+        Log.i(TAG, "onDestroyView...");
+        super.onDestroyView();
+    }
+
+    @Override
+    public void onDestroy() {
+        Log.i(TAG, "onDestroy...");
+        super.onDestroy();
     }
 
 
