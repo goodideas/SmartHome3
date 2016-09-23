@@ -85,6 +85,8 @@ public class EquipmentFragment extends Fragment {
                 Intent intent =packageManager.getLaunchIntentForPackage("vstc.eye4zx.client");
                 if(intent!=null){
                     startActivity(intent);
+                }else{
+                    Util.showToast(getActivity(),"请安装摄像头插件！");
                 }
 
             }

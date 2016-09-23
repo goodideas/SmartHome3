@@ -786,7 +786,8 @@ public class UdpHelper extends UdpMethod {
 
             //温湿度pm2传过啦的数据
             if (msg.what == Constant.HANDLER_TEMP_PM25_HAS_ANSWER) {
-                // 是为3个16进制的数 第一个是temp，第二个是humi，第三个是pm2.5
+                // 是为3个16进制的数 humi，第二个是temp，第三个是pm2.5
+
                 String data = (String) msg.obj;
                 String stat = data.substring(0,12);
                 String mac = data.substring(12);
