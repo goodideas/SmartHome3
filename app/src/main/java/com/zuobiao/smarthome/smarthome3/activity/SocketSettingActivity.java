@@ -73,7 +73,7 @@ public class SocketSettingActivity extends StatusActivity {
     private List<String> symbolList;
     private List<String> temp25List;
     private ConditionSpinnerAdapter conditionSpinnerAdapter;
-    private DBcurd dBcurd;
+    private DBcurd DBcurd;
     private EquipmentBean equipmentBeanActivity;
     private TextView tvSettingEquipmentName;
     private Util util;
@@ -224,8 +224,8 @@ public class SocketSettingActivity extends StatusActivity {
         temp25List = new ArrayList<>();
         Collections.addAll(temp25List, TEMP25);
         util = new Util();
-        dBcurd = new DBcurd(SocketSettingActivity.this);
-        conditionSpinnerAdapterList = dBcurd.getAllSceneConditionEquipments();
+        DBcurd = new DBcurd(SocketSettingActivity.this);
+        conditionSpinnerAdapterList = DBcurd.getAllSceneConditionEquipments();
         conditionSpinnerAdapterListSize = conditionSpinnerAdapterList.size();
         conditionSpinnerAdapter = new ConditionSpinnerAdapter(SocketSettingActivity.this, conditionSpinnerAdapterList);
 
@@ -325,8 +325,8 @@ public class SocketSettingActivity extends StatusActivity {
         Log.e(TAG, "addSceneActivityListViewItem=" + addSceneActivityListViewItem);
 
         //设置设备名
-        if (!dBcurd.getNickNameByMac(equipmentBeanActivity.getMac_ADDR()).equalsIgnoreCase("FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF")) {
-            String tvNameText = new String(util.HexString2Bytes(dBcurd.getNickNameByMac(equipmentBeanActivity.getMac_ADDR()))).trim();
+        if (!DBcurd.getNickNameByMac(equipmentBeanActivity.getMac_ADDR()).equalsIgnoreCase("FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF")) {
+            String tvNameText = new String(util.HexString2Bytes(DBcurd.getNickNameByMac(equipmentBeanActivity.getMac_ADDR()))).trim();
             if (TextUtils.isEmpty(tvNameText)) {
                 tvSettingEquipmentName.setText(Constant.getTypeName(equipmentBeanActivity.getDevice_Type()));
             } else {
@@ -935,7 +935,7 @@ public class SocketSettingActivity extends StatusActivity {
          如果是不是第一次进来的
          */
 
-        List<SceneEquipmentBean> setList = dBcurd.getSceneEquipmentSettingByEquipmentMac(equipmentBeanActivity.getMac_ADDR());
+        List<SceneEquipmentBean> setList = DBcurd.getSceneEquipmentSettingByEquipmentMac(equipmentBeanActivity.getMac_ADDR());
         if (setList.size() != 0) {
             for (int i = 0; i < setList.size(); i++) {
                 Log.e(TAG, "setList.size()=" + setList.size());

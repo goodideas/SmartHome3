@@ -5,7 +5,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
@@ -30,7 +29,7 @@ public class AddRfidCardInfoActivity extends StatusActivity {
     private Button btnAddRfidInfo;
     private ListView rfidListView;
 
-    private DBcurd dBcurd;
+    private DBcurd DBcurd;
     private List<String> list;
     private String rfidInfo;
     private int positioned;
@@ -45,8 +44,8 @@ public class AddRfidCardInfoActivity extends StatusActivity {
         btnBack = (Button)findViewById(R.id.btnBack);
         btnAddRfidInfo = (Button)findViewById(R.id.btnAddRfidInfo);
         rfidListView = (ListView)findViewById(R.id.rfidListView);
-        dBcurd = new DBcurd(AddRfidCardInfoActivity.this);
-        list = dBcurd.getAllRfidInfo();
+        DBcurd = new DBcurd(AddRfidCardInfoActivity.this);
+        list = DBcurd.getAllRfidInfo();
         adapter = new ArrayAdapter<>(AddRfidCardInfoActivity.this,android.R.layout.simple_list_item_1,list);
         rfidListView.setAdapter(adapter);
         rfidListView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
@@ -62,7 +61,7 @@ public class AddRfidCardInfoActivity extends StatusActivity {
                     public void onClick(DialogInterface dialog, int which) {
                         list.remove(positioned);
                         adapter.notifyDataSetChanged();
-                        dBcurd.delRfidInfo(rfidInfo);
+                        DBcurd.delRfidInfo(rfidInfo);
 
                     }
                 });
@@ -98,8 +97,8 @@ public class AddRfidCardInfoActivity extends StatusActivity {
                             }
                         } else {
                             Util.showToast(getApplicationContext(), etRfid.getText().toString());
-                            dBcurd.addRfidInfo(etRfid.getText().toString());
-                            list = dBcurd.getAllRfidInfo();
+                            DBcurd.addRfidInfo(etRfid.getText().toString());
+                            list = DBcurd.getAllRfidInfo();
                             adapter = new ArrayAdapter<>(AddRfidCardInfoActivity.this, android.R.layout.simple_list_item_1, list);
                             rfidListView.setAdapter(adapter);
 //                            dialog.dismiss();
@@ -170,8 +169,8 @@ public class AddRfidCardInfoActivity extends StatusActivity {
                         }
                     } else {
                         Util.showToast(getApplicationContext(), etRfid.getText().toString());
-                        dBcurd.addRfidInfo(etRfid.getText().toString());
-                        list = dBcurd.getAllRfidInfo();
+                        DBcurd.addRfidInfo(etRfid.getText().toString());
+                        list = DBcurd.getAllRfidInfo();
                         adapter = new ArrayAdapter<>(AddRfidCardInfoActivity.this, android.R.layout.simple_list_item_1, list);
                         rfidListView.setAdapter(adapter);
 //                            dialog.dismiss();

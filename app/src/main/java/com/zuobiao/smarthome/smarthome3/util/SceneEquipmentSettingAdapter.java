@@ -29,7 +29,7 @@ public class SceneEquipmentSettingAdapter extends BaseAdapter{
 
     private Context mContext;
     private List<EquipmentBean> mList;
-    private DBcurd dBcurd;
+    private DBcurd DBcurd;
     private Util util;
     private AddSceneActivity mAddSceneActivity;
     private int setCheckPostion = -1;
@@ -39,7 +39,7 @@ public class SceneEquipmentSettingAdapter extends BaseAdapter{
     public SceneEquipmentSettingAdapter(Context context, List<EquipmentBean> list,AddSceneActivity addSceneActivity){
         mContext = context;
         mList = list;
-        dBcurd = new DBcurd(mContext);
+        DBcurd = new DBcurd(mContext);
         util = new Util();
         mAddSceneActivity = addSceneActivity;
 
@@ -88,8 +88,8 @@ public class SceneEquipmentSettingAdapter extends BaseAdapter{
         }
 
 
-        if(!dBcurd.getNickNameByMac(equipmentBean.getMac_ADDR()).equalsIgnoreCase("FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF")){
-            String tvNameText = new String(util.HexString2Bytes(dBcurd.getNickNameByMac(equipmentBean.getMac_ADDR()))).trim();
+        if(!DBcurd.getNickNameByMac(equipmentBean.getMac_ADDR()).equalsIgnoreCase("FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF")){
+            String tvNameText = new String(util.HexString2Bytes(DBcurd.getNickNameByMac(equipmentBean.getMac_ADDR()))).trim();
             if(TextUtils.isEmpty(tvNameText)){
                 viewHolder.tvAddSceneListViewItem.setText(Constant.getTypeName(equipmentBean.getDevice_Type()));
             }else {

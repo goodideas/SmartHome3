@@ -20,7 +20,6 @@ import android.widget.TextView;
 
 import com.zuobiao.smarthome.smarthome3.R;
 import com.zuobiao.smarthome.smarthome3.activity.AddSceneActivity;
-import com.zuobiao.smarthome.smarthome3.activity.MainActivity;
 import com.zuobiao.smarthome.smarthome3.db.DBcurd;
 import com.zuobiao.smarthome.smarthome3.util.Constant;
 import com.zuobiao.smarthome.smarthome3.util.SceneAdapter;
@@ -44,7 +43,7 @@ public class SceneFragment extends Fragment {
 
     private TextView tvShowInUseScene;
     private int postioned;
-    private DBcurd dBcurd;
+    private DBcurd DBcurd;
     public static final int INTENT_ADD_FLAG = 100;
     public static final int INTENT_LIST_VIEW_ITEM_FLAG = 200;
     public static final String INTENT_ADD_FLAG_STRING = "intentSetting";
@@ -67,12 +66,12 @@ public class SceneFragment extends Fragment {
 			Bundle savedInstanceState) {
 		View contactsLayout = inflater.inflate(R.layout.scene_layout,
 				container, false);
-        dBcurd = new DBcurd(getActivity());
+        DBcurd = new DBcurd(getActivity());
         udpHelper = UdpHelper.getInstance();
         spHelper = new SpHelper(getActivity());
         udpHelper.startUdpWithIp(spHelper.getSpGateWayIp(), getActivity());
         udpHelper.setIsSend(true);
-        list = dBcurd.getAllSceneName();
+        list = DBcurd.getAllSceneName();
         btnRefreshSceneSetting = (Button)contactsLayout.findViewById(R.id.btnRefreshSceneSetting);
         util = new Util();
         sceneAdapter = new SceneAdapter(getActivity(),list);
@@ -117,8 +116,8 @@ public class SceneFragment extends Fragment {
                         public void onClick(DialogInterface dialog, int which) {
                             if (choiceItem2 == 1) {
                                 //删除
-                                dBcurd.delSceneNameDataBySceneName(list.get(postioned).getSceneName());
-                                dBcurd.delSceneAllBySceneAllName(list.get(postioned).getSceneName());
+                                DBcurd.delSceneNameDataBySceneName(list.get(postioned).getSceneName());
+                                DBcurd.delSceneAllBySceneAllName(list.get(postioned).getSceneName());
                                 list.remove(postioned);
                                 sceneAdapter.notifyDataSetChanged();
                                 if (postioned == spHelper.getSpIsUseNumber()) {
@@ -133,7 +132,7 @@ public class SceneFragment extends Fragment {
                                 sceneAdapter.notifyDataSetChanged();
                                 tvShowInUseScene.setText("无");
 
-                                List<SceneEquipmentBean> List = dBcurd.getAllSceneEquipmentBySceneNameAll(showInUseScene.getSceneName());
+                                List<SceneEquipmentBean> List = DBcurd.getAllSceneEquipmentBySceneNameAll(showInUseScene.getSceneName());
                                 Util util = new Util();
                                 udpHelper.send(getCloseSceneData(List));
                                 String eee = util.bytes2HexString(getCloseSceneData(List), getCloseSceneData(List).length);
@@ -142,7 +141,7 @@ public class SceneFragment extends Fragment {
 //                                spHelper.SaveSpIsUseName(showInUseScene);
 //                                sceneAdapter.notifyDataSetChanged();
 //                                tvShowInUseScene.setText(showInUseScene);
-//                                List<SceneEquipmentBean> allList = dBcurd.getAllSceneEquipmentBySceneNameAll(showInUseScene);
+//                                List<SceneEquipmentBean> allList = DBcurd.getAllSceneEquipmentBySceneNameAll(showInUseScene);
 //                                Log.e(TAG, "allList.size()=" + allList.size());
 //
 //                                //数据内容的处理
@@ -160,7 +159,7 @@ public class SceneFragment extends Fragment {
                                 spHelper.SaveSpIsUseName(showInUseScene.getSceneName());
                                 sceneAdapter.notifyDataSetChanged();
                                 tvShowInUseScene.setText(showInUseScene.getSceneName());
-                                List<SceneEquipmentBean> allList = dBcurd.getAllSceneEquipmentBySceneNameAll(showInUseScene.getSceneName());
+                                List<SceneEquipmentBean> allList = DBcurd.getAllSceneEquipmentBySceneNameAll(showInUseScene.getSceneName());
                                 Log.e(TAG, "allList.size()=" + allList.size());
                                 //数据内容的处理
                                 byte[] doWithSendData = doWithSendDataToGateWay(allList);
@@ -193,8 +192,8 @@ public class SceneFragment extends Fragment {
                         public void onClick(DialogInterface dialog, int which) {
                             Log.e(TAG, "choiceItem=" + choiceItem);
                             if (choiceItem == 1) {
-                                dBcurd.delSceneNameDataBySceneName(list.get(postioned).getSceneName());
-                                dBcurd.delSceneAllBySceneAllName(list.get(postioned).getSceneName());
+                                DBcurd.delSceneNameDataBySceneName(list.get(postioned).getSceneName());
+                                DBcurd.delSceneAllBySceneAllName(list.get(postioned).getSceneName());
                                 list.remove(postioned);
                                 sceneAdapter.notifyDataSetChanged();
                                 if (postioned == spHelper.getSpIsUseNumber()) {
@@ -212,7 +211,7 @@ public class SceneFragment extends Fragment {
                                 spHelper.SaveSpIsUseName(showInUseScene.getSceneName());
                                 sceneAdapter.notifyDataSetChanged();
                                 tvShowInUseScene.setText(showInUseScene.getSceneName());
-                                List<SceneEquipmentBean> allList = dBcurd.getAllSceneEquipmentBySceneNameAll(showInUseScene.getSceneName());
+                                List<SceneEquipmentBean> allList = DBcurd.getAllSceneEquipmentBySceneNameAll(showInUseScene.getSceneName());
                                 Log.e(TAG, "allList.size()=" + allList.size());
 
                                 //数据内容的处理
@@ -260,7 +259,7 @@ public class SceneFragment extends Fragment {
                 new Handler().postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        list = dBcurd.getAllSceneName();
+                        list = DBcurd.getAllSceneName();
                         sceneAdapter = new SceneAdapter(getActivity(), list);
                         scene_listview.setAdapter(sceneAdapter);
                     }
@@ -559,7 +558,7 @@ public class SceneFragment extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
-        list = dBcurd.getAllSceneName();
+        list = DBcurd.getAllSceneName();
         sceneAdapter = new SceneAdapter(getActivity(),list);
         scene_listview.setAdapter(sceneAdapter);
     }

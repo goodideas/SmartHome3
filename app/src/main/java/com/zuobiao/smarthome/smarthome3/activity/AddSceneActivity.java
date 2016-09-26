@@ -37,7 +37,7 @@ public class AddSceneActivity extends StatusActivity {
     private ListView scene_setting_listview;
     private SceneEquipmentSettingAdapter sceneSettingAdapter;
     private List<EquipmentBean> sceneEquipments;
-    private DBcurd dBcurd;
+    private DBcurd DBcurd;
     private Button btnTest;
     private SpHelper spHelper;
     private int intentRequest = -1;
@@ -49,8 +49,8 @@ public class AddSceneActivity extends StatusActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_scene);
         init();
-        dBcurd = new DBcurd(AddSceneActivity.this);
-        sceneEquipments = dBcurd.getAllSceneEquipments();
+        DBcurd = new DBcurd(AddSceneActivity.this);
+        sceneEquipments = DBcurd.getAllSceneEquipments();
         sceneSettingAdapter = new SceneEquipmentSettingAdapter(AddSceneActivity.this,sceneEquipments,this);
         scene_setting_listview.setAdapter(sceneSettingAdapter);
         spHelper = new SpHelper(AddSceneActivity.this);
@@ -77,7 +77,7 @@ public class AddSceneActivity extends StatusActivity {
             public void onClick(View v) {
 
                 if(intentRequest == SceneFragment.INTENT_ADD_FLAG){
-                    List<SceneNameBean> list = dBcurd.getAllSceneName();
+                    List<SceneNameBean> list = DBcurd.getAllSceneName();
                     int length = list.size();
                     spHelper.SaveSpIsUseNumber(length);
                 }else if(intentRequest == SceneFragment.INTENT_LIST_VIEW_ITEM_FLAG){
@@ -90,7 +90,7 @@ public class AddSceneActivity extends StatusActivity {
         btnTest.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                dBcurd.delAllSceneData();
+                DBcurd.delAllSceneData();
 
             }
         });
@@ -98,7 +98,7 @@ public class AddSceneActivity extends StatusActivity {
         btnAddSceneBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                dBcurd.delAllSceneData();
+                DBcurd.delAllSceneData();
                 finish();
             }
         });
@@ -136,18 +136,18 @@ public class AddSceneActivity extends StatusActivity {
                     } else {
 
                         //根据temp 查找所有的数据，然后把temp的字符串换掉 然后添加场景名
-                        dBcurd.updateSceneAddSceneName(SocketSettingActivity.DB_TEMP, etSceneName.getText().toString());
+                        DBcurd.updateSceneAddSceneName(SocketSettingActivity.DB_TEMP, etSceneName.getText().toString());
 
-                        List<SceneEquipmentBean> list = dBcurd.getAllSceneEquipmentBySceneName(etSceneName.getText().toString());
+                        List<SceneEquipmentBean> list = DBcurd.getAllSceneEquipmentBySceneName(etSceneName.getText().toString());
                         int equipmentsListLength = list.size();
                         if (equipmentsListLength != 0) {
-                            dBcurd.addSceneNameData(etSceneName.getText().toString(), equipmentsListLength);
+                            DBcurd.addSceneNameData(etSceneName.getText().toString(), equipmentsListLength);
                             for (int i = 0; i < list.size(); i++) {
-                                dBcurd.addSceneAllData(list.get(i));
+                                DBcurd.addSceneAllData(list.get(i));
                                 Log.e(TAG, "list.size()=" + list.size() + " " + list.get(i).getEquipmentMac());
                             }
                             //删除之前的数据
-                            dBcurd.delAllSceneData();
+                            DBcurd.delAllSceneData();
                             finish();
                         } else {
 //                            Toast t = Toast.makeText(getApplicationContext(), "", Toast.LENGTH_SHORT);
@@ -170,32 +170,32 @@ public class AddSceneActivity extends StatusActivity {
                         Util.showToast(getApplicationContext(), "场景还没有名字？");
                     } else {
 
-//                        dBcurd.updateSceneAddSceneName(SocketSettingActivity.DB_TEMP, etSceneName.getText().toString());
-//                        List<SceneEquipmentBean> list = dBcurd.getAllSceneEquipmentBySceneName(etSceneName.getText().toString());
+//                        DBcurd.updateSceneAddSceneName(SocketSettingActivity.DB_TEMP, etSceneName.getText().toString());
+//                        List<SceneEquipmentBean> list = DBcurd.getAllSceneEquipmentBySceneName(etSceneName.getText().toString());
 
                         //根据temp 查找所有的数据，然后把temp的字符串换掉 然后添加场景名
-                        dBcurd.updateSceneAddSceneName(SocketSettingActivity.DB_TEMP, etSceneName.getText().toString());
+                        DBcurd.updateSceneAddSceneName(SocketSettingActivity.DB_TEMP, etSceneName.getText().toString());
 
-                        List<SceneEquipmentBean> list = dBcurd.getAllSceneEquipmentBySceneName(etSceneName.getText().toString());
+                        List<SceneEquipmentBean> list = DBcurd.getAllSceneEquipmentBySceneName(etSceneName.getText().toString());
                         int equipmentsListLength = list.size();
 
-//                        dBcurd.addSceneNameData(etSceneName.getText().toString(), equipmentsListLength);
+//                        DBcurd.addSceneNameData(etSceneName.getText().toString(), equipmentsListLength);
                         /**
                          不同于添加按钮的是这个
                          需要做更新操作
                          **/
-//                        dBcurd.updataSceneNameData(etSceneName.getText().toString(), equipmentsListLength);
-//                        dBcurd.delSceneAllBySceneAllName(etSceneName.getText().toString());
-                        dBcurd.updataSceneNameData(etSceneName.getText().toString(), equipmentsListLength, listviewItemSceneName);
+//                        DBcurd.updataSceneNameData(etSceneName.getText().toString(), equipmentsListLength);
+//                        DBcurd.delSceneAllBySceneAllName(etSceneName.getText().toString());
+                        DBcurd.updataSceneNameData(etSceneName.getText().toString(), equipmentsListLength, listviewItemSceneName);
                         //删除数据库之前存的信息
-                        dBcurd.delSceneAllBySceneAllName(listviewItemSceneName);
+                        DBcurd.delSceneAllBySceneAllName(listviewItemSceneName);
                         if (equipmentsListLength != 0) {
                             for (int i = 0; i < list.size(); i++) {
-                                dBcurd.addSceneAllData(list.get(i));
+                                DBcurd.addSceneAllData(list.get(i));
                                 Log.e(TAG, "list.size()=" + list.size() + " " + list.get(i).getEquipmentMac());
                             }
                             //删除之前的数据
-                            dBcurd.delAllSceneData();
+                            DBcurd.delAllSceneData();
                             finish();
                         } else {
 //                            Toast t = Toast.makeText(getApplicationContext(), "", Toast.LENGTH_SHORT);
@@ -251,7 +251,7 @@ public class AddSceneActivity extends StatusActivity {
         int size = sceneEquipments.size();
 
 //        2重循环。第一重是数据库的储存的场景设置的信息，第二重是列表的数据
-        List<SceneEquipmentBean> sceneEquipmentBeanLists = dBcurd.getAllSceneEquipmentBySceneNameAll(sceneName);
+        List<SceneEquipmentBean> sceneEquipmentBeanLists = DBcurd.getAllSceneEquipmentBySceneNameAll(sceneName);
         int sceneEquipmentBeanListsLength = sceneEquipmentBeanLists.size();
 
         /**
@@ -261,14 +261,14 @@ public class AddSceneActivity extends StatusActivity {
         for(int k = 0;k<sceneEquipmentBeanListsLength;k++){
 //            sceneEquipmentBeanLists.get(k).setTemp(SocketSettingActivity.DB_TEMP);
 
-            dBcurd.addSceneData(sceneEquipmentBeanLists.get(k));
+            DBcurd.addSceneData(sceneEquipmentBeanLists.get(k));
 
         }
 
         for (int n= 0 ;n <sceneEquipmentBeanListsLength;n++)
         {
             sceneEquipmentBeanLists.get(n).setTemp(SocketSettingActivity.DB_TEMP);
-            dBcurd.updateTemp(sceneEquipmentBeanLists.get(n));
+            DBcurd.updateTemp(sceneEquipmentBeanLists.get(n));
         }
         //添加temp数据
 
@@ -315,7 +315,7 @@ public class AddSceneActivity extends StatusActivity {
                    CheckBox cb2 = (CheckBox)scene_setting_listview.getChildAt(addSceneActivityListViewItem).findViewById(R.id.addSceneListViewItemCheckBox);
                    cb2.setChecked(false);
                    cb2.setVisibility(View.GONE);
-                   dBcurd.delAllEquipmentDataByEquipmentMac(clearEquipmentMac);
+                   DBcurd.delAllEquipmentDataByEquipmentMac(clearEquipmentMac);
                }else {
                    CheckBox cb = (CheckBox) scene_setting_listview.getChildAt(addSceneActivityListViewItem).findViewById(R.id.addSceneListViewItemCheckBox);
                    cb.setVisibility(View.VISIBLE);
@@ -327,13 +327,13 @@ public class AddSceneActivity extends StatusActivity {
                 //单个
                     SceneEquipmentBean sceneEquipmentBean0 = (SceneEquipmentBean) data.getExtras().get("sceneEquipmentBean0");
                     if (sceneEquipmentBean0 != null) {
-                        if (dBcurd.isSaveSceneDataByEquipmentMac(sceneEquipmentBean0)) {
-                            dBcurd.updateSceneData(sceneEquipmentBean0);
-                            dBcurd.updateTemp(sceneEquipmentBean0);
+                        if (DBcurd.isSaveSceneDataByEquipmentMac(sceneEquipmentBean0)) {
+                            DBcurd.updateSceneData(sceneEquipmentBean0);
+                            DBcurd.updateTemp(sceneEquipmentBean0);
                             Log.e(TAG, "设备1更新");
                         } else {
-                            dBcurd.addSceneData(sceneEquipmentBean0);
-                            dBcurd.updateTemp(sceneEquipmentBean0);
+                            DBcurd.addSceneData(sceneEquipmentBean0);
+                            DBcurd.updateTemp(sceneEquipmentBean0);
                             Log.e(TAG, "设备1添加");
                         }
                     }
@@ -347,38 +347,38 @@ public class AddSceneActivity extends StatusActivity {
                  因为这个设备是3控，所以设备数量返回的结果数量不唯一，
                  如果之前返回的是3个数量，这次返回2个数量，那就要删掉之前的3个数量，然后再存入数据库。
                  */
-                dBcurd.delAllEquipmentDataByEquipmentMac(resultEquipmentMac);
+                DBcurd.delAllEquipmentDataByEquipmentMac(resultEquipmentMac);
                 if(sceneEquipmentBean0!=null){
-                    if(dBcurd.isSaveSceneDataByEquipmentMac(sceneEquipmentBean0)){
-                        dBcurd.updateSceneData(sceneEquipmentBean0);
-                        dBcurd.updateTemp(sceneEquipmentBean0);
+                    if(DBcurd.isSaveSceneDataByEquipmentMac(sceneEquipmentBean0)){
+                        DBcurd.updateSceneData(sceneEquipmentBean0);
+                        DBcurd.updateTemp(sceneEquipmentBean0);
                         Log.e(TAG, "设备1更新");
                     }else {
-                        dBcurd.addSceneData(sceneEquipmentBean0);
-                        dBcurd.updateTemp(sceneEquipmentBean0);
+                        DBcurd.addSceneData(sceneEquipmentBean0);
+                        DBcurd.updateTemp(sceneEquipmentBean0);
                         Log.e(TAG, "设备1添加");
                     }
                 }
                 if(sceneEquipmentBean1!=null){
-                    if(dBcurd.isSaveSceneDataByEquipmentMac(sceneEquipmentBean1)){
-                        dBcurd.updateSceneData(sceneEquipmentBean1);
-                        dBcurd.updateTemp(sceneEquipmentBean1);
+                    if(DBcurd.isSaveSceneDataByEquipmentMac(sceneEquipmentBean1)){
+                        DBcurd.updateSceneData(sceneEquipmentBean1);
+                        DBcurd.updateTemp(sceneEquipmentBean1);
                         Log.e(TAG, "设备2更新");
                     }else {
-                        dBcurd.addSceneData(sceneEquipmentBean1);
-                        dBcurd.updateTemp(sceneEquipmentBean1);
+                        DBcurd.addSceneData(sceneEquipmentBean1);
+                        DBcurd.updateTemp(sceneEquipmentBean1);
                         Log.e(TAG, "设备2添加");
                     }
                 }
 
                 if(sceneEquipmentBean2!=null){
-                    if(dBcurd.isSaveSceneDataByEquipmentMac(sceneEquipmentBean2)){
-                        dBcurd.updateSceneData(sceneEquipmentBean2);
-                        dBcurd.updateTemp(sceneEquipmentBean2);
+                    if(DBcurd.isSaveSceneDataByEquipmentMac(sceneEquipmentBean2)){
+                        DBcurd.updateSceneData(sceneEquipmentBean2);
+                        DBcurd.updateTemp(sceneEquipmentBean2);
                         Log.e(TAG, "设备3更新");
                     }else {
-                        dBcurd.addSceneData(sceneEquipmentBean2);
-                        dBcurd.updateTemp(sceneEquipmentBean2);
+                        DBcurd.addSceneData(sceneEquipmentBean2);
+                        DBcurd.updateTemp(sceneEquipmentBean2);
                         Log.e(TAG, "设备3添加");
                     }
                 }
@@ -390,7 +390,7 @@ public class AddSceneActivity extends StatusActivity {
 
     @Override
     public void onBackPressed() {
-        dBcurd.delAllSceneData();
+        DBcurd.delAllSceneData();
         super.onBackPressed();
     }
 }

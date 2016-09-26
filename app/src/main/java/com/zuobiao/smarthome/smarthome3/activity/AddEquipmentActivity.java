@@ -23,8 +23,6 @@ import com.zuobiao.smarthome.smarthome3.util.SpHelper;
 import com.zuobiao.smarthome.smarthome3.util.UdpHelper;
 import com.zuobiao.smarthome.smarthome3.util.Util;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
 
 
@@ -42,7 +40,7 @@ public class AddEquipmentActivity extends StatusActivity {
     private DrawerLayout mDrawerLayout;
     private ActionBarDrawerToggle mDrawerToggle;
     private Button btnBack;
-    private DBcurd dBcurd;
+    private DBcurd DBcurd;
     private final static int SCANNIN_GREQUEST_CODE = 1;
 
     private UdpHelper udpHelper;
@@ -67,7 +65,7 @@ public class AddEquipmentActivity extends StatusActivity {
         btnSendDelRfidCard = (Button) findViewById(R.id.btnSendDelRfidCard);
         btnAddRfidCardInfo = (Button) findViewById(R.id.btnAddRfidCardInfo);
 
-        dBcurd = new DBcurd(AddEquipmentActivity.this);
+        DBcurd = new DBcurd(AddEquipmentActivity.this);
         lvEquipments = (ListView) findViewById(R.id.lvEquipments);
 
         util = new Util();
@@ -91,7 +89,7 @@ public class AddEquipmentActivity extends StatusActivity {
             public void onDrawerOpened(View drawerView) {
                 super.onDrawerOpened(drawerView);
                 Log.e("Main", "open");
-                lvEquipments.setAdapter(new ImageListViewAdapter(AddEquipmentActivity.this, dBcurd.getAllData(), true));
+                lvEquipments.setAdapter(new ImageListViewAdapter(AddEquipmentActivity.this, DBcurd.getAllData(), true));
             }
 
             @Override
@@ -129,7 +127,7 @@ public class AddEquipmentActivity extends StatusActivity {
         btnSendAddRfidCard.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                rfidList = dBcurd.getAllRfidInfo();
+                rfidList = DBcurd.getAllRfidInfo();
                 rfids = new String[rfidList.size()];
                 for (int i = 0; i < rfidList.size(); i++) {
                     rfids[i] = rfidList.get(i);
@@ -177,7 +175,7 @@ public class AddEquipmentActivity extends StatusActivity {
         btnSendDelRfidCard.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                rfidList = dBcurd.getAllRfidInfo();
+                rfidList = DBcurd.getAllRfidInfo();
                 rfids = new String[rfidList.size()];
                 for (int i = 0; i < rfidList.size(); i++) {
                     rfids[i] = rfidList.get(i);
@@ -240,7 +238,7 @@ public class AddEquipmentActivity extends StatusActivity {
                 udpHelper.send(broadcastData());
                 udpHelper.setOnReceive(new OnReceive() {
                     @Override
-                    public void receive(String data, String ip) {
+                    public void receive(String command,String data, String ip) {
                         Log.e("接收接口", "receive() data=" + data);
                     }
                 });

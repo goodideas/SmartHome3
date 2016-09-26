@@ -34,7 +34,7 @@ public class TempPm25Activity extends StatusActivity {
     private Button btnModifyName;
     private EditText etEquipmentName;
     private boolean isModify = false;
-    private DBcurd dBcurd;
+    private DBcurd DBcurd;
 
     private Button btnEquipmentTitleBarBack;
     private TextView tvEquipmentShow;
@@ -51,7 +51,7 @@ public class TempPm25Activity extends StatusActivity {
         btnEquipmentTitleBarBack = (Button) findViewById(R.id.btnEquipmentTitleBarBack);
         btnModifyName = (Button) findViewById(R.id.btnModifyNameTempPm25);
         etEquipmentName = (EditText) findViewById(R.id.etEquipmentNameTempPm25);
-        dBcurd = new DBcurd(TempPm25Activity.this);
+        DBcurd = new DBcurd(TempPm25Activity.this);
         spHelper = new SpHelper(TempPm25Activity.this);
         udpHelper = UdpHelper.getInstance();
 
@@ -86,8 +86,8 @@ public class TempPm25Activity extends StatusActivity {
             }
         });
         tvEquipmentShow.setText(Constant.getTypeName(equipmentBean.getDevice_Type()));
-        if (!dBcurd.getNickNameByMac(equipmentBean.getMac_ADDR()).equalsIgnoreCase("FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF")) {
-            String equipmentName = new String(Util.HexString2Bytes(dBcurd.getNickNameByMac(equipmentBean.getMac_ADDR()))).trim();
+        if (!DBcurd.getNickNameByMac(equipmentBean.getMac_ADDR()).equalsIgnoreCase("FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF")) {
+            String equipmentName = new String(Util.HexString2Bytes(DBcurd.getNickNameByMac(equipmentBean.getMac_ADDR()))).trim();
             if (TextUtils.isEmpty(equipmentName)) {
                 etEquipmentName.setText(Constant.getTypeName(equipmentBean.getDevice_Type()));
             } else {
@@ -114,7 +114,7 @@ public class TempPm25Activity extends StatusActivity {
                         String modifyString = etEquipmentName.getText().toString();
                         udpHelper.setIsSend(true);
                         udpHelper.send(getModifyData(modifyString));
-                        dBcurd.updataEquipmentName(Util.bytes2HexString(modifyString.getBytes(), modifyString.getBytes().length), equipmentBean.getMac_ADDR());
+                        DBcurd.updataEquipmentName(Util.bytes2HexString(modifyString.getBytes(), modifyString.getBytes().length), equipmentBean.getMac_ADDR());
                     }
                 }
 

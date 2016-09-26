@@ -3,13 +3,10 @@ package com.zuobiao.smarthome.smarthome3.util;
 import com.zuobiao.smarthome.smarthome3.R;
 
 public class Constant {
-    public static final int BTN_FLAG_EQUIPMENT = 0x01;
-    public static final int BTN_FLAG_SCENE = 0x01 << 1;
-    public static final int BTN_FLAG_SETTING = 0x01 << 3;
+
     public static final int HANDLER_ONLINE = 0x123;
     public static final int HANDLER_SEARCH_GATEWAY = 0x124;
-    public static final int SEARCH_GATEWAY_WAIT_MAX_TIME = 2;//查找网关最大等待时间
-    public static final int WEICOM_ACTIVITY_SEARCH_GATEWAY_WAIT_MAX_TIME = 1;//查找网关最大等待时间
+
     public static final int REFRESH_EQUIPMENT_WAIT_MAX_TIME = 2;//刷新设备最大等待时间
     public static final int ADD_EQUIPMENT_WAIT_MAX_TIME = 2;//添加设备最大等待时间
     public static final int HANDLER_REFRESH_EQUIPMENT_GATE_DATA = 0x125;
@@ -27,40 +24,41 @@ public class Constant {
     public static final int HANDLER_TEMP_PM25_HAS_ANSWER = 0x208;
     public static final int HANDLER_INFLAMMABLE_GAS_HAS_ANSWER = 0x209;
     public static final int HANDLER_SWITCHS_HAS_ANSWER3 = 0x210;
-    public static final int  HANDLER_SOCKETS_HAS_ANSWER3 = 0x211;
-    public static final int  HANDLER_LIGHT_SERSON_HAS_ANSWER2 = 0x212;
-    public static final int  HANDLER_INFRARED_HAS_ANSWER3 = 0x213;
-    public static final int  HANDLER_TEMP_PM25_HAS_ANSWER3 = 0x214;
-    public static final int  HANDLER_INFLAMMABLE_GAS_HAS_ANSWER3 = 0x215;
-    public static final int  HANDLER_DOOR_MAGNET_HAS_ANSWER = 0x216;
-    public static final int  HANDLER_DOOR_MAGNET_HAS_ANSWER2 = 0x217;
-    public static final int  HANDLER_MODIFY_EQUIPMENT_NAME_HAS_ANSWER = 0x218;
-    public static final int  HANDLER_CURTAINS_HAS_ANSWER = 0x219;
-    public static final int  HANDLER_SCENE_SETTING_HAS_ANSWER = 0x220;
-    public static final int  HANDLER_SCENE_SETTING_HAS_ANSWER2 = 0x221;
+    public static final int HANDLER_SOCKETS_HAS_ANSWER3 = 0x211;
+    public static final int HANDLER_LIGHT_SENSOR_HAS_ANSWER2 = 0x212;
+    public static final int HANDLER_INFRARED_HAS_ANSWER3 = 0x213;
+    public static final int HANDLER_TEMP_PM25_HAS_ANSWER3 = 0x214;
+    public static final int HANDLER_INFLAMMABLE_GAS_HAS_ANSWER2 = 0x215;
+    public static final int HANDLER_DOOR_MAGNET_HAS_ANSWER = 0x216;
+    public static final int HANDLER_DOOR_MAGNET_HAS_ANSWER2 = 0x217;
+    public static final int HANDLER_MODIFY_EQUIPMENT_NAME_HAS_ANSWER = 0x218;
+    public static final int HANDLER_CURTAINS_HAS_ANSWER = 0x219;
+    public static final int HANDLER_SCENE_SETTING_HAS_ANSWER = 0x220;
+    public static final int HANDLER_SCENE_SETTING_HAS_ANSWER2 = 0x221;
 
-    public static final int  HANDLER_ADD_RFID_INFO_HAS_ANSWER = 0x222;
-    public static final int  HANDLER_DEL_RFID_INFO_HAS_ANSWER = 0x223;
+    public static final int HANDLER_ADD_RFID_INFO_HAS_ANSWER = 0x222;
+    public static final int HANDLER_DEL_RFID_INFO_HAS_ANSWER = 0x223;
 
 
     public static final int QR_RFID_RESULT_CODE = 0x224;
     public static final String QR_RFID_RESULT_DATA = "rfidInfo";
 
-    public static final int  HANDLER_WINDOW_NO_ANSWER = 0x225;
-    public static final int  HANDLER_WINDOW_HAS_ANSWER = 0x226;
-    public static final int  HANDLER_CURTAINS_NO_ANSWER = 0x227;
+    public static final int HANDLER_WINDOW_NO_ANSWER = 0x225;
+    public static final int HANDLER_WINDOW_HAS_ANSWER = 0x226;
+    public static final int HANDLER_CURTAINS_NO_ANSWER = 0x227;
 
-    public static final int  HANDLER_NOISE_SERSON_HAS_ANSWER = 0x228;
-    public static final int  HANDLER_NOISE_SERSON_HAS_ANSWER2 = 0x229;
+    public static final int HANDLER_NOISE_SENSOR_HAS_ANSWER = 0x228;
+    public static final int HANDLER_NOISE_SENSOR_HAS_ANSWER2 = 0x229;
 
-    public static final int BEFOREINTO_SWITCH_MAX_TIME = 1;
-    public static final int BEFOREINTO_WINDOW_MAX_TIME = 1;
-    public static final int BEFOREINTO_CURTAINS_MAX_TIME = 1;
+    public static final int BEFORE_INTO_SWITCH_MAX_TIME = 1000;
+    public static final int BEFORE_INTO_WINDOW_MAX_TIME = 1000;
+    public static final int BEFORE_INTO_CURTAINS_MAX_TIME = 1000;
+    public static final int BEFORE_INTO_MAIN_ACTIVITY_MAX_TIME = 2000;
+    public static final int REFRESH_GATE_TIME = 2000;//设备列表下，下拉刷新时间
+    public static final int SEARCH_GATEWAY_WAIT_MAX_TIME = 2000;//查找网关最大等待时间
+    public static final int WEICOM_ACTIVITY_SEARCH_GATEWAY_WAIT_MAX_TIME = 1000;//查找网关最大等待时间
+    public static final String BROADCAST_IP = "255.255.255.255";
 
-    //Fragment的标识
-    public static final String FRAGMENT_FLAG_EQUIPMENT = "设备";
-    public static final String FRAGMENT_FLAG_SCENE = "场景";
-    public static final String FRAGMENT_FLAG_SETTING = "设置";
 
     //设备标识
     public static final String GATEWAY = "0005fffe";     //网关
@@ -72,12 +70,10 @@ public class Constant {
     public static final String INFLAMMABLE_GAS = "6005fffe";    //可燃性气体 //烟雾 feff0560
     public static final String LIGHT_SENSOR = "7005fffe";    //光照传感器 feff0570
     public static final String DOOR_MAGNET = "8005fffe";    //门磁 feff0580
+    public static final String NOISE_SENSOR = "9005fffe";//噪音传感器
     public static final String CURTAINS = "1105fffe";        //窗帘 feff0511
     public static final String WINDOW = "1205fffe";        //窗 feff0512
     public static final String SINGLE_CURTAINS = "1305fffe";        //单个窗 feff0513
-
-    public static final String NOISE_SENSOR = "9005fffe";//噪音传感器
-//    public static final String TEST = "FFFFFFFF";        //测试
 
 
     //设备名字
@@ -129,7 +125,7 @@ public class Constant {
     public static final String SOCKETS_RECV2_COMMAND = "3150";
     public static final String TEMP_PM25_RECV2_COMMAND = "4150";
     public static final String INFRARED_RECV_COMMAND = "5150";
-    public static final String INFLAMMABLE_GAS_RECV2_COMMAND = "6150";
+    public static final String INFLAMMABLE_GAS_RECV_COMMAND = "6150";
     public static final String LIGHT_SENSOR_RECV2_COMMAND = "7150";
     public static final String DOOR_MAGNET_RECV_COMMAND = "8150";
     public static final String NOISE_SENSOR_RECV2_COMMAND = "9150";
@@ -137,7 +133,7 @@ public class Constant {
     public static final String SOCKETS_RECV3_COMMAND = "3010";
     public static final String TEMP_PM25_RECV3_COMMAND = "4010";
     public static final String INFRARED_RECV3_COMMAND = "5010";
-    public static final String INFLAMMABLE_GAS_RECV3_COMMAND = "6010";
+    public static final String INFLAMMABLE_GAS_RECV_COMMAND2 = "6010";
     public static final String LIGHT_SONSER_RECV2_COMMAND = "7010";
     public static final String DOOR_MAGNET_RECV2_COMMAND = "8010";
     public static final String NOISE_SONSER_RECV2_COMMAND = "9010";
@@ -146,141 +142,139 @@ public class Constant {
     public static final String SCENE_SETTING_RECV2_COMMAND = "F210";
 
 
-    public static final byte[] DATA_HEAD = {(byte)0xFF,(byte)0xAA};
+    public static final byte[] DATA_HEAD = {(byte) 0xFF, (byte) 0xAA};
 
-    public static final byte[] DATA_TAIL = {(byte)0xFF,(byte)0x55};
+    public static final byte[] DATA_TAIL = {(byte) 0xFF, (byte) 0x55};
 
-    public static final byte[] GATEWAY_SEND_COMMAND = {(byte)0x01,(byte)0x00};
+    public static final byte[] GATEWAY_SEND_COMMAND = {(byte) 0x01, (byte) 0x00};
 
-    public static final byte[] REFRESH_EQUIPMENT_SEND_COMMAND = {(byte)0x02,(byte)0x00};
+    public static final byte[] REFRESH_EQUIPMENT_SEND_COMMAND = {(byte) 0x02, (byte) 0x00};
 
-    public static final byte[] ADD_EQUIPMENT_SEND_COMMAND = {(byte)0x04,(byte)0x00};
+    public static final byte[] ADD_EQUIPMENT_SEND_COMMAND = {(byte) 0x04, (byte) 0x00};
 
-    public static final byte[] MODEFY_EQUIPMENT_NAME_SEND_COMMAND = {(byte)0x05,(byte)0x00};
+    public static final byte[] MODEFY_EQUIPMENT_NAME_SEND_COMMAND = {(byte) 0x05, (byte) 0x00};
 
-    public static final byte[] SWITCHS_SEND_COMMAND = {(byte)0x21,(byte)0x00};
-    public static final byte[] SOCKETS_SEND_COMMAND = {(byte)0x31,(byte)0x00};
+    public static final byte[] SWITCHS_SEND_COMMAND = {(byte) 0x21, (byte) 0x00};
+    public static final byte[] SOCKETS_SEND_COMMAND = {(byte) 0x31, (byte) 0x00};
 
-    public static final byte[] SWITCHS_SEND2_COMMAND = {(byte)0x20,(byte)0x00};
-    public static final byte[] SOCKETS_SEND2_COMMAND = {(byte)0x30,(byte)0x00};
-    public static final byte[] TEMP_PM25_SEND2_COMMAND = {(byte)0x40,(byte)0x00};
-    public static final byte[] INFRARED_SEND_COMMAND = {(byte)0x50,(byte)0x00};
-    public static final byte[] INFLAMMABLE_GAS_SEND_COMMAND = {(byte)0x60,(byte)0x00};
-    public static final byte[] LIGHT_SENSOR_SEND2_COMMAND = {(byte)0x70,(byte)0x00};
-    public static final byte[] DOOR_MAGNET_SEND_COMMAND = {(byte)0x80,(byte)0x00};
-    public static final byte[] NOISE_SENSOR_SEND2_COMMAND = {(byte)0x90,(byte)0x00};
+    public static final byte[] SWITCHS_SEND2_COMMAND = {(byte) 0x20, (byte) 0x00};
+    public static final byte[] SOCKETS_SEND2_COMMAND = {(byte) 0x30, (byte) 0x00};
+    public static final byte[] TEMP_PM25_SEND2_COMMAND = {(byte) 0x40, (byte) 0x00};
+    public static final byte[] INFRARED_SEND_COMMAND = {(byte) 0x50, (byte) 0x00};
+    public static final byte[] INFLAMMABLE_GAS_SEND_COMMAND = {(byte) 0x60, (byte) 0x00};
+    public static final byte[] LIGHT_SENSOR_SEND2_COMMAND = {(byte) 0x70, (byte) 0x00};
+    public static final byte[] DOOR_MAGNET_SEND_COMMAND = {(byte) 0x80, (byte) 0x00};
+    public static final byte[] NOISE_SENSOR_SEND2_COMMAND = {(byte) 0x90, (byte) 0x00};
 
-    public static final byte[] WINDOW_SEND_COMMAND = {(byte)0x10,(byte)0x00};
+    public static final byte[] WINDOW_SEND_COMMAND = {(byte) 0x10, (byte) 0x00};
 
 
-    public static final byte[] SCENE_SETTING_SEND_COMMAND = {(byte)0xF1,(byte)0x00};
+    public static final byte[] SCENE_SETTING_SEND_COMMAND = {(byte) 0xF1, (byte) 0x00};
 
-    public static final byte[] CURITAINS_SEND_COMMAND = {(byte)0x12,(byte)0x00};
-    public static final byte[] SCENE_SETTING_SEND_COMMAND2 = {(byte)0xF2,(byte)0x00};
-    public static final byte[]  RFID_INFO_SEND_ADD = {(byte)0x06,(byte)0x00};
-    public static final byte[]  RFID_INFO_SEND_DEL = {(byte)0x07,(byte)0x00};
+    public static final byte[] CURITAINS_SEND_COMMAND = {(byte) 0x12, (byte) 0x00};
+    public static final byte[] SCENE_SETTING_SEND_COMMAND2 = {(byte) 0xF2, (byte) 0x00};
+    public static final byte[] RFID_INFO_SEND_ADD = {(byte) 0x06, (byte) 0x00};
+    public static final byte[] RFID_INFO_SEND_DEL = {(byte) 0x07, (byte) 0x00};
 
     /**
      * 根据设备标识得到图片id
+     *
      * @param deviceType 设备类型名字
      * @return imageId 返回的图片id
      */
-    public static int getImageId(String deviceType){
+    public static int getImageId(String deviceType) {
 
         int imageId = 0;
-        if(GATEWAY.equalsIgnoreCase(deviceType)){
+        if (GATEWAY.equalsIgnoreCase(deviceType)) {
             imageId = DRAWABLE_GATEWAY;
         }
-        if(CONTROL_MODULE.equalsIgnoreCase(deviceType)){
+        if (CONTROL_MODULE.equalsIgnoreCase(deviceType)) {
             imageId = DRAWABLE_CONTROL_MODULE;
         }
-        if(SWITCHES.equalsIgnoreCase(deviceType)){
+        if (SWITCHES.equalsIgnoreCase(deviceType)) {
             imageId = DRAWABLE_SWITCHES;
         }
-        if(SOCKETS.equalsIgnoreCase(deviceType)){
+        if (SOCKETS.equalsIgnoreCase(deviceType)) {
             imageId = DRAWABLE_SOCKETS;
         }
-        if(TEMP_PM25.equalsIgnoreCase(deviceType)){
+        if (TEMP_PM25.equalsIgnoreCase(deviceType)) {
             imageId = DRAWABLE_TEMP_PM25;
         }
-        if(INFRARED.equalsIgnoreCase(deviceType)){
+        if (INFRARED.equalsIgnoreCase(deviceType)) {
             imageId = DRAWABLE_INFRARED;
         }
-        if(INFLAMMABLE_GAS.equalsIgnoreCase(deviceType)){
+        if (INFLAMMABLE_GAS.equalsIgnoreCase(deviceType)) {
             imageId = DRAWABLE_INFLAMMABLE_GAS;
         }
-        if(LIGHT_SENSOR.equalsIgnoreCase(deviceType)){
+        if (LIGHT_SENSOR.equalsIgnoreCase(deviceType)) {
             imageId = DRAWABLE_LIGHT_SENSOR;
         }
-        if(DOOR_MAGNET.equalsIgnoreCase(deviceType)){
+        if (DOOR_MAGNET.equalsIgnoreCase(deviceType)) {
             imageId = DRAWABLE_DOOR_MAGNET;
         }
-        if(CURTAINS.equalsIgnoreCase(deviceType)){
+        if (CURTAINS.equalsIgnoreCase(deviceType)) {
             imageId = DRAWABLE_CURTAINS;
         }
-        if(WINDOW.equalsIgnoreCase(deviceType)){
+        if (WINDOW.equalsIgnoreCase(deviceType)) {
             imageId = DRAWABLE_WINDOW;
         }
-        if(NOISE_SENSOR.equalsIgnoreCase(deviceType)){
+        if (NOISE_SENSOR.equalsIgnoreCase(deviceType)) {
             imageId = DRAWABLE_NOISE;
         }
-        if(SINGLE_CURTAINS.equalsIgnoreCase(deviceType)){
+        if (SINGLE_CURTAINS.equalsIgnoreCase(deviceType)) {
             imageId = DRAWABLE_CURTAINS;
         }
 
-//        if(TEST.equalsIgnoreCase(deviceType)){
-//            imageId = R.drawable.test;
-//        }
         return imageId;
 
     }
 
 
-
     /**
      * 根据设备标识得到类型字符串
+     *
      * @param deviceType 设备类型名字
      * @return equipmentTypeName 返回的类型字符串
      */
-    public static String getTypeName(String deviceType){
+    public static String getTypeName(String deviceType) {
         String equipmentTypeName = "";
-        if(GATEWAY.equalsIgnoreCase(deviceType)){
+        if (GATEWAY.equalsIgnoreCase(deviceType)) {
             equipmentTypeName = GATEWAY_STRING;
         }
-        if(CONTROL_MODULE.equalsIgnoreCase(deviceType)){
+        if (CONTROL_MODULE.equalsIgnoreCase(deviceType)) {
             equipmentTypeName = CONTROL_MODULE_STRING;
         }
-        if(SWITCHES.equalsIgnoreCase(deviceType)){
+        if (SWITCHES.equalsIgnoreCase(deviceType)) {
             equipmentTypeName = SWITCHES_STRING;
         }
-        if(SOCKETS.equalsIgnoreCase(deviceType)){
+        if (SOCKETS.equalsIgnoreCase(deviceType)) {
             equipmentTypeName = SOCKETS_STRING;
         }
-        if(TEMP_PM25.equalsIgnoreCase(deviceType)){
+        if (TEMP_PM25.equalsIgnoreCase(deviceType)) {
             equipmentTypeName = TEMP_PM25_STRING;
         }
-        if(INFRARED.equalsIgnoreCase(deviceType)){
+        if (INFRARED.equalsIgnoreCase(deviceType)) {
             equipmentTypeName = INFRARED_STRING;
         }
-        if(INFLAMMABLE_GAS.equalsIgnoreCase(deviceType)){
+        if (INFLAMMABLE_GAS.equalsIgnoreCase(deviceType)) {
             equipmentTypeName = INFLAMMABLE_GAS_STRING;
         }
-        if(LIGHT_SENSOR.equalsIgnoreCase(deviceType)){
+        if (LIGHT_SENSOR.equalsIgnoreCase(deviceType)) {
             equipmentTypeName = LIGHT_SENSOR_STRING;
         }
-        if(DOOR_MAGNET.equalsIgnoreCase(deviceType)){
+        if (DOOR_MAGNET.equalsIgnoreCase(deviceType)) {
             equipmentTypeName = DOOR_MAGNET_STRING;
         }
-        if(CURTAINS.equalsIgnoreCase(deviceType)){
+        if (CURTAINS.equalsIgnoreCase(deviceType)) {
             equipmentTypeName = CURTAINS_STRING;
         }
-        if(WINDOW.equalsIgnoreCase(deviceType)){
+        if (WINDOW.equalsIgnoreCase(deviceType)) {
             equipmentTypeName = WINDOW_STRING;
         }
-        if(NOISE_SENSOR.equalsIgnoreCase(deviceType)){
+        if (NOISE_SENSOR.equalsIgnoreCase(deviceType)) {
             equipmentTypeName = NOISE_STRING;
         }
-        if(SINGLE_CURTAINS.equalsIgnoreCase(deviceType)){
+        if (SINGLE_CURTAINS.equalsIgnoreCase(deviceType)) {
             equipmentTypeName = CURTAINS_STRING;
         }
 
@@ -295,16 +289,6 @@ public class Constant {
     public static final int INTENT_ENTER_SCENE_REQUEST_CODE = 0x302;
     //ListView的item的activity返回的结果码
     public static final int INTENT_ENTER_SCENE_RESULT_CODE = 0x312;
-
-
-
-//    public static final int EQUIPMENT_TYPE_SWITCH_REQUEST_CODE = 0x401;
-//
-//    public static final int EQUIPMENT_TYPE_SWITCH_RESULT_CODE = 0x411;
-//
-//    public static final int EQUIPMENT_TYPE_SOCKET_REQUEST_CODE = 0x402;
-//
-//    public static final int EQUIPMENT_TYPE_SOCKET_RESULT_CODE = 0x412;
 
     public static final int EQUIPMENT_TYPE_REQUEST_CODE = 0x403;
     public static final int EQUIPMENT_TYPE_RESULT_CODE = 0x413;

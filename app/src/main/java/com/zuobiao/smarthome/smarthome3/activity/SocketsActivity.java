@@ -34,7 +34,7 @@ public class SocketsActivity extends StatusActivity {
     private Button btnModifyName;
     private EditText etEquipmentName;
     private boolean isModify = false;
-    private DBcurd dBcurd;
+    private DBcurd DBcurd;
 
     private Button btnEquipmentTitleBarBack;
     private TextView tvEquipmentShow;
@@ -55,7 +55,7 @@ public class SocketsActivity extends StatusActivity {
                 finish();
             }
         });
-        dBcurd = new DBcurd(SocketsActivity.this);
+        DBcurd = new DBcurd(SocketsActivity.this);
         Intent intent = this.getIntent();
         equipmentBean=(EquipmentBean)intent.getSerializableExtra("equipmentBean");
         Log.e("SocketsActivity", "equipmentBean=" + equipmentBean.getDevice_Type() + " " + equipmentBean.getShort_ADDR());
@@ -77,9 +77,9 @@ public class SocketsActivity extends StatusActivity {
             }
         });
         tvEquipmentShow.setText(Constant.getTypeName(equipmentBean.getDevice_Type()));
-        if(!dBcurd.getNickNameByMac(equipmentBean.getMac_ADDR()).equalsIgnoreCase("FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF")) {
-//            String equipmentName =    new String(util.HexString2Bytes(dBcurd.getNickNameByMac(equipmentBean.getMac_ADDR()))).trim();
-            String equipmentName = Util.hexString2Characters(dBcurd.getNickNameByMac(equipmentBean.getMac_ADDR()));
+        if(!DBcurd.getNickNameByMac(equipmentBean.getMac_ADDR()).equalsIgnoreCase("FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF")) {
+//            String equipmentName =    new String(util.HexString2Bytes(DBcurd.getNickNameByMac(equipmentBean.getMac_ADDR()))).trim();
+            String equipmentName = Util.hexString2Characters(DBcurd.getNickNameByMac(equipmentBean.getMac_ADDR()));
             if(TextUtils.isEmpty(equipmentName)){
                 etEquipmentName.setText(Constant.getTypeName(equipmentBean.getDevice_Type()));
             }else{
@@ -107,7 +107,7 @@ public class SocketsActivity extends StatusActivity {
                         String modifyString = etEquipmentName.getText().toString();
                         udpHelper.setIsSend(true);
                         udpHelper.send(getModifyData(modifyString));
-                        dBcurd.updataEquipmentName(Util.bytes2HexString(modifyString.getBytes(), modifyString.getBytes().length), equipmentBean.getMac_ADDR());
+                        DBcurd.updataEquipmentName(Util.bytes2HexString(modifyString.getBytes(), modifyString.getBytes().length), equipmentBean.getMac_ADDR());
                     }
                 }
 

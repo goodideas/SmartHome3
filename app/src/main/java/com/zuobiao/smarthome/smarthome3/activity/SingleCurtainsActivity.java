@@ -32,7 +32,7 @@ public class SingleCurtainsActivity extends StatusActivity {
     private Button btnModifyName;
     private EditText etEquipmentName;
     private boolean isModify = false;
-    private DBcurd dBcurd;
+    private DBcurd DBcurd;
     private byte statusCurtains = (byte)0x00;
 
 
@@ -66,7 +66,7 @@ public class SingleCurtainsActivity extends StatusActivity {
 
         handler = new Handler();
 
-        dBcurd = new DBcurd(SingleCurtainsActivity.this);
+        DBcurd = new DBcurd(SingleCurtainsActivity.this);
         Intent intent = this.getIntent();
         equipmentBean=(EquipmentBean)intent.getSerializableExtra("equipmentBean");
         Log.e("SingleCurtainsActivity", "equipmentBean=" + equipmentBean.getDevice_Type() + " " + equipmentBean.getShort_ADDR());
@@ -81,7 +81,7 @@ public class SingleCurtainsActivity extends StatusActivity {
         searchDialog.setMessage("");
         searchDialog.onStart();
         searchDialog.show();
-        udpHelper.doCurtains(Constant.BEFOREINTO_CURTAINS_MAX_TIME);
+        udpHelper.doCurtains(Constant.BEFORE_INTO_CURTAINS_MAX_TIME);
         tbSingleCurtains.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -97,9 +97,9 @@ public class SingleCurtainsActivity extends StatusActivity {
 
 
         tvEquipmentShow.setText(Constant.getTypeName(equipmentBean.getDevice_Type()));
-        if(!dBcurd.getNickNameByMac(equipmentBean.getMac_ADDR()).equalsIgnoreCase("FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF")) {
+        if(!DBcurd.getNickNameByMac(equipmentBean.getMac_ADDR()).equalsIgnoreCase("FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF")) {
 
-            String equipmentName = new String(Util.HexString2Bytes(dBcurd.getNickNameByMac(equipmentBean.getMac_ADDR()))).trim();
+            String equipmentName = new String(Util.HexString2Bytes(DBcurd.getNickNameByMac(equipmentBean.getMac_ADDR()))).trim();
             if(TextUtils.isEmpty(equipmentName)){
                 etEquipmentName.setText(Constant.getTypeName(equipmentBean.getDevice_Type()));
             }else{
@@ -128,7 +128,7 @@ public class SingleCurtainsActivity extends StatusActivity {
                         String modifyString = etEquipmentName.getText().toString();
                         udpHelper.setIsSend(true);
                         udpHelper.send(getModifyData(modifyString));
-                        dBcurd.updataEquipmentName(Util.bytes2HexString(modifyString.getBytes(), modifyString.getBytes().length), equipmentBean.getMac_ADDR());
+                        DBcurd.updataEquipmentName(Util.bytes2HexString(modifyString.getBytes(), modifyString.getBytes().length), equipmentBean.getMac_ADDR());
                     }
                 }
 

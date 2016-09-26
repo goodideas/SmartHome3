@@ -22,12 +22,12 @@ public class ConditionSpinnerAdapter extends BaseAdapter{
 
     private Context mContext;
     private List<EquipmentBean> mList;
-    private DBcurd dBcurd;
+    private DBcurd DBcurd;
     private Util util;
     public ConditionSpinnerAdapter(Context context,List<EquipmentBean> list){
         mContext = context;
         mList = list;
-        dBcurd = new DBcurd(context);
+        DBcurd = new DBcurd(context);
         util = new Util();
     }
 
@@ -62,8 +62,8 @@ public class ConditionSpinnerAdapter extends BaseAdapter{
             viewHolder = (ViewHolder)view.getTag();
         }
 
-        if(!dBcurd.getNickNameByMac(equipmentBean.getMac_ADDR()).equalsIgnoreCase("FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF")){
-            String tvNameText = new String(util.HexString2Bytes(dBcurd.getNickNameByMac(equipmentBean.getMac_ADDR()))).trim();
+        if(!DBcurd.getNickNameByMac(equipmentBean.getMac_ADDR()).equalsIgnoreCase("FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF")){
+            String tvNameText = new String(util.HexString2Bytes(DBcurd.getNickNameByMac(equipmentBean.getMac_ADDR()))).trim();
             if(TextUtils.isEmpty(tvNameText)){
                 viewHolder.tvSceneEquipmentSettingSpinnerItem.setText(Constant.getTypeName(equipmentBean.getDevice_Type()));
             }else {

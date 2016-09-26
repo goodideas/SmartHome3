@@ -32,7 +32,7 @@ public class InfraredActivity extends StatusActivity {
     private Button btnModifyName;
     private EditText etEquipmentName;
     private boolean isModify = false;
-    private DBcurd dBcurd;
+    private DBcurd DBcurd;
 
     private Button btnEquipmentTitleBarBack;
     private TextView tvEquipmentShow;
@@ -58,7 +58,7 @@ public class InfraredActivity extends StatusActivity {
         btnModifyName = (Button)findViewById(R.id.btnModifyNameInfrared);
         etEquipmentName = (EditText)findViewById(R.id.etEquipmentNameInfrared);
 
-        dBcurd = new DBcurd(InfraredActivity.this);
+        DBcurd = new DBcurd(InfraredActivity.this);
         spHelper = new SpHelper(InfraredActivity.this);
         udpHelper = UdpHelper.getInstance();
         udpHelper.setInfraredTv(tvInfrared,equipmentBean.getMac_ADDR());
@@ -73,10 +73,10 @@ public class InfraredActivity extends StatusActivity {
             }
         });
         tvEquipmentShow.setText(Constant.getTypeName(equipmentBean.getDevice_Type()));
-        if(!dBcurd.getNickNameByMac(equipmentBean.getMac_ADDR()).equalsIgnoreCase("FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF")) {
-//            etEquipmentName.setText(new String(util.HexString2Bytes(dBcurd.getNickNameByMac(equipmentBean.getMac_ADDR()))).trim());
-            String equipmentName = new String(util.HexString2Bytes(dBcurd.getNickNameByMac(equipmentBean.getMac_ADDR()))).trim();
-//            etEquipmentName.setText(new String(util.HexString2Bytes(dBcurd.getNickNameByMac(equipmentBean.getMac_ADDR()))).trim());
+        if(!DBcurd.getNickNameByMac(equipmentBean.getMac_ADDR()).equalsIgnoreCase("FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF")) {
+//            etEquipmentName.setText(new String(util.HexString2Bytes(DBcurd.getNickNameByMac(equipmentBean.getMac_ADDR()))).trim());
+            String equipmentName = new String(util.HexString2Bytes(DBcurd.getNickNameByMac(equipmentBean.getMac_ADDR()))).trim();
+//            etEquipmentName.setText(new String(util.HexString2Bytes(DBcurd.getNickNameByMac(equipmentBean.getMac_ADDR()))).trim());
             if(TextUtils.isEmpty(equipmentName)){
                 etEquipmentName.setText(Constant.getTypeName(equipmentBean.getDevice_Type()));
             }else{
@@ -104,7 +104,7 @@ public class InfraredActivity extends StatusActivity {
                         String modifyString = etEquipmentName.getText().toString();
                         udpHelper.setIsSend(true);
                         udpHelper.send(getModifyData(modifyString));
-                        dBcurd.updataEquipmentName(Util.bytes2HexString(modifyString.getBytes(), modifyString.getBytes().length), equipmentBean.getMac_ADDR());
+                        DBcurd.updataEquipmentName(Util.bytes2HexString(modifyString.getBytes(), modifyString.getBytes().length), equipmentBean.getMac_ADDR());
                     }
                 }
 

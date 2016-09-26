@@ -3,6 +3,8 @@ package com.zuobiao.smarthome.smarthome3.util;
 import android.content.Context;
 import android.widget.Toast;
 
+import com.zuobiao.smarthome.smarthome3.entity.EquipmentBean;
+
 import java.io.UnsupportedEncodingException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -88,7 +90,7 @@ public class Util {
     public static String hexString2Characters(String hexString){
         String tvNameText = null;
         try {
-            tvNameText = new String(Util.HexString2Bytes(hexString),"utf-8").trim();
+            tvNameText = new String(HexString2Bytes(hexString),"utf-8").trim();
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
@@ -108,7 +110,7 @@ public class Util {
             year = "0" + year;
         }
         //year == 07e0
-        byte[] yearByte = Util.HexString2Bytes(year);
+        byte[] yearByte = HexString2Bytes(year);
 
         time[0] = yearByte[1];
         time[1] = yearByte[0];
@@ -119,6 +121,107 @@ public class Util {
         return time;
     }
 
+    public static byte[] broadcastData(){
+        //数据头
+        byte[] searchGateWay = new byte[17+7];
+        searchGateWay[0] = Constant.DATA_HEAD[0];
+        searchGateWay[1] = Constant.DATA_HEAD[1];
+
+        searchGateWay[2] = (byte)0x00;
+        searchGateWay[3] = (byte)0x00;
+        searchGateWay[4] = (byte)0x00;
+        searchGateWay[5] = (byte)0x00;
+        searchGateWay[6] = (byte)0x00;
+        searchGateWay[7] = (byte)0x00;
+        searchGateWay[8] = (byte)0x00;
+        searchGateWay[9] = (byte)0x00;
+
+        //命令类型
+        searchGateWay[10] = Constant.GATEWAY_SEND_COMMAND[0];
+        searchGateWay[11] = Constant.GATEWAY_SEND_COMMAND[1];
+
+        //数据内容长度
+        searchGateWay[12] = (byte)0x07;
+        //数据内容
+        searchGateWay[13] = (byte)0x00;
+
+        byte[] timeByte = getLocalTime();
+        // yyyy MM dd HH mm ss
+        searchGateWay[14] = timeByte[0];//年
+        searchGateWay[15] = timeByte[1];//年
+        searchGateWay[16] = timeByte[2];//月
+        searchGateWay[17] = timeByte[3];//日
+        searchGateWay[18] = timeByte[4];//时
+        searchGateWay[19] = timeByte[5];//分
+        searchGateWay[20] = timeByte[6];//秒
+        //数据校验
+
+        searchGateWay[21] = checkData(bytes2HexString(timeByte,timeByte.length));
+
+        //数据尾
+        searchGateWay[22] = Constant.DATA_TAIL[0];
+        searchGateWay[23] = Constant.DATA_TAIL[1];
+        return searchGateWay;
+    }
+
+
+    public static byte[] getModifyData(String equipmentName,String gateWayMac,EquipmentBean equipment){
+        byte[] data = new byte[51];
+        data[0] = Constant.DATA_HEAD[0];
+        data[1] = Constant.DATA_HEAD[1];
+        byte[] macByte = HexString2Bytes(gateWayMac);
+        int macByteLength = macByte.length;
+        System.arraycopy(macByte, 0, data, 2, macByteLength);
+        data[10] = Constant.MODEFY_EQUIPMENT_NAME_SEND_COMMAND[0];
+        data[11] = Constant.MODEFY_EQUIPMENT_NAME_SEND_COMMAND[1];
+        //数据内容长度
+        data[12] = (byte) 0x22;
+        data[13] = (byte) 0x00;
+
+        byte[] equipmentMacByte = HexString2Bytes(equipment.getMac_ADDR());
+        int equipmentMacByteLength = equipmentMacByte.length;
+        System.arraycopy(equipmentMacByte, 0, data, 14, equipmentMacByteLength);
+
+        byte[] equipmentShortMacByte = HexString2Bytes(equipment.getShort_ADDR());
+        int equipmentShortMacByteLength = equipmentShortMacByte.length;
+        System.arraycopy(equipmentShortMacByte, 0, data, 22, equipmentShortMacByteLength);
+
+        byte[] etNameByte = equipmentName.getBytes();
+        int etNameByteLength = etNameByte.length;
+        System.arraycopy(etNameByte, 0, data, 24, etNameByteLength);
+
+        String checkData = bytes2HexString(data, data.length);
+        data[48] = checkData(checkData.substring(28, 96));//校验位
+        data[49] = Constant.DATA_TAIL[0];
+        data[50] = Constant.DATA_TAIL[1];
+        return data;
+
+    }
+
+
+    public static byte[] getDataOfBeforeDo(String gateWayMac,byte[] equipmentSendCommand,EquipmentBean equipment) {
+        byte[] data = new byte[25];
+
+        data[0] = Constant.DATA_HEAD[0];
+        data[1] = Constant.DATA_HEAD[1];
+        byte[] macByte = HexString2Bytes(gateWayMac);
+        int macByteLength = macByte.length;
+        System.arraycopy(macByte, 0, data, 2, macByteLength);
+        data[10] = equipmentSendCommand[0];
+        data[11] = equipmentSendCommand[1];
+        //数据内容长度
+        data[12] = (byte) 0x08;
+        data[13] = (byte) 0x00;
+        byte[] equipmentMacByte = HexString2Bytes(equipment.getMac_ADDR());
+        int equipmentMacByteLength = macByte.length;
+        System.arraycopy(equipmentMacByte, 0, data, 14, equipmentMacByteLength);
+        String checkData = bytes2HexString(data, data.length);
+
+        data[22] = checkData(checkData.substring(28, 44));//校验位
+        data[23] = Constant.DATA_TAIL[0];
+        data[24] = Constant.DATA_TAIL[1];
+        return data;
+    }
 
 
 

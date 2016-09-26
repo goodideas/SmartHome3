@@ -40,7 +40,7 @@ public class SwitchsActivity extends StatusActivity {
     private Button btnModifyName;
     private EditText etEquipmentName;
     private boolean isModify = false;
-    private DBcurd dBcurd;
+    private DBcurd DBcurd;
 //    private boolean listens = false;
     private ProgressDialog searchDialog;
 
@@ -68,7 +68,7 @@ public class SwitchsActivity extends StatusActivity {
         equipmentBean = (EquipmentBean) intent.getSerializableExtra("equipmentBean");
         Log.e("SwitchsActivity", "equipmentBean=" + equipmentBean.getDevice_Type() + " " + equipmentBean.getShort_ADDR());
         util = new Util();
-        dBcurd = new DBcurd(SwitchsActivity.this);
+        DBcurd = new DBcurd(SwitchsActivity.this);
         handler = new Handler();
 
         udpHelper = UdpHelper.getInstance();
@@ -81,22 +81,22 @@ public class SwitchsActivity extends StatusActivity {
         searchDialog.setMessage("");
         searchDialog.onStart();
         searchDialog.show();
-        udpHelper.doSwitchs(Constant.BEFOREINTO_SWITCH_MAX_TIME);
+        udpHelper.doSwitchs(Constant.BEFORE_INTO_SWITCH_MAX_TIME);
         toggleButton1 = (ToggleButton) findViewById(R.id.toggleButton1);
         toggleButton2 = (ToggleButton) findViewById(R.id.toggleButton2);
         toggleButton3 = (ToggleButton) findViewById(R.id.toggleButton3);
         udpHelper.setSwitchUI(toggleButton1, toggleButton2, toggleButton3,equipmentBean.getMac_ADDR());
         tvEquipmentShow.setText(Constant.getTypeName(equipmentBean.getDevice_Type()));
-        if(!dBcurd.getNickNameByMac(equipmentBean.getMac_ADDR()).equalsIgnoreCase("FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF")) {
+        if(!DBcurd.getNickNameByMac(equipmentBean.getMac_ADDR()).equalsIgnoreCase("FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF")) {
 
-            String equipmentName = new String(Util.HexString2Bytes(dBcurd.getNickNameByMac(equipmentBean.getMac_ADDR()))).trim();
+            String equipmentName = new String(Util.HexString2Bytes(DBcurd.getNickNameByMac(equipmentBean.getMac_ADDR()))).trim();
             if(TextUtils.isEmpty(equipmentName)){
                 etEquipmentName.setText(Constant.getTypeName(equipmentBean.getDevice_Type()));
             }else{
                 etEquipmentName.setText(equipmentName);
             }
-//            etEquipmentName.setText(new String(util.HexString2Bytes(dBcurd.getNickNameByMac(equipmentBean.getMac_ADDR()).substring(4))).trim());
-//            etEquipmentName.setText(new String(util.HexString2Bytes(dBcurd.getNickNameByMac(equipmentBean.getMac_ADDR()))).trim());
+//            etEquipmentName.setText(new String(util.HexString2Bytes(DBcurd.getNickNameByMac(equipmentBean.getMac_ADDR()).substring(4))).trim());
+//            etEquipmentName.setText(new String(util.HexString2Bytes(DBcurd.getNickNameByMac(equipmentBean.getMac_ADDR()))).trim());
         }else{
             etEquipmentName.setText(Constant.getTypeName(equipmentBean.getDevice_Type()));
         }
@@ -237,7 +237,7 @@ public class SwitchsActivity extends StatusActivity {
                         String modifyString = etEquipmentName.getText().toString();
                         udpHelper.setIsSend(true);
                         udpHelper.send(getModifyData(modifyString));
-                        dBcurd.updataEquipmentName(Util.bytes2HexString(modifyString.getBytes(), modifyString.getBytes().length), equipmentBean.getMac_ADDR());
+                        DBcurd.updataEquipmentName(Util.bytes2HexString(modifyString.getBytes(), modifyString.getBytes().length), equipmentBean.getMac_ADDR());
                     }
                 }
 

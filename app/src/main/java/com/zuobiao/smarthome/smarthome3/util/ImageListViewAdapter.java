@@ -3,7 +3,6 @@ package com.zuobiao.smarthome.smarthome3.util;
 import android.content.Context;
 import android.graphics.Color;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,14 +24,14 @@ public class ImageListViewAdapter extends BaseAdapter{
 
     Context mContext;
     List<EquipmentBean> mList;
-    private DBcurd dBcurd;
+    private DBcurd DBcurd;
     private Util util;
     private boolean mIsShow;
 
     public ImageListViewAdapter(Context context,List<EquipmentBean> list,boolean isShow){
         mContext = context;
         mList = list;
-        dBcurd = new DBcurd(context);
+        DBcurd = new DBcurd(context);
         util = new Util();
         mIsShow = isShow;
     }
@@ -57,11 +56,18 @@ public class ImageListViewAdapter extends BaseAdapter{
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        Log.e("12a1s21a2s1","position="+position);
+//        Log.e("12a1s21a2s1","position="+position);
+//        if(parent.getChildCount() == position){
+//            Log.e("asasa","One position" +position);
+//        }else{
+//            Log.e("asasa","One more position" +position);
+//
+//        }
         View view ;
         ViewHolder viewHolder;
         EquipmentBean equipmentBean;
         equipmentBean = mList.get(position);
+
         if(convertView == null){
             view = LayoutInflater.from(mContext).inflate(R.layout.list_view_item,null);
             viewHolder = new ViewHolder();
@@ -74,11 +80,9 @@ public class ImageListViewAdapter extends BaseAdapter{
             view = convertView;
             viewHolder = (ViewHolder)view.getTag();
         }
-    //    if(equipmentBean.getDevice_Type().equalsIgnoreCase(Constant.TEST)){
-    //        viewHolder.tvName.setText("环境检测");
-   //     }else
-        if(!dBcurd.getNickNameByMac(equipmentBean.getMac_ADDR()).equalsIgnoreCase("FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF")){
-            String tvNameText = new String(Util.HexString2Bytes(dBcurd.getNickNameByMac(equipmentBean.getMac_ADDR()))).trim();
+
+        if(!DBcurd.getNickNameByMac(equipmentBean.getMac_ADDR()).equalsIgnoreCase("FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF")){
+            String tvNameText = new String(Util.HexString2Bytes(DBcurd.getNickNameByMac(equipmentBean.getMac_ADDR()))).trim();
 
             if(TextUtils.isEmpty(tvNameText)){
                 viewHolder.tvName.setText(Constant.getTypeName(equipmentBean.getDevice_Type()));
@@ -89,7 +93,7 @@ public class ImageListViewAdapter extends BaseAdapter{
             viewHolder.tvName.setText(Constant.getTypeName(equipmentBean.getDevice_Type()));
         }
         viewHolder.tvName.setTextSize(16);
-//        viewHolder.tvName.setText(Constant.getTypeName(equipmentBean.getDevice_Type()));
+
         if (Constant.GATEWAY.equalsIgnoreCase(equipmentBean.getDevice_Type())){
             if(equipmentBean.isOnLine()){
                 viewHolder.tvOnLine.setText("在线");

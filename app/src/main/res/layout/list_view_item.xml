@@ -3,27 +3,11 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     >
-    <!--android:background="#10121212"-->
-    <!--<RelativeLayout-->
-    <!--android:layout_width="match_parent"-->
-    <!--android:layout_height="wrap_content"-->
-    <!--android:layout_alignParentTop="true">-->
-
-    <!--<FrameLayout-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:background="#301f5ebe"-->
-        <!--android:layout_marginLeft="8dp"-->
-        <!--android:layout_marginRight="8dp"-->
-        <!--android:layout_marginTop="8dp"-->
-        <!--android:layout_marginBottom="1dp"-->
-        <!--android:layout_alignParentTop="true"-->
-        <!--android:layout_alignBottom="@+id/tvOnLine">-->
-    <!--</FrameLayout>-->
 
     <ImageView
+        android:contentDescription="Equipment"
         android:id="@+id/imageItem"
-        android:layout_width="72dip"
+        android:layout_width="match_parent"
         android:layout_height="72dip"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="16dp"
@@ -31,11 +15,12 @@
 
     <TextView
         android:id="@+id/tvName"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/imageItem"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="8dp"
+        android:gravity="center"
         android:layout_marginTop="8dp"
         android:singleLine="true"
         android:text="123"
@@ -44,9 +29,10 @@
 
     <TextView
         android:id="@+id/tvOnLine"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/tvName"
+        android:gravity="center"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="8dp"
         android:text="456"
