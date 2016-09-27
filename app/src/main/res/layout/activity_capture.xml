@@ -29,20 +29,7 @@
 
             />
 
-        <Switch
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text = "打开闪光灯"
-            android:textColor="#FFFFFF"
-            android:id="@+id/switch1"
-            android:textOff="off"
-            android:textOn="on"
-            android:layout_marginTop="10dp"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentEnd="true"
 
-            />
     </RelativeLayout>
 
 </FrameLayout>

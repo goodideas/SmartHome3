@@ -48,7 +48,6 @@ public class MipcaActivityCapture extends StatusActivity implements Callback {
 	private static final float BEEP_VOLUME = 0.10f;
 	private boolean vibrate;
 
-	private Switch aSwitch;
 	/** Called when the activity is first created. */
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -70,18 +69,6 @@ public class MipcaActivityCapture extends StatusActivity implements Callback {
 		hasSurface = false;
 		inactivityTimer = new InactivityTimer(this);
 
-		aSwitch = (Switch)findViewById(R.id.switch1);
-		aSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-			@Override
-			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-				if(isChecked){
-
-//					Toast.makeText(getApplicationContext(),"open",Toast.LENGTH_SHORT).show();
-				}else{
-//                    Toast.makeText(getApplicationContext(),"close",Toast.LENGTH_SHORT).show();
-				}
-			}
-		});
 	}
 
 	@Override

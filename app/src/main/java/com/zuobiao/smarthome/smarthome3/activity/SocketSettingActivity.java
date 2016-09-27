@@ -325,7 +325,7 @@ public class SocketSettingActivity extends StatusActivity {
         Log.e(TAG, "addSceneActivityListViewItem=" + addSceneActivityListViewItem);
 
         //设置设备名
-        if (!DBcurd.getNickNameByMac(equipmentBeanActivity.getMac_ADDR()).equalsIgnoreCase("FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF")) {
+        if (!DBcurd.getNickNameByMac(equipmentBeanActivity.getMac_ADDR()).equalsIgnoreCase(Constant.EQUIPMENT_NAME_ALL_FF)) {
             String tvNameText = new String(util.HexString2Bytes(DBcurd.getNickNameByMac(equipmentBeanActivity.getMac_ADDR()))).trim();
             if (TextUtils.isEmpty(tvNameText)) {
                 tvSettingEquipmentName.setText(Constant.getTypeName(equipmentBeanActivity.getDevice_Type()));

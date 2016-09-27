@@ -2,6 +2,9 @@ package com.zuobiao.smarthome.smarthome3.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
+import android.os.Message;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
@@ -12,6 +15,7 @@ import com.zuobiao.smarthome.smarthome3.R;
 import com.zuobiao.smarthome.smarthome3.db.DBcurd;
 import com.zuobiao.smarthome.smarthome3.entity.EquipmentBean;
 import com.zuobiao.smarthome.smarthome3.util.Constant;
+import com.zuobiao.smarthome.smarthome3.util.OnReceive;
 import com.zuobiao.smarthome.smarthome3.util.SpHelper;
 import com.zuobiao.smarthome.smarthome3.util.UdpHelper;
 import com.zuobiao.smarthome.smarthome3.util.Util;
@@ -38,6 +42,7 @@ public class TempPm25Activity extends StatusActivity {
 
     private Button btnEquipmentTitleBarBack;
     private TextView tvEquipmentShow;
+    private MyHandler myHandler;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,6 +56,7 @@ public class TempPm25Activity extends StatusActivity {
         btnEquipmentTitleBarBack = (Button) findViewById(R.id.btnEquipmentTitleBarBack);
         btnModifyName = (Button) findViewById(R.id.btnModifyNameTempPm25);
         etEquipmentName = (EditText) findViewById(R.id.etEquipmentNameTempPm25);
+        myHandler = new MyHandler(getMainLooper());
         DBcurd = new DBcurd(TempPm25Activity.this);
         spHelper = new SpHelper(TempPm25Activity.this);
         udpHelper = UdpHelper.getInstance();
@@ -71,22 +77,35 @@ public class TempPm25Activity extends StatusActivity {
                 finish();
             }
         });
-
-        udpHelper.setTempPm25Tv(tvTemperature, tvHumidity, tvPm25,equipmentBean.getMac_ADDR());
         udpHelper.startUdpWithIp(spHelper.getSpGateWayIp(), TempPm25Activity.this);
         udpHelper.setIsSend(true);
-        udpHelper.send(getDataOfBeforeDo());
+        udpHelper.send(Util.getDataOfBeforeDo(spHelper.getSpGateWayMac(), Constant.TEMP_PM25_SEND2_COMMAND, equipmentBean));
+        udpHelper.setOnReceive(new OnReceive() {
+            @Override
+            public void receive(String command, String data, String ip) {
+                if (command.equalsIgnoreCase(Constant.TEMP_PM25_RECEIVE_COMMAND2)
+                        ||command.equalsIgnoreCase(Constant.TEMP_PM25_RECEIVE_COMMAND3)) {
+                    String handlerMessage = data.substring(56, 68);
+                    String mac = data.substring(28,44);
+                    Message msg = new Message();
+                    msg.obj = handlerMessage+mac;
+                    msg.what = Constant.HANDLER_TEMP_PM25_HAS_ANSWER;
+                    myHandler.sendMessage(msg);
+                }
+
+            }
+        });
         btnTempPm25RefreSh.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (udpHelper != null) {
                     udpHelper.setIsSend(true);
-                    udpHelper.send(getDataOfBeforeDo());
+                    udpHelper.send(Util.getDataOfBeforeDo(spHelper.getSpGateWayMac(), Constant.TEMP_PM25_SEND2_COMMAND, equipmentBean));
                 }
             }
         });
         tvEquipmentShow.setText(Constant.getTypeName(equipmentBean.getDevice_Type()));
-        if (!DBcurd.getNickNameByMac(equipmentBean.getMac_ADDR()).equalsIgnoreCase("FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF")) {
+        if (!DBcurd.getNickNameByMac(equipmentBean.getMac_ADDR()).equalsIgnoreCase(Constant.EQUIPMENT_NAME_ALL_FF)) {
             String equipmentName = new String(Util.HexString2Bytes(DBcurd.getNickNameByMac(equipmentBean.getMac_ADDR()))).trim();
             if (TextUtils.isEmpty(equipmentName)) {
                 etEquipmentName.setText(Constant.getTypeName(equipmentBean.getDevice_Type()));
@@ -113,7 +132,7 @@ public class TempPm25Activity extends StatusActivity {
                         etEquipmentName.setEnabled(false);
                         String modifyString = etEquipmentName.getText().toString();
                         udpHelper.setIsSend(true);
-                        udpHelper.send(getModifyData(modifyString));
+                        udpHelper.send(Util.getModifyData(modifyString, spHelper.getSpGateWayMac(), equipmentBean));
                         DBcurd.updataEquipmentName(Util.bytes2HexString(modifyString.getBytes(), modifyString.getBytes().length), equipmentBean.getMac_ADDR());
                     }
                 }
@@ -125,61 +144,55 @@ public class TempPm25Activity extends StatusActivity {
 
     }
 
-    private byte[] getDataOfBeforeDo() {
-        byte[] data = new byte[25];
 
-        data[0] = Constant.DATA_HEAD[0];
-        data[1] = Constant.DATA_HEAD[1];
-        byte[] macByte = Util.HexString2Bytes(spHelper.getSpGateWayMac());
-        int macByteLength = macByte.length;
-        System.arraycopy(macByte, 0, data, 2, macByteLength);
-        data[10] = Constant.TEMP_PM25_SEND2_COMMAND[0];
-        data[11] = Constant.TEMP_PM25_SEND2_COMMAND[1];
-//数据内容长度
-        data[12] = (byte) 0x08;
-        data[13] = (byte) 0x00;
-        byte[] euipmentMacByte = Util.HexString2Bytes(equipmentBean.getMac_ADDR());
-        int euipmentMacByteLength = macByte.length;
-        System.arraycopy(euipmentMacByte, 0, data, 14, euipmentMacByteLength);
-        String checkData = Util.bytes2HexString(data, data.length);
 
-        data[22] = Util.checkData(checkData.substring(28, 44));//校验位
-        data[23] = Constant.DATA_TAIL[0];
-        data[24] = Constant.DATA_TAIL[1];
-        return data;
-    }
+    private class MyHandler extends Handler {
+        MyHandler(Looper looper) {
+            super(looper);
+        }
 
-    private byte[] getModifyData(String equipmentName) {
-        byte[] data = new byte[51];
+        @Override
+        public void handleMessage(Message msg) {
 
-        data[0] = Constant.DATA_HEAD[0];
-        data[1] = Constant.DATA_HEAD[1];
-        byte[] macByte = Util.HexString2Bytes(spHelper.getSpGateWayMac());
-        int macByteLength = macByte.length;
-        System.arraycopy(macByte, 0, data, 2, macByteLength);
-        data[10] = Constant.MODEFY_EQUIPMENT_NAME_SEND_COMMAND[0];
-        data[11] = Constant.MODEFY_EQUIPMENT_NAME_SEND_COMMAND[1];
-        //数据内容长度
-        data[12] = (byte) 0x22;
-        data[13] = (byte) 0x00;
+            //温湿度pm2传过啦的数据2
+            if (msg.what == Constant.HANDLER_TEMP_PM25_HAS_ANSWER) {
+                //是为3个16进制的数 第一个是temp，第二个是humi，第三个是pm2.5
+                String data = (String) msg.obj;
+                String stat = data.substring(0,12);
+                String mac = data.substring(12);
+                if (tvPm25 != null&&tvTemperature !=null && tvHumidity!=null&&mac.equals(equipmentBean.getMac_ADDR())) {
+                    int a = Integer.parseInt(stat.substring(0, 2), 16) * 256;
+                    int b = Integer.parseInt(stat.substring(2, 4), 16);
+                    int c = Integer.parseInt(stat.substring(4, 6), 16) * 256;
+                    int d = Integer.parseInt(stat.substring(6, 8), 16);
+                    int e = Integer.parseInt(stat.substring(8, 10), 16);
+                    int f = Integer.parseInt(stat.substring(10, 12), 16) * 256;
 
-        byte[] euipmentMacByte = Util.HexString2Bytes(equipmentBean.getMac_ADDR());
-        int euipmentMacByteLength = euipmentMacByte.length;
-        System.arraycopy(euipmentMacByte, 0, data, 14, euipmentMacByteLength);
+                    int temp = (c+d) / 10;
+                    int hum = (a+b) / 10;
+                    int pm25 = (e+f);
 
-        byte[] equipmentShorMacByte = Util.HexString2Bytes(equipmentBean.getShort_ADDR());
-        int equipmentShorMacByteLength = equipmentShorMacByte.length;
-        System.arraycopy(equipmentShorMacByte, 0, data, 22, equipmentShorMacByteLength);
+                    if(temp == 0&&hum == 0 && pm25 == 0){
+                        if(!TextUtils.isEmpty(spHelper.getSpTemp())&&!TextUtils.isEmpty(spHelper.getSpHumidity())&&!TextUtils.isEmpty(spHelper.getSpPm25())){
+                            tvTemperature.setText(spHelper.getSpTemp());
+                            tvHumidity.setText(spHelper.getSpHumidity());
+                            tvPm25.setText(spHelper.getSpPm25());
+                        }else{
+                            tvTemperature.setText("正在读取。。。");
+                            tvHumidity.setText("正在读取。。。");
+                            tvPm25.setText("正在读取。。。");
+                        }
+                    }else{
+                        tvTemperature.setText(String.valueOf(temp));
+                        tvHumidity.setText(String.valueOf(hum));
+                        tvPm25.setText(String.valueOf(pm25));
+                    }
 
-        byte[] etNameByte = equipmentName.getBytes();
-        int etNameByteLength = etNameByte.length;
-        System.arraycopy(etNameByte, 0, data, 24, etNameByteLength);
 
-        String checkData = Util.bytes2HexString(data, data.length);
-        data[48] = Util.checkData(checkData.substring(28, 96));//校验位
-        data[49] = Constant.DATA_TAIL[0];
-        data[50] = Constant.DATA_TAIL[1];
-        return data;
+                }
+            }
+
+        }
 
     }
 

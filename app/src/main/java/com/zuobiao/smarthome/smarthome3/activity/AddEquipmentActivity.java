@@ -45,9 +45,7 @@ public class AddEquipmentActivity extends StatusActivity {
 
     private UdpHelper udpHelper;
     private SpHelper spHelper;
-    private byte[] searchGateWay = new byte[17 + 7];
     private static final String broadcastIP = "255.255.255.255";
-    private Util util;
     private List<String> rfidList;
     private String[] rfids;
     private int dialogAddWhich;
@@ -67,8 +65,6 @@ public class AddEquipmentActivity extends StatusActivity {
 
         DBcurd = new DBcurd(AddEquipmentActivity.this);
         lvEquipments = (ListView) findViewById(R.id.lvEquipments);
-
-        util = new Util();
         clicks();
         toolbar = (Toolbar) findViewById(R.id.tl_custom);
         mDrawerLayout = (DrawerLayout) findViewById(R.id.dl_left);
@@ -235,7 +231,7 @@ public class AddEquipmentActivity extends StatusActivity {
                 spHelper = new SpHelper(AddEquipmentActivity.this);
                 udpHelper.startUdpWithIp(broadcastIP, AddEquipmentActivity.this);
                 udpHelper.setIsSend(true);
-                udpHelper.send(broadcastData());
+                udpHelper.send(Util.broadcastData());
                 udpHelper.setOnReceive(new OnReceive() {
                     @Override
                     public void receive(String command,String data, String ip) {
@@ -260,7 +256,7 @@ public class AddEquipmentActivity extends StatusActivity {
                     udpHelper.startUdpWithIp(ip, AddEquipmentActivity.this);
                     udpHelper.setIsSend(true);
                     udpHelper.send(getRefreshSendData());
-                    udpHelper.doRefreshEquipment(Constant.REFRESH_EQUIPMENT_WAIT_MAX_TIME * 1000);
+                    udpHelper.doRefreshEquipment(Constant.REFRESH_EQUIPMENT_WAIT_MAX_TIME);
 
                 } else {
                     Util.showToast(getApplicationContext(), "没有网关信息!");
@@ -283,7 +279,7 @@ public class AddEquipmentActivity extends StatusActivity {
                     udpHelper.startUdpWithIp(ip, AddEquipmentActivity.this);
                     udpHelper.setIsSend(true);
                     udpHelper.send(getAddSendData());
-                    udpHelper.doAddEquipment(Constant.ADD_EQUIPMENT_WAIT_MAX_TIME * 1000);
+                    udpHelper.doAddEquipment(Constant.ADD_EQUIPMENT_WAIT_MAX_TIME);
                 } else {
                     Util.showToast(getApplicationContext(), "没有网关信息！");
                 }
@@ -355,49 +351,6 @@ public class AddEquipmentActivity extends StatusActivity {
     }
 
 
-    private byte[] broadcastData() {
-        //数据头
-        searchGateWay[0] = Constant.DATA_HEAD[0];
-        searchGateWay[1] = Constant.DATA_HEAD[1];
-
-        searchGateWay[2] = (byte) 0x00;
-        searchGateWay[3] = (byte) 0x00;
-        searchGateWay[4] = (byte) 0x00;
-        searchGateWay[5] = (byte) 0x00;
-        searchGateWay[6] = (byte) 0x00;
-        searchGateWay[7] = (byte) 0x00;
-        searchGateWay[8] = (byte) 0x00;
-        searchGateWay[9] = (byte) 0x00;
-
-        //命令类型
-        searchGateWay[10] = Constant.GATEWAY_SEND_COMMAND[0];
-        searchGateWay[11] = Constant.GATEWAY_SEND_COMMAND[1];
-
-        //数据内容长度
-        searchGateWay[12] = (byte) 0x07;
-        searchGateWay[13] = (byte) 0x00;
-        //数据内容
-        byte[] timeByte = Util.getLocalTime();
-        searchGateWay[14] = timeByte[0];//年
-        searchGateWay[15] = timeByte[1];//年
-        searchGateWay[16] = timeByte[2];//月
-        searchGateWay[17] = timeByte[3];//日
-        searchGateWay[18] = timeByte[4];//时
-        searchGateWay[19] = timeByte[5];//分
-        searchGateWay[20] = timeByte[6];//秒
-        //数据校验
-
-        searchGateWay[21] = Util.checkData(Util.bytes2HexString(timeByte, timeByte.length));
-
-        //数据尾
-        searchGateWay[22] = Constant.DATA_TAIL[0];
-        searchGateWay[23] = Constant.DATA_TAIL[1];
-        return searchGateWay;
-    }
-
-
-
-
 
     private byte[] getSendRfidByte(String rfidInfo, byte[] sendCommand) {
         byte[] data = new byte[17 + 12];
@@ -416,7 +369,7 @@ public class AddEquipmentActivity extends StatusActivity {
         byte[] rfidByte = Util.HexString2Bytes(rfidInfo);
         System.arraycopy(rfidByte, 0, data, 14, rfidByte.length);
         //数据校验
-        data[26] = util.checkData(rfidInfo);
+        data[26] = Util.checkData(rfidInfo);
 
         //数据尾
         data[27] = Constant.DATA_TAIL[0];

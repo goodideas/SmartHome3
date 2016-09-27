@@ -172,8 +172,8 @@ public class Util {
         byte[] macByte = HexString2Bytes(gateWayMac);
         int macByteLength = macByte.length;
         System.arraycopy(macByte, 0, data, 2, macByteLength);
-        data[10] = Constant.MODEFY_EQUIPMENT_NAME_SEND_COMMAND[0];
-        data[11] = Constant.MODEFY_EQUIPMENT_NAME_SEND_COMMAND[1];
+        data[10] = Constant.MODIFY_EQUIPMENT_NAME_SEND_COMMAND[0];
+        data[11] = Constant.MODIFY_EQUIPMENT_NAME_SEND_COMMAND[1];
         //数据内容长度
         data[12] = (byte) 0x22;
         data[13] = (byte) 0x00;

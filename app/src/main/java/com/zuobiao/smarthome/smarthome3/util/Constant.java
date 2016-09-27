@@ -1,5 +1,7 @@
 package com.zuobiao.smarthome.smarthome3.util;
 
+import android.view.Window;
+
 import com.zuobiao.smarthome.smarthome3.R;
 
 public class Constant {
@@ -7,30 +9,22 @@ public class Constant {
     public static final int HANDLER_ONLINE = 0x123;
     public static final int HANDLER_SEARCH_GATEWAY = 0x124;
 
-    public static final int REFRESH_EQUIPMENT_WAIT_MAX_TIME = 2;//刷新设备最大等待时间
-    public static final int ADD_EQUIPMENT_WAIT_MAX_TIME = 2;//添加设备最大等待时间
     public static final int HANDLER_REFRESH_EQUIPMENT_GATE_DATA = 0x125;
     public static final int HANDLER_REFRESH_EQUIPMENT_ADD_DATA = 0x126;
     public static final int HANDLER_REFRESH_EQUIPMENT_NO_ANSWER = 0x127;
     public static final int HANDLER_ADD_EQUIPMENT_NO_ANSWER = 0x128;
     public static final int HANDLER_ADD_EQUIPMENT_ADD_DATA = 0x129;
-    public static final int HANDLER_SWITCHS_NO_ANSWER = 0x201;
-    public static final int HANDLER_SWITCHS_HAS_ANSWER = 0x202;
-    public static final int HANDLER_SWITCHS_HAS_ANSWER2 = 0x203;
-    public static final int HANDLER_LIGHT_SERSON_HAS_ANSWER = 0x204;
+    public static final int HANDLER_SWITCHES_HAS_ANSWER = 0x202;
+    public static final int HANDLER_SWITCHES_HAS_ANSWER2 = 0x203;
+    public static final int HANDLER_LIGHT_SENSOR_HAS_ANSWER = 0x204;
     public static final int HANDLER_INFRARED_HAS_ANSWER = 0x205;
     public static final int HANDLER_SOCKETS_HAS_ANSWER = 0x206;
     public static final int HANDLER_SOCKETS_HAS_ANSWER2 = 0x207;
     public static final int HANDLER_TEMP_PM25_HAS_ANSWER = 0x208;
     public static final int HANDLER_INFLAMMABLE_GAS_HAS_ANSWER = 0x209;
-    public static final int HANDLER_SWITCHS_HAS_ANSWER3 = 0x210;
-    public static final int HANDLER_SOCKETS_HAS_ANSWER3 = 0x211;
-    public static final int HANDLER_LIGHT_SENSOR_HAS_ANSWER2 = 0x212;
     public static final int HANDLER_INFRARED_HAS_ANSWER3 = 0x213;
-    public static final int HANDLER_TEMP_PM25_HAS_ANSWER3 = 0x214;
     public static final int HANDLER_INFLAMMABLE_GAS_HAS_ANSWER2 = 0x215;
     public static final int HANDLER_DOOR_MAGNET_HAS_ANSWER = 0x216;
-    public static final int HANDLER_DOOR_MAGNET_HAS_ANSWER2 = 0x217;
     public static final int HANDLER_MODIFY_EQUIPMENT_NAME_HAS_ANSWER = 0x218;
     public static final int HANDLER_CURTAINS_HAS_ANSWER = 0x219;
     public static final int HANDLER_SCENE_SETTING_HAS_ANSWER = 0x220;
@@ -43,12 +37,9 @@ public class Constant {
     public static final int QR_RFID_RESULT_CODE = 0x224;
     public static final String QR_RFID_RESULT_DATA = "rfidInfo";
 
-    public static final int HANDLER_WINDOW_NO_ANSWER = 0x225;
     public static final int HANDLER_WINDOW_HAS_ANSWER = 0x226;
-    public static final int HANDLER_CURTAINS_NO_ANSWER = 0x227;
 
     public static final int HANDLER_NOISE_SENSOR_HAS_ANSWER = 0x228;
-    public static final int HANDLER_NOISE_SENSOR_HAS_ANSWER2 = 0x229;
 
     public static final int BEFORE_INTO_SWITCH_MAX_TIME = 1000;
     public static final int BEFORE_INTO_WINDOW_MAX_TIME = 1000;
@@ -56,8 +47,11 @@ public class Constant {
     public static final int BEFORE_INTO_MAIN_ACTIVITY_MAX_TIME = 2000;
     public static final int REFRESH_GATE_TIME = 2000;//设备列表下，下拉刷新时间
     public static final int SEARCH_GATEWAY_WAIT_MAX_TIME = 2000;//查找网关最大等待时间
-    public static final int WEICOM_ACTIVITY_SEARCH_GATEWAY_WAIT_MAX_TIME = 1000;//查找网关最大等待时间
+    public static final int WELCOME_ACTIVITY_SEARCH_GATEWAY_WAIT_MAX_TIME = 1000;//查找网关最大等待时间
+    public static final int REFRESH_EQUIPMENT_WAIT_MAX_TIME = 2000;//刷新设备最大等待时间
+    public static final int ADD_EQUIPMENT_WAIT_MAX_TIME = 2000;//添加设备最大等待时间
     public static final String BROADCAST_IP = "255.255.255.255";
+    public static final String EQUIPMENT_NAME_ALL_FF = "FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF";
 
 
     //设备标识
@@ -119,27 +113,27 @@ public class Constant {
     public static final String WINDOW_RECV_COMMAND = "1010";
 
 
-    public static final String SWITCH_RECV_COMMAND = "2110";
-    public static final String SWITCH_RECV2_COMMAND = "2150";
-    public static final String SOCKETS_RECV_COMMAND = "3110";
-    public static final String SOCKETS_RECV2_COMMAND = "3150";
-    public static final String TEMP_PM25_RECV2_COMMAND = "4150";
-    public static final String INFRARED_RECV_COMMAND = "5150";
-    public static final String INFLAMMABLE_GAS_RECV_COMMAND = "6150";
-    public static final String LIGHT_SENSOR_RECV2_COMMAND = "7150";
-    public static final String DOOR_MAGNET_RECV_COMMAND = "8150";
-    public static final String NOISE_SENSOR_RECV2_COMMAND = "9150";
-    public static final String SWITCH_RECV3_COMMAND = "2010";
-    public static final String SOCKETS_RECV3_COMMAND = "3010";
-    public static final String TEMP_PM25_RECV3_COMMAND = "4010";
-    public static final String INFRARED_RECV3_COMMAND = "5010";
-    public static final String INFLAMMABLE_GAS_RECV_COMMAND2 = "6010";
-    public static final String LIGHT_SONSER_RECV2_COMMAND = "7010";
-    public static final String DOOR_MAGNET_RECV2_COMMAND = "8010";
-    public static final String NOISE_SONSER_RECV2_COMMAND = "9010";
-    public static final String CURTAINS_RECV_COMMAND = "1210";
-    public static final String SCENE_SETTING_RECV_COMMAND = "F110";
-    public static final String SCENE_SETTING_RECV2_COMMAND = "F210";
+    public static final String SWITCH_RECEIVE_COMMAND = "2110";
+    public static final String SWITCH_RECEIVE_COMMAND2 = "2150";
+    public static final String SOCKETS_RECEIVE_COMMAND = "3110";
+    public static final String SOCKETS_RECEIVE_COMMAND2 = "3150";
+    public static final String TEMP_PM25_RECEIVE_COMMAND2 = "4150";
+    public static final String INFRARED_RECEIVE_COMMAND = "5150";
+    public static final String INFLAMMABLE_GAS_RECEIVE_COMMAND = "6150";
+    public static final String LIGHT_SENSOR_RECEIVE_COMMAND = "7150";
+    public static final String DOOR_MAGNET_RECEIVE_COMMAND = "8150";
+    public static final String NOISE_SENSOR_RECEIVE_COMMAND = "9150";
+    public static final String SWITCH_RECEIVE_COMMAND3 = "2010";
+    public static final String SOCKETS_RECEIVE_COMMAND3 = "3010";
+    public static final String TEMP_PM25_RECEIVE_COMMAND3 = "4010";
+    public static final String INFRARED_RECEIVE_COMMAND2 = "5010";
+    public static final String INFLAMMABLE_GAS_RECEIVE_COMMAND2 = "6010";
+    public static final String LIGHT_SENSOR_RECEIVE_COMMAND2 = "7010";
+    public static final String DOOR_MAGNET_RECEIVE_COMMAND2 = "8010";
+    public static final String NOISE_SENSOR_RECEIVE_COMMAND2 = "9010";
+    public static final String CURTAINS_RECEIVE_COMMAND = "1210";
+    public static final String SCENE_SETTING_RECEIVE_COMMAND = "F110";
+    public static final String SCENE_SETTING_RECEIVE_COMMAND2 = "F210";
 
 
     public static final byte[] DATA_HEAD = {(byte) 0xFF, (byte) 0xAA};
@@ -152,12 +146,12 @@ public class Constant {
 
     public static final byte[] ADD_EQUIPMENT_SEND_COMMAND = {(byte) 0x04, (byte) 0x00};
 
-    public static final byte[] MODEFY_EQUIPMENT_NAME_SEND_COMMAND = {(byte) 0x05, (byte) 0x00};
+    public static final byte[] MODIFY_EQUIPMENT_NAME_SEND_COMMAND = {(byte) 0x05, (byte) 0x00};
 
-    public static final byte[] SWITCHS_SEND_COMMAND = {(byte) 0x21, (byte) 0x00};
+    public static final byte[] SWITCHES_SEND_COMMAND = {(byte) 0x21, (byte) 0x00};
     public static final byte[] SOCKETS_SEND_COMMAND = {(byte) 0x31, (byte) 0x00};
 
-    public static final byte[] SWITCHS_SEND2_COMMAND = {(byte) 0x20, (byte) 0x00};
+    public static final byte[] SWITCHES_SEND2_COMMAND = {(byte) 0x20, (byte) 0x00};
     public static final byte[] SOCKETS_SEND2_COMMAND = {(byte) 0x30, (byte) 0x00};
     public static final byte[] TEMP_PM25_SEND2_COMMAND = {(byte) 0x40, (byte) 0x00};
     public static final byte[] INFRARED_SEND_COMMAND = {(byte) 0x50, (byte) 0x00};
@@ -171,7 +165,7 @@ public class Constant {
 
     public static final byte[] SCENE_SETTING_SEND_COMMAND = {(byte) 0xF1, (byte) 0x00};
 
-    public static final byte[] CURITAINS_SEND_COMMAND = {(byte) 0x12, (byte) 0x00};
+    public static final byte[] CURTAINS_SEND_COMMAND = {(byte) 0x12, (byte) 0x00};
     public static final byte[] SCENE_SETTING_SEND_COMMAND2 = {(byte) 0xF2, (byte) 0x00};
     public static final byte[] RFID_INFO_SEND_ADD = {(byte) 0x06, (byte) 0x00};
     public static final byte[] RFID_INFO_SEND_DEL = {(byte) 0x07, (byte) 0x00};

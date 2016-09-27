@@ -34,7 +34,7 @@ public class WelcomeActivity extends AppCompatActivity {
         udpHelper.startUdpWithIp(Constant.BROADCAST_IP,WelcomeActivity.this);
         udpHelper.setIsSend(true);
         udpHelper.send(Util.broadcastData());
-        udpHelper.doSearchGateWayOnWelcome(Constant.WEICOM_ACTIVITY_SEARCH_GATEWAY_WAIT_MAX_TIME);
+        udpHelper.doSearchGateWayOnWelcome(Constant.WELCOME_ACTIVITY_SEARCH_GATEWAY_WAIT_MAX_TIME);
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {

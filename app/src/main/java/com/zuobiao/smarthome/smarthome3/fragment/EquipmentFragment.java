@@ -65,7 +65,7 @@ public class EquipmentFragment extends Fragment {
         View messageLayout = inflater.inflate(R.layout.equipment_layout,
                 container, false);
         btnAdd = (Button) messageLayout.findViewById(R.id.btnAdd);
-        btnCamera= (Button) messageLayout.findViewById(R.id.btnCamera);
+        btnCamera = (Button) messageLayout.findViewById(R.id.btnCamera);
         mSwipeLayout = (SwipeRefreshLayout) messageLayout.findViewById(R.id.id_swipe_ly);
         myHandler = new MyHandler();
 
@@ -73,11 +73,11 @@ public class EquipmentFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 PackageManager packageManager = getActivity().getPackageManager();
-                Intent intent =packageManager.getLaunchIntentForPackage("vstc.eye4zx.client");
-                if(intent!=null){
+                Intent intent = packageManager.getLaunchIntentForPackage("vstc.eye4zx.client");
+                if (intent != null) {
                     startActivity(intent);
-                }else{
-                    Util.showToast(getActivity(),"请安装摄像头插件！");
+                } else {
+                    Util.showToast(getActivity(), "请安装摄像头插件！");
                 }
 
             }
@@ -111,7 +111,7 @@ public class EquipmentFragment extends Fragment {
 
         //第4种 网关不在线 手机存了 onLine = false，hasGateWayInfo = true
 
-        adapter = new ImageListViewAdapter(getActivity().getApplicationContext(), list,false);
+        adapter = new ImageListViewAdapter(getActivity().getApplicationContext(), list, false);
         gridView.setAdapter(adapter);
         gridView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
@@ -146,54 +146,54 @@ public class EquipmentFragment extends Fragment {
 
         if (onLine) {
             Intent intent = new Intent();
-            switch (deviceType.toLowerCase()){
+            switch (deviceType.toLowerCase()) {
                 case Constant.SWITCHES:
                     //面板开关
                     intent.setClass(getActivity(), SwitchsActivity.class);
                     break;
-                 case Constant.CONTROL_MODULE:
-                     //智能控制模块
-                     intent.setClass(getActivity(), ControlModuleActivity.class);
+                case Constant.CONTROL_MODULE:
+                    //智能控制模块
+                    intent.setClass(getActivity(), ControlModuleActivity.class);
                     break;
-                 case Constant.SOCKETS:
-                     //插座
-                     intent.setClass(getActivity(), SocketsActivity.class);
+                case Constant.SOCKETS:
+                    //插座
+                    intent.setClass(getActivity(), SocketsActivity.class);
                     break;
-                 case Constant.TEMP_PM25:
-                     //温湿度pm2.5
-                     intent.setClass(getActivity(), TempPm25Activity.class);
+                case Constant.TEMP_PM25:
+                    //温湿度pm2.5
+                    intent.setClass(getActivity(), TempPm25Activity.class);
                     break;
-                 case Constant.INFRARED:
-                     //人体红外
-                     intent.setClass(getActivity(), InfraredActivity.class);
+                case Constant.INFRARED:
+                    //人体红外
+                    intent.setClass(getActivity(), InfraredActivity.class);
                     break;
-                 case Constant.INFLAMMABLE_GAS:
-                     //烟雾传感器
-                     intent.setClass(getActivity(), InflammableGasActivity.class);
+                case Constant.INFLAMMABLE_GAS:
+                    //烟雾传感器
+                    intent.setClass(getActivity(), InflammableGasActivity.class);
                     break;
-                 case Constant.LIGHT_SENSOR:
-                     //光照
-                     intent.setClass(getActivity(), LightSensorActivity.class);
+                case Constant.LIGHT_SENSOR:
+                    //光照
+                    intent.setClass(getActivity(), LightSensorActivity.class);
                     break;
-                 case Constant.DOOR_MAGNET:
-                     //门磁
-                     intent.setClass(getActivity(), DoorMagnetActivity.class);
+                case Constant.DOOR_MAGNET:
+                    //门磁
+                    intent.setClass(getActivity(), DoorMagnetActivity.class);
                     break;
-                 case Constant.CURTAINS:
-                     //窗帘
-                     intent.setClass(getActivity(), CurtainsActivity.class);
+                case Constant.CURTAINS:
+                    //窗帘
+                    intent.setClass(getActivity(), CurtainsActivity.class);
                     break;
-                 case Constant.SINGLE_CURTAINS:
-                     //单个窗帘
-                     intent.setClass(getActivity(), SingleCurtainsActivity.class);
+                case Constant.SINGLE_CURTAINS:
+                    //单个窗帘
+                    intent.setClass(getActivity(), SingleCurtainsActivity.class);
                     break;
-                 case Constant.WINDOW:
-                     //窗
-                     intent.setClass(getActivity(), WindowActivity.class);
+                case Constant.WINDOW:
+                    //窗
+                    intent.setClass(getActivity(), WindowActivity.class);
                     break;
-                 case Constant.NOISE_SENSOR:
-                     //噪音
-                     intent.setClass(getActivity(), NoiseActivity.class);
+                case Constant.NOISE_SENSOR:
+                    //噪音
+                    intent.setClass(getActivity(), NoiseActivity.class);
                     break;
             }
 
@@ -203,11 +203,11 @@ public class EquipmentFragment extends Fragment {
             startActivity(intent);
 
         } else {
-            Util.showToast(getActivity(),"网关不在线");
+            Util.showToast(getActivity(), "网关不在线");
         }
     }
 
-    private void showDialogs(final EquipmentBean equipmentBean,final int position){
+    private void showDialogs(final EquipmentBean equipmentBean, final int position) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder.setTitle("删除");
         builder.setMessage("确定删除吗？");
@@ -232,10 +232,10 @@ public class EquipmentFragment extends Fragment {
 
     @Override
     public void onStart() {
-        Log.e(TAG,"onStart");
+        Log.e(TAG, "onStart");
         Log.e(TAG, "spHelper.getSpHasGateWayInfo()=" + spHelper.getSpHasGateWayInfo() + "  spHelper.getSpOnLine()=" + spHelper.getSpOnLine());
         list = DBcurd.getAllData();//数据源 不管什么时候，都是从这里读取所有设备
-        adapter = new ImageListViewAdapter(getActivity().getApplicationContext(), list,false);
+        adapter = new ImageListViewAdapter(getActivity().getApplicationContext(), list, false);
         gridView.setAdapter(adapter);
         if (spHelper.getSpHasGateWayInfo()) {
             Log.e(TAG, "hasGateWayInfo=" + spHelper.getSpHasGateWayInfo());
@@ -254,10 +254,10 @@ public class EquipmentFragment extends Fragment {
 
 
     @SuppressLint("HandlerLeak")
-    private class MyHandler extends Handler{
+    private class MyHandler extends Handler {
         @Override
         public void handleMessage(Message msg) {
-            if(msg.what == REFRESH_DATA){
+            if (msg.what == REFRESH_DATA) {
 
                 mSwipeLayout.setRefreshing(false);
                 gridView.setAdapter(adapter);

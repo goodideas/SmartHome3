@@ -69,7 +69,8 @@ public class DoorMagnetActivity extends StatusActivity {
         udpHelper.setOnReceive(new OnReceive() {
             @Override
             public void receive(String command, String data, String ip) {
-                if (command.equalsIgnoreCase(Constant.DOOR_MAGNET_RECV_COMMAND)) {
+                if (command.equalsIgnoreCase(Constant.DOOR_MAGNET_RECEIVE_COMMAND)
+                        ||command.equalsIgnoreCase(Constant.DOOR_MAGNET_RECEIVE_COMMAND2)) {
                     String handlerMessage = data.substring(56, 58);
                     String mac = data.substring(28, 44);
                     Message msg = new Message();
@@ -77,19 +78,11 @@ public class DoorMagnetActivity extends StatusActivity {
                     msg.what = Constant.HANDLER_DOOR_MAGNET_HAS_ANSWER;
                     myHandler.sendMessage(msg);
                 }
-                if (command.equalsIgnoreCase(Constant.DOOR_MAGNET_RECV2_COMMAND)) {
-                    String handlerMessage = data.substring(56, 58);
-                    String mac = data.substring(28, 44);
-                    Message msg = new Message();
-                    msg.obj = handlerMessage + mac;
-                    msg.what = Constant.HANDLER_DOOR_MAGNET_HAS_ANSWER2;
-                    myHandler.sendMessage(msg);
-                }
+
             }
         });
-//        udpHelper.setDoorMagnetUI(tvDoorMagnet,equipmentBean.getMac_ADDR());
         tvEquipmentShow.setText(Constant.getTypeName(equipmentBean.getDevice_Type()));
-        if(!DBcurd.getNickNameByMac(equipmentBean.getMac_ADDR()).equalsIgnoreCase("FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF")) {
+        if(!DBcurd.getNickNameByMac(equipmentBean.getMac_ADDR()).equalsIgnoreCase(Constant.EQUIPMENT_NAME_ALL_FF)) {
             String equipmentName = new String(Util.HexString2Bytes(DBcurd.getNickNameByMac(equipmentBean.getMac_ADDR()))).trim();
             if(TextUtils.isEmpty(equipmentName)){
                 etEquipmentName.setText(Constant.getTypeName(equipmentBean.getDevice_Type()));
@@ -120,10 +113,11 @@ public class DoorMagnetActivity extends StatusActivity {
                         DBcurd.updataEquipmentName(Util.bytes2HexString(modifyString.getBytes(), modifyString.getBytes().length), equipmentBean.getMac_ADDR());
                     }
                 }
-
-
             }
         });
+
+
+
 
     }
 
@@ -136,22 +130,6 @@ public class DoorMagnetActivity extends StatusActivity {
         @Override
         public void handleMessage(Message msg) {
             if (msg.what == Constant.HANDLER_DOOR_MAGNET_HAS_ANSWER) {
-                String handlerMessage = (String) msg.obj;
-                String stat = handlerMessage.substring(0,2);
-                String mac = handlerMessage.substring(2);
-
-                if (tvDoorMagnet != null&&mac.equalsIgnoreCase(equipmentBean.getMac_ADDR())) {
-                    if (stat.equalsIgnoreCase("01")) {
-                        tvDoorMagnet.setText("开");
-                    }
-                    if (stat.equalsIgnoreCase("00")) {
-                        tvDoorMagnet.setText("关");
-                    }
-                }
-
-            }
-
-            if (msg.what == Constant.HANDLER_DOOR_MAGNET_HAS_ANSWER2) {
                 String handlerMessage = (String) msg.obj;
                 String stat = handlerMessage.substring(0,2);
                 String mac = handlerMessage.substring(2);

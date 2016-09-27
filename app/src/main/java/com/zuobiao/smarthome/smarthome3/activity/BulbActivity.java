@@ -1,7 +1,6 @@
 package com.zuobiao.smarthome.smarthome3.activity;
 
 import android.os.Bundle;
-
 import com.zuobiao.smarthome.smarthome3.R;
 
 public class BulbActivity extends StatusActivity {

@@ -1,23 +1,15 @@
 package com.zuobiao.smarthome.smarthome3.util;
 
 import android.annotation.SuppressLint;
-import android.annotation.TargetApi;
 import android.support.v7.app.AlertDialog;
-import android.app.Notification;
-import android.app.NotificationManager;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.os.Build;
 import android.os.Handler;
 import android.os.Message;
-import android.support.v7.app.NotificationCompat;
 import android.text.TextUtils;
 import android.util.Log;
-import android.widget.TextView;
-import android.widget.ToggleButton;
 
-import com.zuobiao.smarthome.smarthome3.R;
 import com.zuobiao.smarthome.smarthome3.db.DBcurd;
 import com.zuobiao.smarthome.smarthome3.entity.EquipmentBean;
 import com.zuobiao.smarthome.smarthome3.entity.SceneEquipmentBean;
@@ -31,7 +23,7 @@ import java.net.InetAddress;
  * Author zhuangbinbin
  * Time 2016/1/16.
  */
-public class UdpHelper extends UdpMethod {
+public class UdpHelper {
 
     private static final String TAG = "UdpHelper";
     private InetAddress inetAddress;
@@ -54,42 +46,9 @@ public class UdpHelper extends UdpMethod {
     private Runnable WelcomeRunnable;
     private Runnable refreshRunnable;
     private Runnable addRunnable;
-    private Runnable switchsRunnable;
-    private Runnable WindowRunnable;
-    private Runnable CurtainsRunnable;
     private boolean searchGateWayFlag = false; //主要判断是欢迎界面的查找网关还是添加界面的查找网关
     private int addEquipmentNumber;
     private int countEquipment;
-
-    private TextView tvLightSensor;
-    private TextView tvInfrared;
-    private TextView tvTemperature;
-    private TextView tvHumidity;
-    private TextView tvPm25;
-
-//    private TextView tvInflammableGas;
-//    private TextView tvDoorMagnet;
-
-
-    private ToggleButton toggleButton1;
-    private ToggleButton toggleButton2;
-    private ToggleButton toggleButton3;
-    private ToggleButton toggleButton;
-    private String socketMac;
-    private String switchMac;
-    private String inflammableGasMac;
-//    private String doorMagnetMac;
-    private String infraredMac;
-    private String lightSensorMac;
-    private String noiseSensorMac;
-    private String tempPm25Mac;
-
-    private ToggleButton tbDoor;
-    private ToggleButton tbWindow;
-//    private ToggleButton tbCurtains;
-    private ToggleButton tbSingleCurtains ;
-
-    private TextView tvNoiseSensor;
 
     private boolean isSend = true;
     private Context mContext;
@@ -97,6 +56,10 @@ public class UdpHelper extends UdpMethod {
 
     private static UdpHelper UdpInstance = new UdpHelper();
 
+    /**
+     * 静态单例
+     * @return 单例
+     */
     public static UdpHelper getInstance() {
         if (UdpInstance == null) {
             UdpInstance = new UdpHelper();
@@ -119,20 +82,6 @@ public class UdpHelper extends UdpMethod {
         startUdp();
         mContext = context;
         getDataFlag = false;
-    }
-
-    //消息
-    @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
-    private void notifys() {
-        NotificationManager nm = (NotificationManager) mContext.getSystemService(mContext.NOTIFICATION_SERVICE);
-        NotificationCompat.Builder notification = new NotificationCompat.Builder(mContext);
-        notification.setSmallIcon(R.drawable.bulb);
-        notification.setContentTitle("提示");
-        notification.setContentText("有人来了");
-        notification.setTicker("有人");//显示栏
-        notification.setAutoCancel(true);        //点击自动消息
-        notification.setDefaults(Notification.DEFAULT_ALL);    //铃声,振动,呼吸灯
-        nm.notify(0, notification.build());
     }
 
 
@@ -173,10 +122,6 @@ public class UdpHelper extends UdpMethod {
         }.start();
     }
 
-    public void setLightSensorTv(TextView tvLightSensor,String lightSensorMac) {
-        this.tvLightSensor = tvLightSensor;
-        this.lightSensorMac = lightSensorMac;
-    }
 
 
     public void setIsSend(boolean isSend) {
@@ -225,11 +170,6 @@ public class UdpHelper extends UdpMethod {
         }
         UdpInstance = null;
         Log.e("UdpHelper", "closeUdp");
-    }
-
-    @Override
-    public boolean getRevDataFlag() {
-        return getDataFlag;
     }
 
     @SuppressLint("HandlerLeak")
@@ -295,33 +235,6 @@ public class UdpHelper extends UdpMethod {
                 }
             }
 
-            //面板开关
-            if (msg.what == Constant.HANDLER_SWITCHS_HAS_ANSWER) {
-
-                String handlerMessage = (String) msg.obj;
-                if (handlerMessage.equalsIgnoreCase("01")) {
-                    Util.showToast(mContext, "成功");
-                }
-                if (handlerMessage.equalsIgnoreCase("00")||handlerMessage.equalsIgnoreCase("FF")) {
-                    Util.showToast(mContext, "失败");
-                }
-
-            }
-
-            //插座返回数据
-            if (msg.what == Constant.HANDLER_SOCKETS_HAS_ANSWER) {
-                String handlerMessage = (String) msg.obj;
-                if (handlerMessage.equalsIgnoreCase("01")) {
-                    Util.showToast(mContext, "成功");
-                }
-                if (handlerMessage.equalsIgnoreCase("00")) {
-                    Util.showToast(mContext, "失败");
-                }
-
-                if (handlerMessage.equalsIgnoreCase("FF")) {
-                    Util.showToast(mContext, "失败");
-                }
-            }
 
 
             if(msg.what == Constant.HANDLER_SCENE_SETTING_HAS_ANSWER){
@@ -335,554 +248,7 @@ public class UdpHelper extends UdpMethod {
             }
 
 
-            //窗帘
-            if (msg.what == Constant.HANDLER_CURTAINS_HAS_ANSWER) {
-                String handlerMessage = (String) msg.obj;
-                if (handlerMessage.equalsIgnoreCase("01")) {
-                    Util.showToast(mContext, "成功！");
-                }
-                if (handlerMessage.equalsIgnoreCase("00")) {
-                    Util.showToast(mContext, "失败！");
-                }
 
-                if (handlerMessage.equalsIgnoreCase("FF")) {
-                    Util.showToast(mContext, "失败！");
-                }
-            }
-
-            //面板
-            if (msg.what == Constant.HANDLER_SWITCHS_HAS_ANSWER2) {
-                String handlerMessage = (String) msg.obj;
-                String stat = handlerMessage.substring(0,2);
-                String mac = handlerMessage.substring(2);
-                if(switchMac!=null&&mac.equalsIgnoreCase(switchMac)){
-                    int state = Integer.parseInt(stat, 16);
-                    Log.e(TAG, "state1=" + state);
-                    if (toggleButton1 != null && toggleButton2 != null && toggleButton3 != null)
-                        dowithTbState(state);
-                }
-
-
-            }
-            //面板2
-            if (msg.what == Constant.HANDLER_SWITCHS_HAS_ANSWER3) {
-                String handlerMessage = (String) msg.obj;
-                int state = Integer.parseInt(handlerMessage, 16);
-                Log.e(TAG, "state2=" + state);
-                if (toggleButton1 != null && toggleButton2 != null && toggleButton3 != null)
-                    dowithTbState(state);
-            }
-
-            //人为按下插座时返回的数据
-            if (msg.what == Constant.HANDLER_SOCKETS_HAS_ANSWER2) {
-                String handlerMessage = (String) msg.obj;
-                String data1 = handlerMessage.substring(0,2);
-                String mac = handlerMessage.substring(2);
-
-                Log.e(TAG,"handler mac = "+mac);
-                if (data1.equalsIgnoreCase("01")&&mac.equalsIgnoreCase(socketMac)) {
-                    if (toggleButton != null) {
-                        setIsSend(false);
-                        toggleButton.setChecked(true);
-                        myHandler.postDelayed(new Runnable() {
-                            @Override
-                            public void run() {
-                                setIsSend(true);
-                            }
-                        }, 100);
-
-                    }
-
-                }
-                if (data1.equalsIgnoreCase("00")&&mac.equalsIgnoreCase(socketMac)) {
-
-                    if (toggleButton != null) {
-                        setIsSend(false);
-                        toggleButton.setChecked(false);
-                        myHandler.postDelayed(new Runnable() {
-                            @Override
-                            public void run() {
-                                setIsSend(true);
-                            }
-                        }, 100);
-                    }
-
-
-                }
-            }
-
-            //同步
-            if (msg.what == Constant.HANDLER_SOCKETS_HAS_ANSWER3) {
-                String handlerMessage = (String) msg.obj;
-                if (handlerMessage.equalsIgnoreCase("01")) {
-                    if (toggleButton != null) {
-                        setIsSend(false);
-                        toggleButton.setChecked(true);
-                        myHandler.postDelayed(new Runnable() {
-                            @Override
-                            public void run() {
-                                setIsSend(true);
-                            }
-                        }, 100);
-                    }
-
-
-                }
-                if (handlerMessage.equalsIgnoreCase("00")) {
-                    if (toggleButton != null) {
-                        setIsSend(false);
-                        toggleButton.setChecked(false);
-                        myHandler.postDelayed(new Runnable() {
-                            @Override
-                            public void run() {
-                                setIsSend(true);
-                            }
-                        }, 100);
-                    }
-
-
-
-                }
-            }
-
-
-            //同步窗户窗帘数据
-            if (msg.what == Constant.HANDLER_WINDOW_HAS_ANSWER) {
-
-                String handlerMessage = (String) msg.obj;
-                // TODO: 2016/3/21 数据处理
-                String doors = handlerMessage.substring(0,2);
-                String window = handlerMessage.substring(2,4);
-
-
-
-                if(doors.equalsIgnoreCase("00")){
-                    if (tbDoor != null) {
-                        setIsSend(false);
-                        tbDoor.setChecked(false);
-                        myHandler.postDelayed(new Runnable() {
-                            @Override
-                            public void run() {
-                                setIsSend(true);
-                            }
-                        }, 100);
-
-                    }
-                }else if(doors.equalsIgnoreCase("01")){
-                    if (tbDoor != null) {
-                        setIsSend(false);
-                        tbDoor.setChecked(true);
-                        myHandler.postDelayed(new Runnable() {
-                            @Override
-                            public void run() {
-                                setIsSend(true);
-                            }
-                        }, 100);
-
-                    }
-                }
-
-                if(window.equalsIgnoreCase("00")){
-                    if (tbWindow != null) {
-                        setIsSend(false);
-                        tbWindow.setChecked(false);
-                        myHandler.postDelayed(new Runnable() {
-                            @Override
-                            public void run() {
-                                setIsSend(true);
-                            }
-                        }, 100);
-
-                    }
-                }else if(window.equalsIgnoreCase("01")){
-                    if (tbWindow != null) {
-                        setIsSend(false);
-                        tbWindow.setChecked(true);
-                        myHandler.postDelayed(new Runnable() {
-                            @Override
-                            public void run() {
-                                setIsSend(true);
-                            }
-                        }, 100);
-
-                    }
-                }
-
-//==================================================================
-                if(doors.equalsIgnoreCase("00")){
-//                    if (tbCurtains != null) {
-//                        setIsSend(false);
-//                        tbCurtains.setChecked(false);
-//                        myHandler.postDelayed(new Runnable() {
-//                            @Override
-//                            public void run() {
-//                                setIsSend(true);
-//                            }
-//                        }, 100);
-//
-//                    }
-                    if (tbSingleCurtains!=null) {
-                        setIsSend(false);
-                        tbSingleCurtains.setChecked(false);
-                        myHandler.postDelayed(new Runnable() {
-                            @Override
-                            public void run() {
-                                setIsSend(true);
-                            }
-                        }, 100);
-
-                    }
-
-                }else if(doors.equalsIgnoreCase("01")){
-//                    if (tbCurtains != null) {
-//                        setIsSend(false);
-//                        tbCurtains.setChecked(true);
-//                        myHandler.postDelayed(new Runnable() {
-//                            @Override
-//                            public void run() {
-//                                setIsSend(true);
-//                            }
-//                        }, 100);
-//
-//                    }
-
-                    if (tbSingleCurtains!=null) {
-                        setIsSend(false);
-                        tbSingleCurtains.setChecked(true);
-                        myHandler.postDelayed(new Runnable() {
-                            @Override
-                            public void run() {
-                                setIsSend(true);
-                            }
-                        }, 100);
-
-                    }
-                }
-
-//                if(window.equalsIgnoreCase("00")){
-//                    if (tbWindows != null) {
-//                        setIsSend(false);
-//                        tbWindows.setChecked(false);
-//                        myHandler.postDelayed(new Runnable() {
-//                            @Override
-//                            public void run() {
-//                                setIsSend(true);
-//                            }
-//                        }, 100);
-//
-//                    }
-//                }else if(window.equalsIgnoreCase("01")){
-//                    if (tbWindows != null) {
-//                        setIsSend(false);
-//                        tbWindows.setChecked(true);
-//                        myHandler.postDelayed(new Runnable() {
-//                            @Override
-//                            public void run() {
-//                                setIsSend(true);
-//                            }
-//                        }, 100);
-//
-//                    }
-//                }
-//
-//
-//                if (handlerMessage.equalsIgnoreCase("01")) {
-//
-//                }
-//
-//                if (handlerMessage.equalsIgnoreCase("01")) {
-//                    if (toggleButton != null)
-//                        toggleButton.setChecked(true);
-//                }
-//                if (handlerMessage.equalsIgnoreCase("00")) {
-//                    if (toggleButton != null)
-//                        toggleButton.setChecked(false);
-//                }
-            }
-
-
-            //光照
-            if (msg.what == Constant.HANDLER_LIGHT_SERSON_HAS_ANSWER) {
-                String handlerMessage = (String) msg.obj;
-                String stat = handlerMessage.substring(0,4);
-                String mac = handlerMessage.substring(4);
-                int high = Integer.parseInt(stat.substring(0, 2), 16);
-                int low = Integer.parseInt(stat.substring(2, 4), 16);
-
-
-                if (tvLightSensor != null&&mac.equals(lightSensorMac)){
-                    int lightSensor = high + low * 256;
-                    tvLightSensor.setText("光照强度 ：" + lightSensor + "lux");
-                    if(spHelper!=null){
-                        spHelper.saveSpLightSensor(String.valueOf(lightSensor));
-                    }
-
-
-                }
-
-            }
-
-            //光照2
-            if (msg.what == Constant.HANDLER_LIGHT_SENSOR_HAS_ANSWER2) {
-                String handlerMessage = (String) msg.obj;
-                String stat = handlerMessage.substring(0,4);
-                String mac = handlerMessage.substring(4);
-                int high = Integer.parseInt(stat.substring(0, 2), 16);
-                int low = Integer.parseInt(stat.substring(2, 4), 16);
-                if (tvLightSensor != null&&mac.equals(lightSensorMac)){
-                    int lightSensor = high + low * 256;
-                    if(lightSensor == 0){
-                        if(!TextUtils.isEmpty(spHelper.getSpLightSensor())){
-                            if(Integer.parseInt(spHelper.getSpLightSensor())==0){
-                                tvLightSensor.setText("正在读取数据。。。");
-                            }else{
-                                tvLightSensor.setText("光照强度 ：" + spHelper.getSpLightSensor() + "lux");
-                            }
-                        }
-                    }else{
-                        //读到的数据不是为0
-                        tvLightSensor.setText("光照强度 ：" + lightSensor + "lux");
-                    }
-                }
-            }
-
-
-            //噪音
-            if (msg.what == Constant.HANDLER_NOISE_SENSOR_HAS_ANSWER) {
-
-                String handlerMessage = (String) msg.obj;
-                String stat = handlerMessage.substring(0,4);
-                String mac = handlerMessage.substring(4);
-                int high = Integer.parseInt(stat.substring(0, 2), 16);
-                int low = Integer.parseInt(stat.substring(2, 4), 16);
-                if (tvNoiseSensor != null&&mac.equals(noiseSensorMac)){
-                    int noiseSensor = high + low * 256;
-                    tvNoiseSensor.setText("音量 ：" + noiseSensor + "db");
-                    if(spHelper!=null){
-                        spHelper.saveSpNoiseSensor(String.valueOf(noiseSensor));
-                    }
-
-
-                }
-
-            }
-
-            //噪音2
-            if (msg.what == Constant.HANDLER_NOISE_SENSOR_HAS_ANSWER2) {
-                String handlerMessage = (String) msg.obj;
-                String stat = handlerMessage.substring(0,4);
-                String mac = handlerMessage.substring(4);
-                int high = Integer.parseInt(stat.substring(0, 2), 16);
-                int low = Integer.parseInt(stat.substring(2, 4), 16);
-                if (tvNoiseSensor != null&&mac.equals(noiseSensorMac)){
-                    int noiseSensor = high + low * 256;
-                    if(noiseSensor == 0){
-                        if(!TextUtils.isEmpty(spHelper.getSpNoiseSensor())){
-                            if(Integer.parseInt(spHelper.getSpNoiseSensor())==0){
-                                tvNoiseSensor.setText("正在读取数据。。。");
-                            }else{
-                                tvNoiseSensor.setText("音量 ：" + spHelper.getSpNoiseSensor() + "db");
-                            }
-                        }
-                    }else{
-                        //读到的数据不是为0
-                        tvNoiseSensor.setText("音量 ：" + noiseSensor + "db");
-                    }
-                }
-            }
-
-
-
-//            //烟雾
-//            if (msg.what == Constant.HANDLER_INFLAMMABLE_GAS_HAS_ANSWER) {
-//                String handlerMessage = (String) msg.obj;
-//                String stat = handlerMessage.substring(0,4);
-//                String mac = handlerMessage.substring(4);
-//
-//                int high = Integer.parseInt(stat.substring(0, 2), 16);
-//                int low = Integer.parseInt(stat.substring(2, 4), 16);
-//
-//                if (tvInflammableGas != null&&mac.equals(inflammableGasMac)){
-//                    int inflammableGasSensor = (high + low * 256);
-//                    tvInflammableGas.setText("数据 ：" + inflammableGasSensor+" PPM");
-//                    if(spHelper!=null){
-//                        spHelper.saveSpInflammableGasSensor(String.valueOf(inflammableGasSensor));
-//                    }
-//                }
-//            }
-
-            //烟雾2
-//            if (msg.what == Constant.HANDLER_INFLAMMABLE_GAS_HAS_ANSWER2) {
-//                String handlerMessage = (String) msg.obj;
-//                String stat = handlerMessage.substring(0,4);
-//                String mac = handlerMessage.substring(4);
-//                int high = Integer.parseInt(stat.substring(0, 2), 16);
-//                int low = Integer.parseInt(stat.substring(2, 4), 16);
-//                if (tvInflammableGas != null&&mac.equals(inflammableGasMac)) {
-//                    int inflammableGasSensor = high + low * 256;
-//                    if(inflammableGasSensor == 0){
-//                        if(!TextUtils.isEmpty(spHelper.getSpInflammableGasSensor())){
-//                            if(Integer.parseInt(spHelper.getSpInflammableGasSensor())==0){
-//                                tvInflammableGas.setText("正在读取数据。。。");
-//                            }else{
-//                                tvInflammableGas.setText("数据 ：" + spHelper.getSpInflammableGasSensor() + " PPM");
-//                            }
-//                        }
-//                    }else{
-//                        //读到的数据不是为0
-//                        tvInflammableGas.setText("数据 ：" + inflammableGasSensor + " PPM");
-//                    }
-//
-//                }
-//            }
-
-
-            //人体红外
-            if (msg.what == Constant.HANDLER_INFRARED_HAS_ANSWER) {
-                String handlerMessage = (String) msg.obj;
-                String stat = handlerMessage.substring(0,2);
-                String mac = handlerMessage.substring(2);
-                if (tvInfrared != null&&mac.equals(infraredMac)) {
-                    if (stat.equalsIgnoreCase("01")) {
-                        tvInfrared.setText("有人");
-                        new Thread() {
-                            @Override
-                            public void run() {
-                                notifys();
-                            }
-                        }.start();
-                    }
-                    if (stat.equalsIgnoreCase("00")) {
-                        tvInfrared.setText("没人");
-                    }
-
-                }
-
-            }
-            //人体红外2
-            if (msg.what == Constant.HANDLER_INFRARED_HAS_ANSWER3) {
-                String handlerMessage = (String) msg.obj;
-                String stat = handlerMessage.substring(0,2);
-                String mac = handlerMessage.substring(2);
-                if (tvInfrared != null&&mac.equals(infraredMac)) {
-                    if (stat.equalsIgnoreCase("01")) {
-                        tvInfrared.setText("有人");
-                        new Thread() {
-                            @Override
-                            public void run() {
-                                notifys();
-                            }
-                        }.start();
-                    }
-                    if (stat.equalsIgnoreCase("00")) {
-                        tvInfrared.setText("没人");
-                    }
-
-                }
-
-            }
-
-
-            //温湿度pm2传过啦的数据
-            if (msg.what == Constant.HANDLER_TEMP_PM25_HAS_ANSWER) {
-                // 是为3个16进制的数 humi，第二个是temp，第三个是pm2.5
-
-                String data = (String) msg.obj;
-                String stat = data.substring(0,12);
-                String mac = data.substring(12);
-                if (tvPm25 != null&&tvTemperature !=null && tvHumidity!=null&&mac.equals(tempPm25Mac)) {
-                    int a = Integer.parseInt(stat.substring(0, 2), 16) * 256;
-                    int b = Integer.parseInt(stat.substring(2, 4), 16);
-                    int c = Integer.parseInt(stat.substring(4, 6), 16) * 256;
-                    int d = Integer.parseInt(stat.substring(6, 8), 16);
-                    int e = Integer.parseInt(stat.substring(8, 10), 16);
-                    int f = Integer.parseInt(stat.substring(10, 12), 16) * 256;
-                    int temp = (c+d) / 10;
-                    int hum = (a+b) / 10;
-                    int pm25 = (e+f) ;
-
-                    tvTemperature.setText(String.valueOf(temp));
-                    tvHumidity.setText(String.valueOf(hum));
-                    tvPm25.setText(String.valueOf(pm25));
-                    if(spHelper!=null){
-                        spHelper.saveSpTemp(String.valueOf(temp));
-                        spHelper.saveSpHumidity(String.valueOf(hum));
-                        spHelper.saveSpPm25(String.valueOf(pm25));
-                    }
-
-                }
-            }
-            //温湿度pm2传过啦的数据2
-            if (msg.what == Constant.HANDLER_TEMP_PM25_HAS_ANSWER3) {
-                // TODO: 2016/1/26 data 是为3个16进制的数 第一个是temp，第二个是humi，第三个是pm2.5
-                String data = (String) msg.obj;
-                String stat = data.substring(0,12);
-                String mac = data.substring(12);
-                if (tvPm25 != null&&tvTemperature !=null && tvHumidity!=null&&mac.equals(tempPm25Mac)) {
-                    int a = Integer.parseInt(stat.substring(0, 2), 16) * 256;
-                    int b = Integer.parseInt(stat.substring(2, 4), 16);
-                    int c = Integer.parseInt(stat.substring(4, 6), 16) * 256;
-                    int d = Integer.parseInt(stat.substring(6, 8), 16);
-                    int e = Integer.parseInt(stat.substring(8, 10), 16);
-                    int f = Integer.parseInt(stat.substring(10, 12), 16) * 256;
-
-                    int temp = (c+d) / 10;
-                    int hum = (a+b) / 10;
-                    int pm25 = (e+f);
-
-                    if(temp == 0&&hum == 0 && pm25 == 0){
-                        if(!TextUtils.isEmpty(spHelper.getSpTemp())&&!TextUtils.isEmpty(spHelper.getSpHumidity())&&!TextUtils.isEmpty(spHelper.getSpPm25())){
-                            tvTemperature.setText(spHelper.getSpTemp());
-                            tvHumidity.setText(spHelper.getSpHumidity());
-                            tvPm25.setText(spHelper.getSpPm25());
-                        }else{
-                            tvTemperature.setText("正在读取。。。");
-                            tvHumidity.setText("正在读取。。。");
-                            tvPm25.setText("正在读取。。。");
-                        }
-                    }else{
-                        tvTemperature.setText(String.valueOf(temp));
-                        tvHumidity.setText(String.valueOf(hum));
-                        tvPm25.setText(String.valueOf(pm25));
-                    }
-
-
-                }
-            }
-
-//            if (msg.what == Constant.HANDLER_DOOR_MAGNET_HAS_ANSWER) {
-//                String handlerMessage = (String) msg.obj;
-//                String stat = handlerMessage.substring(0,2);
-//                String mac = handlerMessage.substring(2);
-//
-//                if (tvDoorMagnet != null&&mac.equalsIgnoreCase(doorMagnetMac)) {
-//                    if (stat.equalsIgnoreCase("01")) {
-//                        tvDoorMagnet.setText("开");
-//                    }
-//                    if (stat.equalsIgnoreCase("00")) {
-//                        tvDoorMagnet.setText("关");
-//                    }
-//                }
-//
-//            }
-
-//            if (msg.what == Constant.HANDLER_DOOR_MAGNET_HAS_ANSWER2) {
-//                String handlerMessage = (String) msg.obj;
-//                String stat = handlerMessage.substring(0,2);
-//                String mac = handlerMessage.substring(2);
-//
-//                if (tvDoorMagnet != null&&mac.equalsIgnoreCase(doorMagnetMac)) {
-//                    if (stat.equalsIgnoreCase("01")) {
-//                        tvDoorMagnet.setText("开");
-//                    }
-//                    if (stat.equalsIgnoreCase("00")) {
-//                        tvDoorMagnet.setText("关");
-//                    }
-//                }
-//
-//            }
-
-            //修改设备名称
             if (msg.what == Constant.HANDLER_MODIFY_EQUIPMENT_NAME_HAS_ANSWER) {
                 String handlerMessage = (String) msg.obj;
 
@@ -922,7 +288,6 @@ public class UdpHelper extends UdpMethod {
 
             if(msg.what == Constant.HANDLER_SCENE_SETTING_HAS_ANSWER2) {
                 String handlerMessage = (String) msg.obj;
-
                 String sceneNameByte = handlerMessage.substring(28, 76);
                 String sceneNameString = new String(Util.HexString2Bytes(sceneNameByte)).trim();
                 int equipmentCount = Integer.parseInt(handlerMessage.substring(76, 78));
@@ -1028,101 +393,6 @@ public class UdpHelper extends UdpMethod {
 
 
         }
-    }
-
-    private void dowithTbState(int state) {
-        setIsSend(false);
-        switch (state) {
-            case 0:
-                toggleButton1.setChecked(false);
-                toggleButton2.setChecked(false);
-                toggleButton3.setChecked(false);
-                break;
-            case 1:
-                toggleButton1.setChecked(true);
-                toggleButton2.setChecked(false);
-                toggleButton3.setChecked(false);
-                break;
-            case 2:
-                toggleButton1.setChecked(false);
-                toggleButton2.setChecked(true);
-                toggleButton3.setChecked(false);
-                break;
-            case 3:
-                toggleButton1.setChecked(true);
-                toggleButton2.setChecked(true);
-                toggleButton3.setChecked(false);
-                break;
-            case 4:
-                toggleButton1.setChecked(false);
-                toggleButton2.setChecked(false);
-                toggleButton3.setChecked(true);
-                break;
-            case 5:
-                toggleButton1.setChecked(true);
-                toggleButton2.setChecked(false);
-                toggleButton3.setChecked(true);
-                break;
-            case 6:
-                toggleButton1.setChecked(false);
-                toggleButton2.setChecked(true);
-                toggleButton3.setChecked(true);
-                break;
-            case 7:
-                toggleButton1.setChecked(true);
-                toggleButton2.setChecked(true);
-                toggleButton3.setChecked(true);
-                break;
-            default:
-                break;
-        }
-        myHandler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                setIsSend(true);
-            }
-        }, 100);
-//        setIsSend(true);
-        Log.e(TAG, "switch-case end");
-    }
-
-
-    //在进入页面之前做一些判断
-    public void doSwitchs(int maxTime) {
-        showWaitDialog("正在同步");
-        switchsRunnable = new Runnable() {
-            @Override
-            public void run() {
-                searchDialog.dismiss();
-                myHandler.sendEmptyMessage(Constant.HANDLER_SWITCHS_NO_ANSWER);
-            }
-        };
-        myHandler.postDelayed(switchsRunnable, maxTime);
-    }
-
-
-    public void doWindow(int maxTime){
-        showWaitDialog("正在同步");
-        WindowRunnable = new Runnable() {
-            @Override
-            public void run() {
-                searchDialog.dismiss();
-                myHandler.sendEmptyMessage(Constant.HANDLER_WINDOW_NO_ANSWER);
-            }
-        };
-        myHandler.postDelayed(WindowRunnable, maxTime);
-    }
-
-    public void doCurtains(int maxTime){
-        showWaitDialog("正在同步");
-        CurtainsRunnable = new Runnable() {
-            @Override
-            public void run() {
-                searchDialog.dismiss();
-                myHandler.sendEmptyMessage(Constant.HANDLER_CURTAINS_NO_ANSWER);
-            }
-        };
-        myHandler.postDelayed(CurtainsRunnable,maxTime);
     }
 
 
@@ -1273,7 +543,7 @@ public class UdpHelper extends UdpMethod {
 
        //数据接收接口
         if(onReceive!=null){
-            onReceive.receive(command,data,ip);
+            onReceive.receive(command, data, ip);
         }
 
         //网关
@@ -1357,56 +627,21 @@ public class UdpHelper extends UdpMethod {
 
         }
 
-        if (command.equalsIgnoreCase(Constant.SWITCH_RECV_COMMAND)) {
-            String handlerMessage = data.substring(44, 46);
-            Message msg = new Message();
-            msg.obj = handlerMessage;
-            msg.what = Constant.HANDLER_SWITCHS_HAS_ANSWER;
-            myHandler.sendMessage(msg);
-        }
-
-        //面板开关人为去触摸时会发送指令过来
-        if (command.equalsIgnoreCase(Constant.SWITCH_RECV2_COMMAND)) {
-            String handlerMessage = data.substring(56, 58);
-            String mac  = data.substring(28,44);
-            Message msg = new Message();
-            msg.obj = handlerMessage+mac;
-            msg.what = Constant.HANDLER_SWITCHS_HAS_ANSWER2;
-            myHandler.sendMessage(msg);
-        }
 
         //光照
-        if (command.equalsIgnoreCase(Constant.LIGHT_SENSOR_RECV2_COMMAND)) {
-
-
+        if (command.equalsIgnoreCase(Constant.LIGHT_SENSOR_RECEIVE_COMMAND)) {
             if (Constant.LIGHT_SENSOR.equalsIgnoreCase(data.substring(48, 56))) {
                 String mac = data.substring(28, 44);
                 String handlerMessage = data.substring(56, 60);
                 Message msg = new Message();
                 msg.obj = handlerMessage+mac;
-                msg.what = Constant.HANDLER_LIGHT_SERSON_HAS_ANSWER;
+                msg.what = Constant.HANDLER_LIGHT_SENSOR_HAS_ANSWER;
                 myHandler.sendMessage(msg);
             }
-
-
-        }
-        //噪音
-        if (command.equalsIgnoreCase(Constant.NOISE_SENSOR_RECV2_COMMAND)) {
-
-
-            if (Constant.NOISE_SENSOR.equalsIgnoreCase(data.substring(48, 56))) {
-                String mac = data.substring(28, 44);
-                String handlerMessage = data.substring(56, 60);
-                Message msg = new Message();
-                msg.obj = handlerMessage+mac;
-                msg.what = Constant.HANDLER_NOISE_SENSOR_HAS_ANSWER;
-                myHandler.sendMessage(msg);
-            }
-
-
         }
 
-        if (command.equalsIgnoreCase(Constant.INFLAMMABLE_GAS_RECV_COMMAND)) {
+
+        if (command.equalsIgnoreCase(Constant.INFLAMMABLE_GAS_RECEIVE_COMMAND)) {
             //如果是烟雾的
             if (Constant.INFLAMMABLE_GAS.equalsIgnoreCase(data.substring(48, 56))) {
                 String handlerMessage = data.substring(56, 60);
@@ -1418,7 +653,7 @@ public class UdpHelper extends UdpMethod {
             }
         }
 
-        if (command.equalsIgnoreCase(Constant.INFLAMMABLE_GAS_RECV_COMMAND2)) {
+        if (command.equalsIgnoreCase(Constant.INFLAMMABLE_GAS_RECEIVE_COMMAND2)) {
             String handlerMessage = data.substring(56, 60);
             String mac = data.substring(28, 44);
             Message msg = new Message();
@@ -1428,7 +663,7 @@ public class UdpHelper extends UdpMethod {
         }
 
 
-        if (command.equalsIgnoreCase(Constant.INFRARED_RECV_COMMAND)) {
+        if (command.equalsIgnoreCase(Constant.INFRARED_RECEIVE_COMMAND)) {
 
             String handlerMessage = data.substring(56, 58);
             String mac = data.substring(28, 44);
@@ -1438,7 +673,7 @@ public class UdpHelper extends UdpMethod {
             myHandler.sendMessage(msg);
 
         }
-        if (command.equalsIgnoreCase(Constant.INFRARED_RECV3_COMMAND)) {
+        if (command.equalsIgnoreCase(Constant.INFRARED_RECEIVE_COMMAND2)) {
             String handlerMessage = data.substring(56, 58);
             String mac = data.substring(28, 44);
             Message msg = new Message();
@@ -1448,17 +683,9 @@ public class UdpHelper extends UdpMethod {
         }
 
 
-        //插座返回数据
-        if (command.equalsIgnoreCase(Constant.SOCKETS_RECV_COMMAND)) {
-            String handlerMessage = data.substring(44, 46);
-            Message msg = new Message();
-            msg.obj = handlerMessage;
-            msg.what = Constant.HANDLER_SOCKETS_HAS_ANSWER;
-            myHandler.sendMessage(msg);
 
-        }
 
-        if(command.equalsIgnoreCase(Constant.SCENE_SETTING_RECV2_COMMAND)){
+        if(command.equalsIgnoreCase(Constant.SCENE_SETTING_RECEIVE_COMMAND2)){
             Message msg = new Message();
             msg.obj = data;
             msg.what = Constant.HANDLER_SCENE_SETTING_HAS_ANSWER2;
@@ -1467,7 +694,7 @@ public class UdpHelper extends UdpMethod {
         }
 
         //应用场景返回的信息
-        if(command.equalsIgnoreCase(Constant.SCENE_SETTING_RECV_COMMAND)){
+        if(command.equalsIgnoreCase(Constant.SCENE_SETTING_RECEIVE_COMMAND)){
             Message msg = new Message();
             msg.obj = data;
             msg.what = Constant.HANDLER_SCENE_SETTING_HAS_ANSWER;
@@ -1475,90 +702,6 @@ public class UdpHelper extends UdpMethod {
         }
 
 
-
-
-        if (command.equalsIgnoreCase(Constant.SOCKETS_RECV2_COMMAND)) {
-            String handlerMessage = data.substring(56, 58);
-            String mac = data.substring(28, 44);
-            Log.e(TAG,"rev mac = "+mac);
-            Message msg = new Message();
-            msg.obj = handlerMessage+mac;
-            msg.what = Constant.HANDLER_SOCKETS_HAS_ANSWER2;
-            myHandler.sendMessage(msg);
-        }
-
-        if (command.equalsIgnoreCase(Constant.TEMP_PM25_RECV2_COMMAND)) {
-
-            String handlerMessage = data.substring(56, 68);
-            String mac = data.substring(28,44);
-            Message msg = new Message();
-            msg.obj = handlerMessage+mac;
-            msg.what = Constant.HANDLER_TEMP_PM25_HAS_ANSWER;
-            myHandler.sendMessage(msg);
-        }
-        if (command.equalsIgnoreCase(Constant.SWITCH_RECV3_COMMAND)) {
-            String handlerMessage = data.substring(56, 58);
-            Message msg = new Message();
-            msg.obj = handlerMessage;
-            msg.what = Constant.HANDLER_SWITCHS_HAS_ANSWER3;
-            myHandler.sendMessage(msg);
-        }
-
-        if (command.equalsIgnoreCase(Constant.SOCKETS_RECV3_COMMAND)) {
-            String handlerMessage = data.substring(56, 58);
-            Message msg = new Message();
-            msg.obj = handlerMessage;
-            msg.what = Constant.HANDLER_SOCKETS_HAS_ANSWER3;
-            myHandler.sendMessage(msg);
-        }
-
-        //光照
-        if (command.equalsIgnoreCase(Constant.LIGHT_SONSER_RECV2_COMMAND)) {
-            String handlerMessage = data.substring(56, 60);
-            String mac = data.substring(28,44);
-            Message msg = new Message();
-            msg.obj = handlerMessage+mac;
-            msg.what = Constant.HANDLER_LIGHT_SENSOR_HAS_ANSWER2;
-            myHandler.sendMessage(msg);
-        }
-
-        //噪音
-        if (command.equalsIgnoreCase(Constant.NOISE_SONSER_RECV2_COMMAND)) {
-            String handlerMessage = data.substring(56, 60);
-            String mac = data.substring(28, 44);
-            Message msg = new Message();
-            msg.obj = handlerMessage+mac;
-            msg.what = Constant.HANDLER_NOISE_SENSOR_HAS_ANSWER2;
-            myHandler.sendMessage(msg);
-        }
-
-        if (command.equalsIgnoreCase(Constant.TEMP_PM25_RECV3_COMMAND)) {
-            String handlerMessage = data.substring(56, 68);
-            String mac = data.substring(28, 44);
-            Message msg = new Message();
-            msg.obj = handlerMessage+mac;
-            msg.what = Constant.HANDLER_TEMP_PM25_HAS_ANSWER3;
-            myHandler.sendMessage(msg);
-        }
-
-//        if (command.equalsIgnoreCase(Constant.DOOR_MAGNET_RECV_COMMAND)) {
-//
-//            String handlerMessage = data.substring(56, 58);
-//            String mac = data.substring(28, 44);
-//            Message msg = new Message();
-//            msg.obj = handlerMessage+mac;
-//            msg.what = Constant.HANDLER_DOOR_MAGNET_HAS_ANSWER;
-//            myHandler.sendMessage(msg);
-//        }
-
-//        if (command.equalsIgnoreCase(Constant.DOOR_MAGNET_RECV2_COMMAND)) {
-//            String handlerMessage = data.substring(56, 58);
-//            String mac = data.substring(28, 44);
-//            Message msg = new Message();
-//            msg.obj = handlerMessage+mac;
-//            msg.what = Constant.HANDLER_DOOR_MAGNET_HAS_ANSWER2;
-//            myHandler.sendMessage(msg);
-//        }
 
         if (command.equalsIgnoreCase(Constant.MODIFY_EQUIPMENT_NAME_RECV_COMMAND)) {
             String handlerMessage = data.substring(44, 46);
@@ -1568,15 +711,6 @@ public class UdpHelper extends UdpMethod {
             myHandler.sendMessage(msg);
         }
 
-
-        //窗帘
-        if (command.equalsIgnoreCase(Constant.CURTAINS_RECV_COMMAND)) {
-            String handlerMessage = data.substring(44, 46);
-            Message msg = new Message();
-            msg.obj = handlerMessage;
-            msg.what = Constant.HANDLER_CURTAINS_HAS_ANSWER;
-            myHandler.sendMessage(msg);
-        }
 
 
         //添加RFID信息回复
@@ -1597,95 +731,18 @@ public class UdpHelper extends UdpMethod {
             myHandler.sendMessage(msg);
         }
 
-//        if(command.equalsIgnoreCase(Constant.WINDOW_RECV_COMMAND)){
-//
-//            String handlerMessage = data.substring(60, 64);
-//
-//            Message msg = new Message();
-//            msg.obj = handlerMessage;
-//            msg.what = Constant.HANDLER_WINDOW_HAS_ANSWER;
-//            myHandler.sendMessage(msg);
-//        }
-
 
 
     }
 
+    /**
+     * 接收接口 方便后面要添加设备时，可以直接调用此接口
+     * @param receive 接收接口
+     */
     public void setOnReceive(OnReceive receive){
         this.onReceive = receive;
     }
 
 
-    /**
-     * ui处理
-     *
-     * @param toggleButton1 第1个按钮
-     * @param toggleButton2 第2个按钮
-     * @param toggleButton3 第3个按钮
-     */
-    public void setSwitchUI(ToggleButton toggleButton1, ToggleButton toggleButton2, ToggleButton toggleButton3,String switchMac) {
-        this.toggleButton1 = toggleButton1;
-        this.toggleButton2 = toggleButton2;
-        this.toggleButton3 = toggleButton3;
-        this.switchMac = switchMac;
-
-    }
-
-    public void setSocketsUI(ToggleButton toggleButton,String socketMac) {
-        this.toggleButton = toggleButton;
-        this.socketMac = socketMac;
-    }
-
-//    public void setInflammableGasUI(TextView tvInflammableGas,String inflammableGasMac) {
-//        this.tvInflammableGas = tvInflammableGas;
-//        this.inflammableGasMac = inflammableGasMac;
-//    }
-
-    public void setInfraredTv(TextView tvInfrared,String infraredMac) {
-        this.tvInfrared = tvInfrared;
-        this.infraredMac = infraredMac;
-    }
-
-
-    public void setTempPm25Tv(TextView tvTemperature,TextView tvHumidity,TextView tvPm25,String tempPm25Mac) {
-        this.tvTemperature = tvTemperature;
-        this.tvHumidity= tvHumidity;
-        this.tvPm25 = tvPm25;
-        this.tempPm25Mac = tempPm25Mac;
-
-    }
-
-//    public void setDoorMagnetUI(TextView tvDoorMagnet,String doorMagnetMac) {
-//        this.tvDoorMagnet = tvDoorMagnet;
-//        this.doorMagnetMac = doorMagnetMac;
-//    }
-
-    public void setWindowUI(ToggleButton tbDoor,ToggleButton tbWindow){
-        this.tbDoor = tbDoor;
-        this.tbWindow = tbWindow;
-    }
-
-
-
-//    public void setCurtainsUI(ToggleButton tbWindows,ToggleButton tbCurtains){
-//        this.tbWindows = tbWindows;
-//        this.tbCurtains = tbCurtains;
-//    }
-
-
-//    public void setCurtainsUI(ToggleButton tbCurtains){
-//        this.tbCurtains = tbCurtains;
-//    }
-
-
-    public void setSingleCurtainsUI(ToggleButton tbSingleCurtains){
-        this.tbSingleCurtains = tbSingleCurtains;
-    }
-
-
-    public void setNoiseSensorTv(TextView tvNoiseSensor,String noiseSensorMac){
-        this.tvNoiseSensor = tvNoiseSensor;
-        this.noiseSensorMac = noiseSensorMac;
-    }
 
 }

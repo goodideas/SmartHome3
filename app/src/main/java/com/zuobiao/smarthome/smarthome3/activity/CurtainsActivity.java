@@ -1,5 +1,6 @@
 package com.zuobiao.smarthome.smarthome3.activity;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -40,7 +41,7 @@ public class CurtainsActivity extends StatusActivity {
     private ToggleButton tbCurtains;
     private Button btnEquipmentTitleBarBack;
     private TextView tvEquipmentShow;
-
+    private ProgressDialog searchDialog;
     private MyHandler myHandler;
 
 
@@ -70,7 +71,6 @@ public class CurtainsActivity extends StatusActivity {
         udpHelper = UdpHelper.getInstance();
         udpHelper.startUdpWithIp(spHelper.getSpGateWayIp(), CurtainsActivity.this);
         udpHelper.setIsSend(true);
-//        udpHelper.setCurtainsUI(tbCurtains);
         udpHelper.send(Util.getDataOfBeforeDo(spHelper.getSpGateWayMac(), Constant.WINDOW_SEND_COMMAND, equipmentBean));
         udpHelper.setOnReceive(new OnReceive() {
             @Override
@@ -83,9 +83,23 @@ public class CurtainsActivity extends StatusActivity {
                     msg.what = Constant.HANDLER_WINDOW_HAS_ANSWER;
                     myHandler.sendMessage(msg);
                 }
+
+                //窗帘
+                if (command.equalsIgnoreCase(Constant.CURTAINS_RECEIVE_COMMAND)) {
+                    String handlerMessage = data.substring(44, 46);
+                    Message msg = new Message();
+                    msg.obj = handlerMessage;
+                    msg.what = Constant.HANDLER_CURTAINS_HAS_ANSWER;
+                    myHandler.sendMessage(msg);
+                }
             }
         });
-        udpHelper.doCurtains(Constant.BEFORE_INTO_CURTAINS_MAX_TIME);
+
+        searchDialog = new ProgressDialog(this);
+        searchDialog.setMessage("正在同步");
+        searchDialog.onStart();
+        searchDialog.show();
+
         tbCurtains.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -101,7 +115,7 @@ public class CurtainsActivity extends StatusActivity {
 
 
         tvEquipmentShow.setText(Constant.getTypeName(equipmentBean.getDevice_Type()));
-        if (!DBcurd.getNickNameByMac(equipmentBean.getMac_ADDR()).equalsIgnoreCase("FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF")) {
+        if (!DBcurd.getNickNameByMac(equipmentBean.getMac_ADDR()).equalsIgnoreCase(Constant.EQUIPMENT_NAME_ALL_FF)) {
 
             String equipmentName = new String(Util.HexString2Bytes(DBcurd.getNickNameByMac(equipmentBean.getMac_ADDR()))).trim();
             if (TextUtils.isEmpty(equipmentName)) {
@@ -137,6 +151,12 @@ public class CurtainsActivity extends StatusActivity {
 
             }
         });
+        myHandler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                searchDialog.dismiss();
+            }
+        }, Constant.BEFORE_INTO_CURTAINS_MAX_TIME);
 
 
     }
@@ -152,8 +172,8 @@ public class CurtainsActivity extends StatusActivity {
         int macByteLength = macByte.length;
         System.arraycopy(macByte, 0, data, 2, macByteLength);
         //命令类型
-        data[10] = Constant.CURITAINS_SEND_COMMAND[0];
-        data[11] = Constant.CURITAINS_SEND_COMMAND[1];
+        data[10] = Constant.CURTAINS_SEND_COMMAND[0];
+        data[11] = Constant.CURTAINS_SEND_COMMAND[1];
 
         //数据内容长度
         data[12] = (byte) 0x13; //19长度
@@ -200,6 +220,9 @@ public class CurtainsActivity extends StatusActivity {
         @Override
         public void handleMessage(Message msg) {
             if (msg.what == Constant.HANDLER_WINDOW_HAS_ANSWER) {
+                if(searchDialog!=null){
+                    searchDialog.dismiss();
+                }
                 String handlerMessage = (String) msg.obj;
                 String doors = handlerMessage.substring(0, 2);
                 if (doors.equalsIgnoreCase("00")) {
@@ -228,6 +251,21 @@ public class CurtainsActivity extends StatusActivity {
 
                     }
 
+                }
+            }
+
+            //窗帘
+            if (msg.what == Constant.HANDLER_CURTAINS_HAS_ANSWER) {
+                String handlerMessage = (String) msg.obj;
+                if (handlerMessage.equalsIgnoreCase("01")) {
+                    Util.showToast(CurtainsActivity.this, "成功！");
+                }
+                if (handlerMessage.equalsIgnoreCase("00")) {
+                    Util.showToast(CurtainsActivity.this, "失败！");
+                }
+
+                if (handlerMessage.equalsIgnoreCase("FF")) {
+                    Util.showToast(CurtainsActivity.this, "失败！");
                 }
             }
         }
