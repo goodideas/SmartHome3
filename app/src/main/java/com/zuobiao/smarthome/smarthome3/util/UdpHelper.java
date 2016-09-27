@@ -702,7 +702,7 @@ public class UdpHelper {
         }
 
 
-
+//        FFAA 1E13007FCF5C0000 1210 0900 3F1AEA08004B1200 01 A9 FF55
         if (command.equalsIgnoreCase(Constant.MODIFY_EQUIPMENT_NAME_RECV_COMMAND)) {
             String handlerMessage = data.substring(44, 46);
             Message msg = new Message();

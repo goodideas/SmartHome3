@@ -168,6 +168,7 @@ public class LightSensorActivity extends StatusActivity {
                             }
                         }
                     }else{
+                        spHelper.saveSpLightSensor(String.valueOf(lightSensor));
                         tvLightSensor.setText("光照强度 ：" + lightSensor + "lux");
                     }
                 }

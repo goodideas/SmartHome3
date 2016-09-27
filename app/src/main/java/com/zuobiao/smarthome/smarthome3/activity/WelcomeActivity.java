@@ -6,6 +6,9 @@ import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Window;
 import android.view.WindowManager;
+import android.view.animation.Animation;
+import android.view.animation.ScaleAnimation;
+import android.widget.ImageView;
 
 import com.zuobiao.smarthome.smarthome3.R;
 import com.zuobiao.smarthome.smarthome3.util.Constant;
@@ -21,8 +24,8 @@ import com.zuobiao.smarthome.smarthome3.util.Util;
  */
 public class WelcomeActivity extends AppCompatActivity {
 
-
-
+    private ImageView ivWelcome;
+    private ScaleAnimation scaleAnimation;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         this.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -30,18 +33,42 @@ public class WelcomeActivity extends AppCompatActivity {
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_welcome);
+        ivWelcome = (ImageView)findViewById(R.id.ivWelcome);
         UdpHelper udpHelper = UdpHelper.getInstance();
-        udpHelper.startUdpWithIp(Constant.BROADCAST_IP,WelcomeActivity.this);
+        udpHelper.startUdpWithIp(Constant.BROADCAST_IP, WelcomeActivity.this);
         udpHelper.setIsSend(true);
         udpHelper.send(Util.broadcastData());
         udpHelper.doSearchGateWayOnWelcome(Constant.WELCOME_ACTIVITY_SEARCH_GATEWAY_WAIT_MAX_TIME);
+
+        scaleAnimation = new ScaleAnimation(1.0f,1.2f,1.0f,1.2f, Animation.RELATIVE_TO_SELF,0.5f,Animation.RELATIVE_TO_SELF,0.5f);
+        scaleAnimation.setFillAfter(true);
+        scaleAnimation.setDuration(Constant.BEFORE_INTO_MAIN_ACTIVITY_MAX_TIME);
+        scaleAnimation.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {
+            }
+
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                Intent intent = new Intent(WelcomeActivity.this, MainActivity.class);
+                startActivity(intent);
+                overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+                finish();
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+
+            }
+        });
+
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                startActivity(new Intent(WelcomeActivity.this, MainActivity.class));
-                finish();
+                ivWelcome.startAnimation(scaleAnimation);
             }
-        }, Constant.BEFORE_INTO_MAIN_ACTIVITY_MAX_TIME);
+        }, Constant.WELCOME_ACTIVITY_SEARCH_GATEWAY_WAIT_MAX_TIME);
+
     }
 
 }

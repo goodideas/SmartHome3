@@ -183,6 +183,9 @@ public class TempPm25Activity extends StatusActivity {
                             tvPm25.setText("正在读取。。。");
                         }
                     }else{
+                        spHelper.saveSpTemp(String.valueOf(temp));
+                        spHelper.saveSpPm25(String.valueOf(pm25));
+                        spHelper.saveSpHumidity(String.valueOf(hum));
                         tvTemperature.setText(String.valueOf(temp));
                         tvHumidity.setText(String.valueOf(hum));
                         tvPm25.setText(String.valueOf(pm25));
@@ -198,3 +201,5 @@ public class TempPm25Activity extends StatusActivity {
 
 
 }
+//FFAA 1E13007FCF5C0000 4010 1400 CE6FEA08004B1200 3A08 4005FFFE 0000 0000 0000 10 FF55
+//FFAA 1E13007FCF5C0000 4150 1400 CE6FEA08004B1200 3A08 4005FFFE 0284 0130 4300 0A FF55

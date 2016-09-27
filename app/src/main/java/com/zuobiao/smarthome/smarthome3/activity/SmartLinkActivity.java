@@ -33,6 +33,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.zuobiao.smarthome.smarthome3.R;
+import com.zuobiao.smarthome.smarthome3.util.SpHelper;
 
 import java.io.IOException;
 import java.net.DatagramPacket;
@@ -148,6 +149,7 @@ public class SmartLinkActivity extends StatusActivity {
 
     private boolean btnStartClick = false;
     private boolean btnStartClick2 = false;
+    private SpHelper spHelper;
 
 
     @Override
@@ -157,6 +159,10 @@ public class SmartLinkActivity extends StatusActivity {
         init();
         myHandler = new MyHandler();
         brodcastWifi();
+        spHelper = new SpHelper(this);
+        if(!TextUtils.isEmpty(spHelper.getSpWifiPassword())){
+            etSSIDPW.setText(spHelper.getSpWifiPassword());
+        }
     }
 
     private void init() {
@@ -239,6 +245,10 @@ public class SmartLinkActivity extends StatusActivity {
 
                     } else {
                         btnStartDo();
+                        if(!TextUtils.isEmpty(etSSIDPW.getText().toString())){
+                            spHelper.saveSpWifiPassword(etSSIDPW.getText().toString());
+                        }
+
                     }
 
 
@@ -788,7 +798,6 @@ public class SmartLinkActivity extends StatusActivity {
                             Log.e(TAG,"广播后回复数据="+receiveStr);
 
                             if (doWithSecondUdpRvData(receiveStr)) {
-                                // TODO: 2016/1/19 确定是网关接收包了，保存
                                 secondUdpRevWhile = false;
                                 secondUdpHandler.removeCallbacks(secondUdpRunnable);
                                 secondUdpBreakDOwhile = true;
@@ -1066,7 +1075,9 @@ public class SmartLinkActivity extends StatusActivity {
             }
 
             if (msg.what == 4) {
-
+                if(!TextUtils.isEmpty(etSSIDPW.getText().toString())){
+                    spHelper.saveSpWifiPassword(etSSIDPW.getText().toString());
+                }
                 progressBar.setProgress(100);
                 showDialog("连接成功", "设备已经连上路由器");
                 removeRobotAP(robotAPSSID);

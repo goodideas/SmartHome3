@@ -171,6 +171,7 @@ public class InflammableGasActivity extends StatusActivity {
                         }
                     } else {
                         //读到的数据不是为0
+                        spHelper.saveSpInflammableGasSensor(String.valueOf(inflammableGasSensor));
                         tvInflammableGas.setText("数据 ：" + inflammableGasSensor + " PPM");
                     }
 

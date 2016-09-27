@@ -38,6 +38,7 @@ public class SpHelper {
     private final String spInflammableGasSensor = "inflammableGasSensor";
     private final String spNoiseSensor = "noiseSensor";
 
+    private final String spWifiPassword = "wifiPassword";
 
     private SharedPreferences gateWayInfoShared;
     SharedPreferences.Editor gateWayInfoEditor;
@@ -47,6 +48,18 @@ public class SpHelper {
                 spFileName, Activity.MODE_PRIVATE);
         gateWayInfoEditor = gateWayInfoShared.edit();
     }
+
+
+    //wifi密码
+    public String getSpWifiPassword() {
+        return gateWayInfoShared.getString(spWifiPassword, null);
+    }
+
+    public void saveSpWifiPassword(String wifiPassword) {
+        gateWayInfoEditor.putString(spWifiPassword, wifiPassword);
+        gateWayInfoEditor.commit();
+    }
+
 
     //湿度
     public String getSpHumidity() {

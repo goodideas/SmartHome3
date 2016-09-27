@@ -161,6 +161,7 @@ public class NoiseActivity extends StatusActivity {
                             }
                         }
                     }else{
+                        spHelper.saveSpNoiseSensor(String.valueOf(noiseSensor));
                         tvNoiseSensor.setText("音量 ：" + noiseSensor + "db");
                     }
                 }

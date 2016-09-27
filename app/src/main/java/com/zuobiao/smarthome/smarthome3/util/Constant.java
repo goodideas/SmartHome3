@@ -105,7 +105,7 @@ public class Constant {
     public static final String REFRESH_EQUIPMENT_RECV_COMMAND = "0210";
     public static final String REFRESH_EQUIPMENT_RECV2_COMMAND = "0310";
     public static final String ADD_EQUIPMENT_RECV_COMMAND = "0410";
-    public static final String MODIFY_EQUIPMENT_NAME_RECV_COMMAND = "0510";
+    public static final String MODIFY_EQUIPMENT_NAME_RECV_COMMAND = "1210";//实际测试得为1210
 
     public static final String ADD_RFID_INFO_RECV_COMMAND = "0610";
     public static final String DEL_RFID_INFO_RECV_COMMAND = "0710";
